@@ -18,20 +18,7 @@ public class MainActivity extends AppCompatActivity {
     //Initialize 2d array for table
     Element[][] mBoard = new Element[9][9];
 
-    //This grid stores a pre-made valid 9x9 sudoku grid
-    private final int[][] demoTable =
 
-            {
-                {0, 0, 0, 2, 6, 0, 7, 0, 1},
-                {6, 8, 0, 0, 7, 0, 0, 9, 0},
-                {1, 9, 0, 0, 0, 4, 5, 0, 0},
-                {8, 2, 0, 1, 0, 0, 0, 4, 0},
-                {0, 0, 4, 6, 0, 2, 9, 0, 5},
-                {0, 5, 0, 0, 0, 3, 0, 2, 8},
-                {0, 0, 9, 3, 0, 0, 0, 7, 4},
-                {0, 4, 0, 0, 5, 0, 0, 3, 6},
-                {7, 0, 3, 0, 1, 8, 0, 0, 0}
-            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Create Sudoku object, probably should change the way the board is initialized
-        Sudoku myGame = new Sudoku(mBoard, this);
+        Sudoku myGame = new Sudoku(this);
 
         //Initialize Resources, access English.xml and Spanish.xml
         Resources res = getResources();
@@ -58,13 +45,10 @@ public class MainActivity extends AppCompatActivity {
             for(int cols = 0; cols < 9; cols++)
             {
                 //set values for every Element in mBoard
-                if(demoTable[rows][cols] != 0)
+                if(myGame.mSudokuBoard[rows][cols].mValue != 0)
                 {
-                    myGame.mSudokuBoard[rows][cols] = new Element(demoTable[rows][cols], english[demoTable[rows][cols] - 1], spanish[demoTable[rows][cols] - 1], this);
-                }
-                else
-                {
-                    myGame.mSudokuBoard[rows][cols] = new Element(0, "", "", this);
+                    myGame.mSudokuBoard[rows][cols].setEnglish(english[myGame.mSudokuBoard[rows][cols].mValue - 1]);
+                    myGame.mSudokuBoard[rows][cols].setTranslation(spanish[myGame.mSudokuBoard[rows][cols].mValue - 1]);
                 }
                 //This adds the created element into the row
                 tableRow.addView(myGame.mSudokuBoard[rows][cols].mButton);
@@ -88,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                myGame.solveGrid(0,0);
+                myGame.solveGrid(0,0, myGame.mSudokuBoard);
                 Log.i("[0,0]", String.valueOf(myGame.mSudokuBoard[0][0].mValue));
 
                 //Re draw the grid to set it with the new values
