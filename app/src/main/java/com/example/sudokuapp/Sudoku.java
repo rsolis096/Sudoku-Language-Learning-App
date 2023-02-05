@@ -1,18 +1,67 @@
 package com.example.sudokuapp;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.InputType;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
+import android.widget.Toast;
 
 public class Sudoku
 {
     public Element[][] mSudokuBoard;
     public Button solveButton;
     public Context THIS;
-    Sudoku(Element[][] board, Context context)
+
+    private final Element[][] answerTable;
+    Sudoku(Context context)
     {
-        mSudokuBoard = board;
+        int[][] demoTable = {
+                {0, 0, 0, 2, 6, 0, 7, 0, 1},
+                {6, 8, 0, 0, 7, 0, 0, 9, 0},
+                {1, 9, 0, 0, 0, 4, 5, 0, 0},
+                {8, 2, 0, 1, 0, 0, 0, 4, 0},
+                {0, 0, 4, 6, 0, 2, 9, 0, 5},
+                {0, 5, 0, 0, 0, 3, 0, 2, 8},
+                {0, 0, 9, 3, 0, 0, 0, 7, 4},
+                {0, 4, 0, 0, 5, 0, 0, 3, 6},
+                {7, 0, 3, 0, 1, 8, 0, 0, 0}
+        };
+
+        mSudokuBoard = new Element[9][9];
+        answerTable = new Element[9][9];
+        for(int rows = 0; rows < 9; rows++)
+        {
+            for(int cols = 0; cols < 9; cols++)
+            {
+                //set values for every Element in mBoard
+                //This grid stores a pre-made valid 9x9 sudoku grid
+
+                if(demoTable[rows][cols] != 0)
+                {
+                    mSudokuBoard[rows][cols] = new Element(demoTable[rows][cols], " ", " ", context);
+                    answerTable[rows][cols] = new Element(demoTable[rows][cols], " ", " ", context);
+                }
+                else
+                {
+                    mSudokuBoard[rows][cols] = new Element(0, "", "", context);
+                    answerTable[rows][cols] = new Element(0, "", "", context);
+
+                }
+                mSudokuBoard[rows][cols].mButton.setOnClickListener(new ElementButtonListener());
+            }
+        }
+
+        //Solve the grid for user input error checking
+        solveGrid(0,0, answerTable);
+
         //Create the solve button
         THIS = context;
         solveButton = new Button(THIS);
@@ -32,15 +81,21 @@ public class Sudoku
     }
 
 
-    public boolean checkBox(int row, int col, int num)
+    public boolean checkBox(int row, int col, int num, Element[][] board)
     {
         //This function checks a 3x3 mSudokuBoard area the proposed number is within to verify its not repeated
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (mSudokuBoard[i + (row - row%3)][j + (col - col%3)].mValue == num)
+                if((i + (Math.floorDiv(row, 3) * 3) ) == row && (j + (Math.floorDiv(col, 3) * 3)) == col)
+                    continue;
+                else if (board[i + (Math.floorDiv(row, 3) * 3) ][j + (Math.floorDiv(col, 3) * 3)].mValue == num)
+                {
+                    //Log.i("Box Failed:", String.valueOf(board[i + (Math.floorDiv(row, 3) * 3) ][j + (Math.floorDiv(col, 3) * 3)].mValue));
                     return false;
+
+                }
             }
         }
         return true;
@@ -48,23 +103,34 @@ public class Sudoku
 
 
     //Return true if num is in the correct position given row and col coordinates
-    public boolean validSpot(int row, int col, int num)
+    public boolean validSpot(int row, int col, int num, Element[][] board)
     {
-        //TO DO: Throw an error for numbers outside [0,9]
+        //TO DO: Throw an error for num outside [0,9]
         for (int i = 0; i < 9; i++)
         {
             //Check row
-            if (mSudokuBoard[row][i].mValue == num)
+            if (board[row][i].mValue == num)
             {
-                return false;
+                if(col == i)
+                    continue;
+                else {
+                    //Log.i("Row Failed:", String.valueOf(board[row][i].mValue));
+                    return false;
+                }
+
             }
             //Check column
-            if (mSudokuBoard[i][col].mValue == num)
+            if (board[i][col].mValue == num)
             {
-                return false;
+                if(row == i)
+                    continue;
+                else {
+                    //Log.i("Col Failed:", String.valueOf(board[i][col].mValue));
+                    return false;
+                }
             }
             //Check box
-            if (!checkBox(row, col, num))
+            if (!checkBox(row, col, num, board))
             {
                 return false;
             }
@@ -72,7 +138,7 @@ public class Sudoku
         return true;
     }
 
-    public boolean solveGrid(int row, int col)
+    public boolean solveGrid(int row, int col, Element[][] board)
     {
         //Stops recursion if all rows are filled
         if (row == 9)
@@ -81,17 +147,17 @@ public class Sudoku
         }
 
         //If the value at the specified row and col coordinate is not zero, continue with this if statement to move onto the next cell
-        if (mSudokuBoard[row][col].mValue != 0)
+        if (board[row][col].mValue != 0)
         {
             //If at the last column, move to the next row and start column at 0 again
             if (col == 8)
             {
-                return solveGrid(row + 1, 0);
+                return solveGrid(row + 1, 0, board);
             }
             //Otherwise, continue in same row, but move onto next column
             else
             {
-                return solveGrid(row, col + 1);
+                return solveGrid(row, col + 1, board);
             }
         }
 
@@ -99,11 +165,11 @@ public class Sudoku
         for (int num = 1; num <= 9; num++)
         {
             //Check the passed parameters coordinates if they are valid
-            if (validSpot(row, col, num))
+            if (validSpot(row, col, num, board))
             {
                 //If so, set num
                 //CHANGE THIS TO BE INTERCHANGABLE WITH WORDS
-                mSudokuBoard[row][col].mValue = num;
+                board[row][col].mValue = num;
 
                 //If you are at column 8 (last column), move onto the next row
                 if (col == 8)
@@ -113,7 +179,7 @@ public class Sudoku
                     //Otherwise, it will return false therefore this if statement will not return true and the original row and col will have
                     //to be tested again with another value num++
                     //This is the same concept for every other function call in this function
-                    if (solveGrid(row + 1, 0))
+                    if (solveGrid(row + 1, 0, board))
                     {
                         return true;
                     }
@@ -121,17 +187,70 @@ public class Sudoku
                 else
                 {
                     //Otherwise, Move onto the next column if not at the last column
-                    if (solveGrid(row, col + 1))
+                    if (solveGrid(row, col + 1, board))
                     {
                         return true;
                     }
                 }
                 //When backtracking, reset the value to 0 as the presumed solution failed
                 //THis needs to reset it to the correct number, english and translation.
-                mSudokuBoard[row][col].mValue = 0;
+                board[row][col].mValue = 0;
             }
         }
         return false;
     }
 
+    private class ElementButtonListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            //We need to update the value contained in the button, set it on the board, check if its valid
+            Button buttonPressed = (Button) view;
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("Enter Number");
+
+            EditText input = new EditText(view.getContext());
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            builder.setView(input);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String userInput = input.getText().toString();
+                    //Update the text shown in the box;
+                    buttonPressed.setText(userInput);
+                    //Update the actual value of the Element the button object belongs to
+                    int r = 0;
+                    int c = 0;
+                    for(int i = 0; i < 9; i++)
+                    {
+                        for(int j = 0; j < 9; j++)
+                        {
+                            //Compare with the answer table
+                            if(mSudokuBoard[i][j].mButton == buttonPressed)
+                            {
+                                mSudokuBoard[i][j].mValue = Integer.parseInt(userInput);
+                                r = i;
+                                c = j;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(mSudokuBoard[r][c].mValue == answerTable[r][c].mValue)
+                    {
+                        //Green if spot is valid
+                        buttonPressed.setBackgroundColor(Color.rgb(173,223,179));
+                    }
+                    else
+                    {
+                        //Red if spot is invalid
+                        buttonPressed.setBackgroundColor(Color.rgb(255,114,118));
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+            builder.show();
+        }
+    }
 }

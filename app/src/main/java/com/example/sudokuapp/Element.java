@@ -1,14 +1,31 @@
 package com.example.sudokuapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.InputType;
+
+import android.view.View;
+
 import android.widget.Button;
+import android.widget.EditText;
+
 
 public class Element {
     int mValue;
     Button mButton;
 
     String mEnglish;
+
+    public void setEnglish(String english) {
+        mEnglish = english;
+    }
+
+    public void setTranslation(String translation) {
+        mTranslation = translation;
+    }
+
     String mTranslation;
 
     //Getter methods
@@ -39,7 +56,9 @@ public class Element {
             mButton.setText(String.valueOf(mValue));
 
         }
-        mButton.setTextColor((Color.BLACK));
+        mButton.setTextColor(Color.BLACK);
+
+
     }
 
     public Element()
@@ -49,6 +68,8 @@ public class Element {
         mTranslation ="";
         mButton = null;
     }
+
+
 
 
 }
