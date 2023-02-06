@@ -22,17 +22,14 @@ public class Sudoku
     public Element[][] mSudokuBoard;
     public Button solveButton;
     public Context THIS;
-    public String[] english;
-    public  String[] spanish;
     public HashMap<Integer, Pair<String,String>> wordIndex;
     public HashMap<Pair<String,String>, Integer>  numberIndex;
     private final Element[][] answerTable;
     Sudoku(Context context, Resources res)
     {
-        spanish = new String[9];
-        english = new String[9];
-        english = res.getStringArray(R.array.numbers_english);
-        spanish = res.getStringArray(R.array.numbers_spanish);
+
+        String[] english = res.getStringArray(R.array.numbers_english);
+        String[] spanish = res.getStringArray(R.array.numbers_spanish);
 
         //Initialize a hash map for easier accessing of words
         //Each word is assigned a number [1,9] to make indexing easier
@@ -49,6 +46,7 @@ public class Sudoku
             numberIndex.put(new Pair<>(english[i], spanish[i]), i+1);
         }
 
+        //This table is for the purposes of testing, generating algorithm should be used
         int[][] demoTable = {
                 {0, 0, 0, 2, 6, 0, 7, 0, 1},
                 {6, 8, 0, 0, 7, 0, 0, 9, 0},
@@ -99,7 +97,8 @@ public class Sudoku
         solveButton.setLayoutParams(new LinearLayout.LayoutParams(100, 200));
     }
 
-    public void updateGame()
+
+    public void updateGame() //Only givens can be updated, they will be updated to the language opposite of the givens
     {
         for(int i = 0; i < 9; i++)
         {
@@ -241,10 +240,10 @@ public class Sudoku
 
         @Override
         public void onClick(View view) {
-            //We need to update the value contained in the button, set it on the board, check if its valid
+            //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
-            //Iterate to find the Element containing the calling object (buttonPressed)
 
+            //Only allow unlocked cells to be changes (givens cannot be changed)
             if(!buttonPressed.isLocked)
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
@@ -258,16 +257,14 @@ public class Sudoku
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String userInput = input.getText().toString();
-                        //Update the text shown in the box;
-                        //User input is in spanish
-                        buttonPressed.setText(userInput);
 
+                        //Check if userInput is in the hashmap
+                        //Iterating like this defeats purpose of hashmap, data structure should be reconsidered
                         boolean validUserInput = false;
                         for(int i = 1; i <= 9; i++)
                         {
                             if(Objects.equals(wordIndex.get(i).second, userInput))
                             {
-
                                 validUserInput = true;
                                 mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
                                 mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
@@ -275,12 +272,17 @@ public class Sudoku
                             }
                         }
 
-                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
+                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput)
+                        {
                             //Green if spot is valid
                             buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
+                            //Lock the button, cannot be changed after correct input
                             buttonPressed.setLocked(true);
-                        } else {
-                            //Red if spot is invalid
+                            //Update the cell with the userInput text
+                            buttonPressed.setText(userInput);
+                        } else
+                        {
+                            //Red if spot is invalid, button remains locked, text unchanged
                             buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
                         }
                     }

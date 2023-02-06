@@ -1,10 +1,10 @@
 package com.example.sudokuapp;
 
 import android.content.Context;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
+//This class inherits button to add some useful attributes.
 public class ElementButton extends androidx.appcompat.widget.AppCompatButton
 {
     public int index1;
