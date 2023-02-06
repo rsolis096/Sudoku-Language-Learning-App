@@ -14,9 +14,37 @@ import android.widget.EditText;
 
 public class Element {
     int mValue;
-    Button mButton;
+    ElementButton mButton;
+
+
 
     String mEnglish;
+
+    Boolean mGiven;
+
+
+    public Boolean getGiven() {
+        return mGiven;
+    }
+
+    //Setter methods
+    public void setValue(int value) {
+        mValue = value;
+    }
+
+    public void setGiven(Boolean given) {
+        mGiven = given;
+    }
+
+    public void setLock(boolean val) {
+        mButton.setLocked(val);
+    }
+
+    public void setIndex(int i1, int i2)
+    {
+        mButton.setIndex(i1, i2);
+    }
+
 
     public void setEnglish(String english) {
         mEnglish = english;
@@ -46,14 +74,15 @@ public class Element {
         mValue = v;
         mEnglish = e;
         mTranslation = t;
-        mButton = new Button(context);
+        mButton = new ElementButton(context);
+        mGiven = false;
         if(mValue == 0)
         {
             mButton.setText(" ");
         }
         else
         {
-            mButton.setText(String.valueOf(mValue));
+            mButton.setText(mEnglish);
 
         }
         mButton.setTextColor(Color.BLACK);

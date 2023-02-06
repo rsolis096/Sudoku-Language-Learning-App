@@ -4,25 +4,51 @@ package com.example.sudokuapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 public class Sudoku
 {
     public Element[][] mSudokuBoard;
     public Button solveButton;
     public Context THIS;
-
+    public String[] english;
+    public  String[] spanish;
+    public HashMap<Integer, Pair<String,String>> wordIndex;
+    public HashMap<Pair<String,String>, Integer>  numberIndex;
     private final Element[][] answerTable;
-    Sudoku(Context context)
+    Sudoku(Context context, Resources res)
     {
+        spanish = new String[9];
+        english = new String[9];
+        english = res.getStringArray(R.array.numbers_english);
+        spanish = res.getStringArray(R.array.numbers_spanish);
+
+        //Initialize a hash map for easier accessing of words
+        //Each word is assigned a number [1,9] to make indexing easier
+        //Indexing could be done through the array
+        wordIndex = new HashMap<>();
+        numberIndex = new HashMap<>();
+        wordIndex.put(0, new Pair<>("", ""));
+        numberIndex.put(new Pair<>("",""), 0);
+        for(int i = 0; i < 9; i++)
+        {
+            //wordIndex; Key = Integer, Value = Pair
+            wordIndex.put(i+1, new Pair<>(english[i], spanish[i]));
+            //numberIndex; Key = Pair, Value = Integer
+            numberIndex.put(new Pair<>(english[i], spanish[i]), i+1);
+        }
+
         int[][] demoTable = {
                 {0, 0, 0, 2, 6, 0, 7, 0, 1},
                 {6, 8, 0, 0, 7, 0, 0, 9, 0},
@@ -46,13 +72,17 @@ public class Sudoku
 
                 if(demoTable[rows][cols] != 0)
                 {
-                    mSudokuBoard[rows][cols] = new Element(demoTable[rows][cols], " ", " ", context);
-                    answerTable[rows][cols] = new Element(demoTable[rows][cols], " ", " ", context);
+                    mSudokuBoard[rows][cols] = new Element(demoTable[rows][cols], english[demoTable[rows][cols] - 1], spanish[demoTable[rows][cols] - 1], context);
+                    answerTable[rows][cols] = new Element(demoTable[rows][cols], english[demoTable[rows][cols] - 1], spanish[demoTable[rows][cols] - 1], context);
+                    mSudokuBoard[rows][cols].setGiven(true);
+                    mSudokuBoard[rows][cols].setLock(true);
+                    mSudokuBoard[rows][cols].setIndex(rows, cols);
                 }
                 else
                 {
                     mSudokuBoard[rows][cols] = new Element(0, "", "", context);
                     answerTable[rows][cols] = new Element(0, "", "", context);
+                    mSudokuBoard[rows][cols].setIndex(rows, cols);
 
                 }
                 mSudokuBoard[rows][cols].mButton.setOnClickListener(new ElementButtonListener());
@@ -75,7 +105,10 @@ public class Sudoku
         {
             for(int j = 0; j < 9; j++)
             {
-                mSudokuBoard[i][j].mButton.setText(String.valueOf(mSudokuBoard[i][j].mValue));
+                if(!mSudokuBoard[i][j].getGiven())
+                {
+                    mSudokuBoard[i][j].mButton.setText(mSudokuBoard[i][j].mTranslation);
+                }
             }
         }
     }
@@ -170,6 +203,8 @@ public class Sudoku
                 //If so, set num
                 //CHANGE THIS TO BE INTERCHANGABLE WITH WORDS
                 board[row][col].mValue = num;
+                board[row][col].setEnglish(wordIndex.get(num).first);
+                board[row][col].setTranslation(wordIndex.get(num).second);
 
                 //If you are at column 8 (last column), move onto the next row
                 if (col == 8)
@@ -195,6 +230,8 @@ public class Sudoku
                 //When backtracking, reset the value to 0 as the presumed solution failed
                 //THis needs to reset it to the correct number, english and translation.
                 board[row][col].mValue = 0;
+                board[row][col].setEnglish(wordIndex.get(0).first);
+                board[row][col].setTranslation(wordIndex.get(0).second);
             }
         }
         return false;
@@ -205,52 +242,52 @@ public class Sudoku
         @Override
         public void onClick(View view) {
             //We need to update the value contained in the button, set it on the board, check if its valid
-            Button buttonPressed = (Button) view;
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("Enter Number");
+            ElementButton buttonPressed = (ElementButton) view;
+            //Iterate to find the Element containing the calling object (buttonPressed)
 
-            EditText input = new EditText(view.getContext());
-            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            if(!buttonPressed.isLocked)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Enter Number");
 
-            builder.setView(input);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String userInput = input.getText().toString();
-                    //Update the text shown in the box;
-                    buttonPressed.setText(userInput);
-                    //Update the actual value of the Element the button object belongs to
-                    int r = 0;
-                    int c = 0;
-                    for(int i = 0; i < 9; i++)
-                    {
-                        for(int j = 0; j < 9; j++)
+                EditText input = new EditText(view.getContext());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String userInput = input.getText().toString();
+                        //Update the text shown in the box;
+                        //User input is in spanish
+                        buttonPressed.setText(userInput);
+
+                        boolean validUserInput = false;
+                        for(int i = 1; i <= 9; i++)
                         {
-                            //Compare with the answer table
-                            if(mSudokuBoard[i][j].mButton == buttonPressed)
+                            if(Objects.equals(wordIndex.get(i).second, userInput))
                             {
-                                mSudokuBoard[i][j].mValue = Integer.parseInt(userInput);
-                                r = i;
-                                c = j;
-                                break;
+
+                                validUserInput = true;
+                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
+                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
+                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).second);
                             }
                         }
-                    }
 
-                    if(mSudokuBoard[r][c].mValue == answerTable[r][c].mValue)
-                    {
-                        //Green if spot is valid
-                        buttonPressed.setBackgroundColor(Color.rgb(173,223,179));
+                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
+                            //Green if spot is valid
+                            buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
+                            buttonPressed.setLocked(true);
+                        } else {
+                            //Red if spot is invalid
+                            buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
+                        }
                     }
-                    else
-                    {
-                        //Red if spot is invalid
-                        buttonPressed.setBackgroundColor(Color.rgb(255,114,118));
-                    }
-                }
-            });
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-            builder.show();
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                builder.show();
+            }
         }
     }
 }
