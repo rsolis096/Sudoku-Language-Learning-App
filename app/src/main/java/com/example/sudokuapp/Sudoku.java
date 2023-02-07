@@ -7,33 +7,32 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.InputType;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
+import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Objects;
 
+
 public class Sudoku
 {
-    public Element[][] mSudokuBoard;
+    public ElementButton[][] mSudokuBoard;
     public Button solveButton;
-    public Context THIS;
+    private final Context THIS;
     public HashMap<Integer, Pair<String,String>> wordIndex;
     public HashMap<Pair<String,String>, Integer>  numberIndex;
-    private final Element[][] answerTable;
+    private final ElementButton[][] answerTable;
     Sudoku(Context context, Resources res)
     {
-
+        //Saves getResources from MainActivity to be used in this class
+        //Get words
         String[] english = res.getStringArray(R.array.numbers_english);
         String[] spanish = res.getStringArray(R.array.numbers_spanish);
 
-        //Initialize a hash map for easier accessing of words
-        //Each word is assigned a number [1,9] to make indexing easier
-        //Indexing could be done through the array
+        //Hashmap is used for indexing of words TODO: make efficient or switch data structure
         wordIndex = new HashMap<>();
         numberIndex = new HashMap<>();
         wordIndex.put(0, new Pair<>("", ""));
@@ -46,44 +45,55 @@ public class Sudoku
             numberIndex.put(new Pair<>(english[i], spanish[i]), i+1);
         }
 
-        //This table is for the purposes of testing, generating algorithm should be used
-        int[][] demoTable = {
-                {0, 0, 0, 2, 6, 0, 7, 0, 1},
-                {6, 8, 0, 0, 7, 0, 0, 9, 0},
-                {1, 9, 0, 0, 0, 4, 5, 0, 0},
-                {8, 2, 0, 1, 0, 0, 0, 4, 0},
-                {0, 0, 4, 6, 0, 2, 9, 0, 5},
-                {0, 5, 0, 0, 0, 3, 0, 2, 8},
-                {0, 0, 9, 3, 0, 0, 0, 7, 4},
-                {0, 4, 0, 0, 5, 0, 0, 3, 6},
-                {7, 0, 3, 0, 1, 8, 0, 0, 0}
-        };
+        //Builds a valid integer board
+        GenerateBoard generatedBoard = new GenerateBoard(9, 9);
+        generatedBoard.createBoard();
 
-        mSudokuBoard = new Element[9][9];
-        answerTable = new Element[9][9];
+        //Converts the integer board into and Element board.
+        mSudokuBoard = new ElementButton[9][9];
+        answerTable = new ElementButton[9][9];
         for(int rows = 0; rows < 9; rows++)
         {
             for(int cols = 0; cols < 9; cols++)
             {
-                //set values for every Element in mBoard
-                //This grid stores a pre-made valid 9x9 sudoku grid
-
-                if(demoTable[rows][cols] != 0)
+                //Iterated through the generatedBoard
+                if(generatedBoard.mGeneratedBoard[rows][cols] != 0)
                 {
-                    mSudokuBoard[rows][cols] = new Element(demoTable[rows][cols], english[demoTable[rows][cols] - 1], spanish[demoTable[rows][cols] - 1], context);
-                    answerTable[rows][cols] = new Element(demoTable[rows][cols], english[demoTable[rows][cols] - 1], spanish[demoTable[rows][cols] - 1], context);
-                    mSudokuBoard[rows][cols].setGiven(true);
+
+                    //Initialize each ElementButton (cell in table)
+                    mSudokuBoard[rows][cols] =
+                            new ElementButton(
+                                generatedBoard.mGeneratedBoard[rows][cols],
+                                english[generatedBoard.mGeneratedBoard[rows][cols] - 1],
+                                spanish[generatedBoard.mGeneratedBoard[rows][cols] - 1],
+                                context,
+                                true,
+                                rows,
+                                cols
+                            );
                     mSudokuBoard[rows][cols].setLock(true);
                     mSudokuBoard[rows][cols].setIndex(rows, cols);
+
+                    answerTable[rows][cols] =
+                            new ElementButton(
+                                generatedBoard.mGeneratedBoard[rows][cols],
+                                english[generatedBoard.mGeneratedBoard[rows][cols] - 1],
+                                spanish[generatedBoard.mGeneratedBoard[rows][cols] - 1],
+                                context,
+                                true,
+                                rows,
+                                cols
+                            );
+
                 }
                 else
                 {
-                    mSudokuBoard[rows][cols] = new Element(0, "", "", context);
-                    answerTable[rows][cols] = new Element(0, "", "", context);
+                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, 0, 0);
+                    answerTable[rows][cols] = new ElementButton(0, "", "", context, false, 0, 0);
                     mSudokuBoard[rows][cols].setIndex(rows, cols);
 
                 }
-                mSudokuBoard[rows][cols].mButton.setOnClickListener(new ElementButtonListener());
+                mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
             }
         }
 
@@ -98,79 +108,56 @@ public class Sudoku
     }
 
 
-    public void updateGame() //Only givens can be updated, they will be updated to the language opposite of the givens
+    public void updateGame()
     {
+        //Updates the text of buttons
         for(int i = 0; i < 9; i++)
         {
             for(int j = 0; j < 9; j++)
             {
                 if(!mSudokuBoard[i][j].getGiven())
                 {
-                    mSudokuBoard[i][j].mButton.setText(mSudokuBoard[i][j].mTranslation);
+                    mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
                 }
             }
         }
     }
 
-
-    public boolean checkBox(int row, int col, int num, Element[][] board)
+    public boolean checkBox(int row, int col, int num, ElementButton[][] board)
     {
         //This function checks a 3x3 mSudokuBoard area the proposed number is within to verify its not repeated
+        int box_start_row = (row / 3) * 3;
+        int box_start_col = (col / 3) * 3;
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                if((i + (Math.floorDiv(row, 3) * 3) ) == row && (j + (Math.floorDiv(col, 3) * 3)) == col)
-                    continue;
-                else if (board[i + (Math.floorDiv(row, 3) * 3) ][j + (Math.floorDiv(col, 3) * 3)].mValue == num)
-                {
-                    //Log.i("Box Failed:", String.valueOf(board[i + (Math.floorDiv(row, 3) * 3) ][j + (Math.floorDiv(col, 3) * 3)].mValue));
-                    return false;
 
+                if (board[i + box_start_row][j + box_start_col].getValue() == num)
+                {
+                    return false;
                 }
             }
         }
         return true;
     }
-
 
     //Return true if num is in the correct position given row and col coordinates
-    public boolean validSpot(int row, int col, int num, Element[][] board)
+    public boolean validSpot(int row, int col, int num, ElementButton[][] board)
     {
-        //TO DO: Throw an error for num outside [0,9]
+        //TODO: Throw an error for num outside [0,9]
         for (int i = 0; i < 9; i++)
         {
-            //Check row
-            if (board[row][i].mValue == num)
+            if (board[row][i].getValue() == num || board[i][col].getValue()== num)
             {
-                if(col == i)
-                    continue;
-                else {
-                    //Log.i("Row Failed:", String.valueOf(board[row][i].mValue));
                     return false;
-                }
-
-            }
-            //Check column
-            if (board[i][col].mValue == num)
-            {
-                if(row == i)
-                    continue;
-                else {
-                    //Log.i("Col Failed:", String.valueOf(board[i][col].mValue));
-                    return false;
-                }
-            }
-            //Check box
-            if (!checkBox(row, col, num, board))
-            {
-                return false;
             }
         }
-        return true;
+        //Check box
+        return checkBox(row, col, num, board);
     }
 
-    public boolean solveGrid(int row, int col, Element[][] board)
+    public boolean solveGrid(int row, int col, ElementButton[][] board)
     {
         //Stops recursion if all rows are filled
         if (row == 9)
@@ -179,7 +166,7 @@ public class Sudoku
         }
 
         //If the value at the specified row and col coordinate is not zero, continue with this if statement to move onto the next cell
-        if (board[row][col].mValue != 0)
+        if (board[row][col].getValue() != 0)
         {
             //If at the last column, move to the next row and start column at 0 again
             if (col == 8)
@@ -200,8 +187,7 @@ public class Sudoku
             if (validSpot(row, col, num, board))
             {
                 //If so, set num
-                //CHANGE THIS TO BE INTERCHANGABLE WITH WORDS
-                board[row][col].mValue = num;
+                board[row][col].setValue(num);
                 board[row][col].setEnglish(wordIndex.get(num).first);
                 board[row][col].setTranslation(wordIndex.get(num).second);
 
@@ -228,7 +214,7 @@ public class Sudoku
                 }
                 //When backtracking, reset the value to 0 as the presumed solution failed
                 //THis needs to reset it to the correct number, english and translation.
-                board[row][col].mValue = 0;
+                board[row][col].setValue(0);
                 board[row][col].setEnglish(wordIndex.get(0).first);
                 board[row][col].setTranslation(wordIndex.get(0).second);
             }
@@ -272,19 +258,38 @@ public class Sudoku
                             }
                         }
 
+                        //If the answer is correct
                         if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput)
                         {
+
                             //Green if spot is valid
                             buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
                             //Lock the button, cannot be changed after correct input
                             buttonPressed.setLocked(true);
                             //Update the cell with the userInput text
                             buttonPressed.setText(userInput);
-                        } else
-                        {
-                            //Red if spot is invalid, button remains locked, text unchanged
-                            buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
+
                         }
+                        //If the answer is incorrect
+                        else
+                        {
+                            //Case 1: Invalid input, Toast message displayed button unchanged.
+                            if(!validUserInput)
+                            {
+                                Toast t = Toast.makeText(THIS,"Invalid Input", Toast.LENGTH_LONG);
+                                t.show();
+                            }
+                            //Case 2: Valid input (in vocab) but incorrect word
+                            else
+                            {
+                                //Red if spot is invalid, button remains locked, text unchanged
+                                buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
+                                //Update the cell with the userInput text
+                                buttonPressed.setText(userInput);
+                            }
+
+                        }
+
                     }
                 });
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
@@ -292,4 +297,7 @@ public class Sudoku
             }
         }
     }
+
 }
+
+
