@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int rows = 0; rows < 9; rows++)
         {
-
+//hi
             TableRow tableRow = new TableRow(this);
             for(int cols = 0; cols < 9; cols++)
             {
