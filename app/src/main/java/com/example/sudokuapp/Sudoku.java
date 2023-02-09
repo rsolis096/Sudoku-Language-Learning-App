@@ -115,7 +115,7 @@ public class Sudoku
         {
             for(int j = 0; j < 9; j++)
             {
-                if(!mSudokuBoard[i][j].getGiven())
+                if(!mSudokuBoard[i][j].getLocked())
                 {
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
                 }
