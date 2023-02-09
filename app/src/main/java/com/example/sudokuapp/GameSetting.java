@@ -12,7 +12,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class GameSetting extends AppCompatActivity {
-    int mDifficulty;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,21 +34,21 @@ public class GameSetting extends AppCompatActivity {
         ToggleButton btnHard = findViewById(R.id.tgBtnHard);
 
         btnEasy.setOnClickListener(view -> {
-            mDifficulty = 0;
+            Sudoku.difficulty = 0;
             btnEasy.setChecked(true);
             btnMedium.setChecked(false);
             btnHard.setChecked(false);
         });
 
         btnMedium.setOnClickListener(view -> {
-            mDifficulty = 1;
+            Sudoku.difficulty = 1;
             btnEasy.setChecked(false);
             btnMedium.setChecked(true);
             btnHard.setChecked(false);
         });
 
         btnHard.setOnClickListener(view -> {
-            mDifficulty = 2;
+            Sudoku.difficulty = 2;
             btnEasy.setChecked(false);
             btnMedium.setChecked(false);
             btnHard.setChecked(true);
@@ -60,7 +59,7 @@ public class GameSetting extends AppCompatActivity {
     private void setupLaunchButton() {
         Button btnConfirm = findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(view -> {
-            Toast.makeText(GameSetting.this, String.valueOf(mDifficulty), Toast.LENGTH_SHORT)
+            Toast.makeText(GameSetting.this, "Generating game.", Toast.LENGTH_SHORT)
                     .show();
             Intent intent = MainActivity.makeIntent(GameSetting.this);
             startActivity(intent);
