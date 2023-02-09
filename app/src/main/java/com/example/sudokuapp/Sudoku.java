@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Objects;
@@ -27,6 +29,12 @@ public class Sudoku
     private final ElementButton[][] answerTable;
     public static int difficulty;
     public static boolean manual;
+    //setters for game settings
+    public static void setDifficulty(int d) {difficulty = d;}
+    public static void setInputMode(boolean m) {manual = m;}
+    //getters for game settings
+    public static int getDifficulty() {return difficulty;}
+    public static boolean getInputMode() {return manual;}
     Sudoku(Context context, Resources res)
     {
         //Saves getResources from MainActivity to be used in this class
@@ -232,7 +240,7 @@ public class Sudoku
             ElementButton buttonPressed = (ElementButton) view;
 
             //Only allow unlocked cells to be changes (givens cannot be changed)
-            if(!buttonPressed.isLocked) {
+            if (!buttonPressed.isLocked) {
                 if (manual) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("Enter Number:");
@@ -290,52 +298,50 @@ public class Sudoku
                     });
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     builder.show();
-                }
-            }
-            /*else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Enter Number:");
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Enter Number:");
+                    int place = 1;
+                    Context dialogContext = builder.getContext();
 
-                EditText input = new EditText(view.getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    TableLayout input = new TableLayout(dialogContext);
+                    int rows, cols;
 
-                builder.setView(input);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String userInput = input.getText().toString();
+                    for (rows = 1; rows < 4; rows++) {
 
-                        //Check if userInput is in the hashmap
-                        //Iterating like this defeats purpose of hashmap, data structure should be reconsidered
-                        boolean validUserInput = false;
-                        for (int i = 1; i <= 9; i++) {
-                            if (Objects.equals(wordIndex.get(i).second, userInput)) {
-                                validUserInput = true;
-                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
-                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
-                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).second);
-                            }
+                        TableRow tableRow = new TableRow(dialogContext);
+                        for (cols = 1; cols < 4; cols++) {
+                            Button newButton = new Button(dialogContext);
+                            newButton.setText(wordIndex.get(place).second);
+                            tableRow.addView(newButton);
+                            place++;
                         }
+                        input.addView(tableRow);
+                    }
+                    builder.setView(input);
+                    int finalPlace = place;
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String userInput = wordIndex.get(finalPlace).second;
 
-                        //If the answer is correct
-                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
+                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(finalPlace);
+                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).first);
+                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).second);
 
-                            //Green if spot is valid
-                            buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
-                            //Lock the button, cannot be changed after correct input
-                            buttonPressed.setLocked(true);
-                            //Update the cell with the userInput text
-                            buttonPressed.setText(userInput);
 
-                        }
-                        //If the answer is incorrect
-                        else {
-                            //Case 1: Invalid input, Toast message displayed button unchanged.
-                            if (!validUserInput) {
-                                Toast t = Toast.makeText(THIS, "Invalid Input", Toast.LENGTH_LONG);
-                                t.show();
+                            //If the answer is correct
+                            if ((finalPlace == answerTable[buttonPressed.index1][buttonPressed.index2].mValue)) {
+
+                                //Green if spot is valid
+                                buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
+                                //Lock the button, cannot be changed after correct input
+                                buttonPressed.setLocked(true);
+                                //Update the cell with the userInput text
+                                buttonPressed.setText(userInput);
+
                             }
-                            //Case 2: Valid input (in vocab) but incorrect word
+                            //If the answer is incorrect
                             else {
                                 //Red if spot is invalid, button remains locked, text unchanged
                                 buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
@@ -345,16 +351,13 @@ public class Sudoku
 
                         }
 
-                    }
-                });
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                builder.show();
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    builder.show();
+                }
             }
         }
-            }*/
-        }
     }
-
 }
 
 

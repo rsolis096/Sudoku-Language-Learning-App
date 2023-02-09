@@ -29,41 +29,39 @@ public class GameSetting extends AppCompatActivity {
         // once the settings are chosen, click confirm to launch the game
         setupLaunchButton();
     }
-
+    //set up for the input mode switch
     private void setUpModeSwitch() {
         Switch swtchInputMode = findViewById(R.id.swtchInputMode);
         swtchInputMode.setOnClickListener(view -> {
-            if(Sudoku.manual) {
-                Sudoku.manual = false;
-            }
-            else {
-                Sudoku.manual = true;
-            }
-
+            //flips the mode when the switch is triggered based on current state
+            if (Sudoku.getInputMode())
+                Sudoku.setInputMode(false);
+             else
+                Sudoku.setInputMode(true);
         });
     }
-
+    //set up for the three difficulty buttons
     private void setupDifficulty() {
         ToggleButton btnEasy = findViewById(R.id.tgBtnEasy);
         ToggleButton btnMedium = findViewById(R.id.tgBtnMedium);
         ToggleButton btnHard = findViewById(R.id.tgBtnHard);
         //sets difficulty to 'easy' and unchecks the other buttons
         btnEasy.setOnClickListener(view -> {
-            Sudoku.difficulty = 0;
+            Sudoku.setDifficulty(0);
             btnEasy.setChecked(true);
             btnMedium.setChecked(false);
             btnHard.setChecked(false);
         });
         //sets difficulty to 'medium' and unchecks the other buttons
         btnMedium.setOnClickListener(view -> {
-            Sudoku.difficulty = 1;
+            Sudoku.setDifficulty(1);
             btnEasy.setChecked(false);
             btnMedium.setChecked(true);
             btnHard.setChecked(false);
         });
         //sets difficulty to 'hard' and unchecks the other buttons
         btnHard.setOnClickListener(view -> {
-            Sudoku.difficulty = 2;
+            Sudoku.setDifficulty(2);
             btnEasy.setChecked(false);
             btnMedium.setChecked(false);
             btnHard.setChecked(true);
