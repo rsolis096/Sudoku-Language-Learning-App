@@ -3,5 +3,10 @@
     <string name="start">Start</string>
     <string name="options">Options</string>
     <string name="confirm">Confirm</string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
     <string name="x">X</string>
+    <string name="back">Back</string>
 </resources>
