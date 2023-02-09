@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,30 +24,44 @@ public class GameSetting extends AppCompatActivity {
         // word bank selection
         // fill in english or spanish
         // type in answer or choose answer
+        setUpModeSwitch();
 
         // once the settings are chosen, click confirm to launch the game
         setupLaunchButton();
+    }
+
+    private void setUpModeSwitch() {
+        Switch swtchInputMode = findViewById(R.id.swtchInputMode);
+        swtchInputMode.setOnClickListener(view -> {
+            if(Sudoku.manual) {
+                Sudoku.manual = false;
+            }
+            else {
+                Sudoku.manual = true;
+            }
+
+        });
     }
 
     private void setupDifficulty() {
         ToggleButton btnEasy = findViewById(R.id.tgBtnEasy);
         ToggleButton btnMedium = findViewById(R.id.tgBtnMedium);
         ToggleButton btnHard = findViewById(R.id.tgBtnHard);
-
+        //sets difficulty to 'easy' and unchecks the other buttons
         btnEasy.setOnClickListener(view -> {
             Sudoku.difficulty = 0;
             btnEasy.setChecked(true);
             btnMedium.setChecked(false);
             btnHard.setChecked(false);
         });
-
+        //sets difficulty to 'medium' and unchecks the other buttons
         btnMedium.setOnClickListener(view -> {
             Sudoku.difficulty = 1;
             btnEasy.setChecked(false);
             btnMedium.setChecked(true);
             btnHard.setChecked(false);
         });
-
+        //sets difficulty to 'hard' and unchecks the other buttons
         btnHard.setOnClickListener(view -> {
             Sudoku.difficulty = 2;
             btnEasy.setChecked(false);
@@ -64,7 +79,7 @@ public class GameSetting extends AppCompatActivity {
             Intent intent = MainActivity.makeIntent(GameSetting.this);
             startActivity(intent);
         });
-
+        //return to main menu
         Button btnPrevious = findViewById(R.id.btnPrevious);
         btnPrevious.setOnClickListener(view -> finish());
         };

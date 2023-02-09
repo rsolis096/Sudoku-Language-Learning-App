@@ -26,6 +26,7 @@ public class Sudoku
     public HashMap<Pair<String,String>, Integer>  numberIndex;
     private final ElementButton[][] answerTable;
     public static int difficulty;
+    public static boolean manual;
     Sudoku(Context context, Resources res)
     {
         //Saves getResources from MainActivity to be used in this class
@@ -231,10 +232,69 @@ public class Sudoku
             ElementButton buttonPressed = (ElementButton) view;
 
             //Only allow unlocked cells to be changes (givens cannot be changed)
-            if(!buttonPressed.isLocked)
-            {
+            if(!buttonPressed.isLocked) {
+                if (manual) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Enter Number:");
+
+                    EditText input = new EditText(view.getContext());
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String userInput = input.getText().toString();
+
+                            //Check if userInput is in the hashmap
+                            //Iterating like this defeats purpose of hashmap, data structure should be reconsidered
+                            boolean validUserInput = false;
+                            for (int i = 1; i <= 9; i++) {
+                                if (Objects.equals(wordIndex.get(i).second, userInput)) {
+                                    validUserInput = true;
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).second);
+                                }
+                            }
+
+                            //If the answer is correct
+                            if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
+
+                                //Green if spot is valid
+                                buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
+                                //Lock the button, cannot be changed after correct input
+                                buttonPressed.setLocked(true);
+                                //Update the cell with the userInput text
+                                buttonPressed.setText(userInput);
+
+                            }
+                            //If the answer is incorrect
+                            else {
+                                //Case 1: Invalid input, Toast message displayed button unchanged.
+                                if (!validUserInput) {
+                                    Toast t = Toast.makeText(THIS, "Invalid Input", Toast.LENGTH_LONG);
+                                    t.show();
+                                }
+                                //Case 2: Valid input (in vocab) but incorrect word
+                                else {
+                                    //Red if spot is invalid, button remains locked, text unchanged
+                                    buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
+                                    //Update the cell with the userInput text
+                                    buttonPressed.setText(userInput);
+                                }
+
+                            }
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    builder.show();
+                }
+            }
+            /*else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Enter Number");
+                builder.setTitle("Enter Number:");
 
                 EditText input = new EditText(view.getContext());
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -248,10 +308,8 @@ public class Sudoku
                         //Check if userInput is in the hashmap
                         //Iterating like this defeats purpose of hashmap, data structure should be reconsidered
                         boolean validUserInput = false;
-                        for(int i = 1; i <= 9; i++)
-                        {
-                            if(Objects.equals(wordIndex.get(i).second, userInput))
-                            {
+                        for (int i = 1; i <= 9; i++) {
+                            if (Objects.equals(wordIndex.get(i).second, userInput)) {
                                 validUserInput = true;
                                 mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
                                 mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
@@ -260,8 +318,7 @@ public class Sudoku
                         }
 
                         //If the answer is correct
-                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput)
-                        {
+                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
 
                             //Green if spot is valid
                             buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
@@ -272,17 +329,14 @@ public class Sudoku
 
                         }
                         //If the answer is incorrect
-                        else
-                        {
+                        else {
                             //Case 1: Invalid input, Toast message displayed button unchanged.
-                            if(!validUserInput)
-                            {
-                                Toast t = Toast.makeText(THIS,"Invalid Input", Toast.LENGTH_LONG);
+                            if (!validUserInput) {
+                                Toast t = Toast.makeText(THIS, "Invalid Input", Toast.LENGTH_LONG);
                                 t.show();
                             }
                             //Case 2: Valid input (in vocab) but incorrect word
-                            else
-                            {
+                            else {
                                 //Red if spot is invalid, button remains locked, text unchanged
                                 buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
                                 //Update the cell with the userInput text
@@ -296,6 +350,8 @@ public class Sudoku
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 builder.show();
             }
+        }
+            }*/
         }
     }
 
