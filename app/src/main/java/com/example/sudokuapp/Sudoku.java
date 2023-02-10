@@ -229,8 +229,8 @@ public class Sudoku
                 //When backtracking, reset the value to 0 as the presumed solution failed
                 //THis needs to reset it to the correct number, english and translation.
                 board[row][col].setValue(0);
-                board[row][col].setEnglish(wordIndex.get(num).first);
-                board[row][col].setTranslation(wordIndex.get(num).second);
+                board[row][col].setEnglish(wordIndex.get(0).first);
+                board[row][col].setTranslation(wordIndex.get(0).second);
 
             }
         }
