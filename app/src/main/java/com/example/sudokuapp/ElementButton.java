@@ -11,18 +11,15 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     int mValue;
     String mTranslation;
     String mEnglish;
-    Boolean mGiven;
     public int index1;
     public int index2;
     public boolean isLocked;
 
     //Getter methods
-    public boolean getGiven() {
-        return mGiven;
-    }
     public int getValue() {
         return mValue;
     }
+    public boolean getLocked() {return isLocked;}
     public String getEnglish() {
         return mEnglish;
     }
@@ -39,9 +36,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     //Setter methods
     public void setValue(int value) {
         mValue = value;
-    }
-    public void setGiven(Boolean given) {
-        mGiven = given;
     }
     public void setLock(boolean val) {
         isLocked = val;
@@ -62,22 +56,25 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     }
 
 
-    public ElementButton(int v, String e, String t, @NonNull Context context, boolean given, int i1, int i2) {
+    public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
         super(context);
         index1 = i1;
         index2 = i2;
         mValue = v;
         mEnglish = e;
         mTranslation = t;
-        mGiven = given;
-
+        isLocked = locked;
         if(mValue == 0)
         {
             this.setText(" ");
         }
         else
         {
-            this.setText(mEnglish);
+            //translationDirection = true -> english to spanish
+            if(Sudoku.getTranslationDirection())
+                this.setText(mEnglish);
+            else
+                this.setText(mTranslation);
 
         }
         this.setTextColor(Color.BLACK);
@@ -89,7 +86,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
         mValue = 0;
         mEnglish = "";
         mTranslation ="";
-        mGiven = false;
+        isLocked = false;
     }
 
     public ElementButton(Context context, int num)
@@ -98,5 +95,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
         mValue = num;
         mEnglish = "";
         mTranslation ="";
+        isLocked = false;
     }
 }

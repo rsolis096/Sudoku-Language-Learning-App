@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Sudoku App</string>
+    <string name="start">Start</string>
+    <string name="options">Options</string>
+    <string name="confirm">Confirm</string>
+    <string name="input_mode">Manual Input</string>
+    <string name="difficulty">Choose a Difficulty:</string>
+    <string name="language">Choose a Learning Method:</string>
+    <string name="english">English to Spanish Translation</string>
+    <string name="spanish">Spanish to English Translation</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="x">X</string>
+    <string name="back">Back</string>
 </resources>
