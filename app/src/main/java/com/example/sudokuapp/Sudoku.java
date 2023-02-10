@@ -243,7 +243,7 @@ public class Sudoku
             if (!buttonPressed.isLocked) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 if (manual) {
-                    builder.setTitle("Enter Number:");
+                    builder.setTitle("Enter Word:");
 
                     EditText input = new EditText(view.getContext());
                     input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -258,7 +258,9 @@ public class Sudoku
                             //Iterating like this defeats purpose of hashmap, data structure should be reconsidered
                             boolean validUserInput = false;
                             for (int i = 1; i <= 9; i++) {
-                                if (Objects.equals(wordIndex.get(i).second, userInput)) {
+                                //converting all words (both dictionary and user input) to lowercase makes case sensitivity irrelevant
+                                //may cause a bug when accents are included as not sure how exactly toLowerCase() works with them
+                                if (Objects.equals(wordIndex.get(i).second.toLowerCase(), userInput.toLowerCase())) {
                                     validUserInput = true;
                                     mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
                                     mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
@@ -299,9 +301,9 @@ public class Sudoku
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     builder.show();
                 } else {
-                    //creating the dialog box this way simply allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
+                    //creating the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
                     AlertDialog alert = builder.create();
-                    alert.setTitle("Enter Number:");
+                    alert.setTitle("Enter Word:");
                     int place = 0;
                     Context dialogContext = builder.getContext();
                     TableLayout input = new TableLayout(dialogContext);

@@ -2,6 +2,7 @@ package com.example.sudokuapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,8 +32,8 @@ public class GameSetting extends AppCompatActivity {
     }
     //set up for the input mode switch
     private void setUpModeSwitch() {
-        Switch swtchInputMode = findViewById(R.id.swtchInputMode);
-        swtchInputMode.setOnClickListener(view -> {
+        Switch switchInputMode = findViewById(R.id.swtchInputMode);
+        switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
             if (Sudoku.getInputMode())
                 Sudoku.setInputMode(false);
