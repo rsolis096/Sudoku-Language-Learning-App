@@ -24,21 +24,39 @@ public class GameSetting extends AppCompatActivity {
         setupDifficulty();
         // word bank selection
         // fill in english or spanish
+        setupLanguageMode();
         // type in answer or choose answer
         setUpModeSwitch();
 
         // once the settings are chosen, click confirm to launch the game
         setupLaunchButton();
     }
+
+    private void setupLanguageMode() {
+        ToggleButton btnEngToSpan = findViewById(R.id.tgBtnEngToSpan);
+        ToggleButton btnSpanToEng = findViewById(R.id.tgBtnSpanToEng);
+        //sets which direction the sudoku translates
+        //true for spanish inputs, false for english inputs
+        btnEngToSpan.setOnClickListener(view -> {
+            Sudoku.setTranslationDirection(true);
+            btnEngToSpan.setChecked(true);
+            btnSpanToEng.setChecked(false);
+
+        });
+        btnSpanToEng.setOnClickListener(view -> {
+            Sudoku.setTranslationDirection(false);
+            btnEngToSpan.setChecked(false);
+            btnSpanToEng.setChecked(true);
+        });
+
+    }
+
     //set up for the input mode switch
     private void setUpModeSwitch() {
         Switch switchInputMode = findViewById(R.id.swtchInputMode);
         switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
-            if (Sudoku.getInputMode())
-                Sudoku.setInputMode(false);
-             else
-                Sudoku.setInputMode(true);
+            Sudoku.setInputMode(!Sudoku.getInputMode());
         });
     }
     //set up for the three difficulty buttons
@@ -81,7 +99,7 @@ public class GameSetting extends AppCompatActivity {
         //return to main menu
         Button btnPrevious = findViewById(R.id.btnPrevious);
         btnPrevious.setOnClickListener(view -> finish());
-        };
+        }
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, GameSetting.class);

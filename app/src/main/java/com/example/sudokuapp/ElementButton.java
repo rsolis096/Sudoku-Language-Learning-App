@@ -70,7 +70,11 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
         }
         else
         {
-            this.setText(mEnglish);
+            //translationDirection = true -> english to spanish
+            if(Sudoku.getTranslationDirection())
+                this.setText(mEnglish);
+            else
+                this.setText(mTranslation);
 
         }
         this.setTextColor(Color.BLACK);

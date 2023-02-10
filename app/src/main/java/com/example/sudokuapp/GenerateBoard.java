@@ -6,7 +6,6 @@ public class GenerateBoard {
     int[][] mGeneratedBoard;
     int rows, cols;
     int dif;
-    boolean manual;
 
     GenerateBoard(int r, int c, int d)
     {
