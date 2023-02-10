@@ -25,6 +25,7 @@ public class Sudoku
     public HashMap<Integer, Pair<String,String>> wordIndex;
     public HashMap<Pair<String,String>, Integer>  numberIndex;
     private final ElementButton[][] answerTable;
+    public static int difficulty;
     Sudoku(Context context, Resources res)
     {
         //Saves getResources from MainActivity to be used in this class
@@ -46,7 +47,7 @@ public class Sudoku
         }
 
         //Builds a valid integer board
-        GenerateBoard generatedBoard = new GenerateBoard(9, 9);
+        GenerateBoard generatedBoard = new GenerateBoard(9, 9, difficulty);
         generatedBoard.createBoard();
 
         //Converts the integer board into and Element board.
@@ -115,7 +116,7 @@ public class Sudoku
         {
             for(int j = 0; j < 9; j++)
             {
-                if(!mSudokuBoard[i][j].getGiven())
+                if(!mSudokuBoard[i][j].getLocked())
                 {
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
                 }

@@ -5,11 +5,13 @@ import java.util.Random;
 public class GenerateBoard {
     int[][] mGeneratedBoard;
     int rows, cols;
+    int dif;
 
-    GenerateBoard(int r, int c)
+    GenerateBoard(int r, int c, int d)
     {
         rows = r;
         cols = c;
+        dif = d;
         mGeneratedBoard = new int[r][c];
         for(int[] i:mGeneratedBoard)
         {
@@ -33,14 +35,24 @@ public class GenerateBoard {
         //Solve the grid based off that seed.
         solveBoard(0,0,mGeneratedBoard);
         //demoTableGenerated and generatedTable are the same. Remove some givens from demoTableGenerated
-        int givenCounter = 0;
-        int givenMax = 40;
-        while (givenCounter < givenMax)
+        int hiddenCounter = 0;
+        //Adjusting hiddenMax can be used to set a difficulty
+        //If hiddenMax = 70, there are 70 hidden cells, and 11 given cells.
+        //dif multiplier alters number of hidden cells by 10, easy = 40 given, medium = 30 given, hard = 20 given
+        //TODO: add random variance to hidden cell generation (hard:19-26, med:27-36, easy:37-40)
+        int hiddenMax = 41 + 10*dif;
+
+        while (hiddenCounter < hiddenMax)
         {
             row = random.nextInt((max - min) + 1) + min;
             col = random.nextInt((max - min) + 1) + min;
-            mGeneratedBoard[row][col] = 0;
-            givenCounter++;
+            if(mGeneratedBoard[row][col] != 0)
+            {
+                mGeneratedBoard[row][col] = 0;
+                hiddenCounter++;
+            }
+
+
         }
     }
 
@@ -100,14 +112,22 @@ public class GenerateBoard {
             }
         }
 
+        //Random number prevents first row and box from containing values 1 through 9 in that order
+        Random random = new Random();
+        int min = 1;
+        int max = 9;
+        int checkNum = random.nextInt((max - min) + 1) + min;
+        int counter = 0;
         //If at a zero position, attempt to fill it with numbers [1,9]
-        for (int num = 1; num <= 9; num++)
+
+        //Must iterate enough times for row + 1 and col+1 to reach 8
+        while (counter < 9)
         {
             //Check the passed parameters coordinates if they are valid
-            if (validSpot(row, col, num, board))
+            if (validSpot(row, col, checkNum, board))
             {
-                //If so, set num
-                board[row][col] = num;
+                //If so, set to checkNum
+                board[row][col] = checkNum;
 
                 //If you are at column 8 (last column), move onto the next row
                 if (col == 8)
@@ -134,6 +154,7 @@ public class GenerateBoard {
                 //THis needs to reset it to the correct number, english and translation.
                 board[row][col] = 0;
             }
+            counter++;
         }
         return false;
     }
