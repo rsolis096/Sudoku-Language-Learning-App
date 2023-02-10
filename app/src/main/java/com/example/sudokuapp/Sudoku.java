@@ -241,8 +241,8 @@ public class Sudoku
 
             //Only allow unlocked cells to be changes (givens cannot be changed)
             if (!buttonPressed.isLocked) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                 if (manual) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     builder.setTitle("Enter Number:");
 
                     EditText input = new EditText(view.getContext());
@@ -299,61 +299,61 @@ public class Sudoku
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     builder.show();
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setTitle("Enter Number:");
-                    int place = 1;
+                    //creating the dialog box this way simply allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
+                    AlertDialog alert = builder.create();
+                    alert.setTitle("Enter Number:");
+                    int place = 0;
                     Context dialogContext = builder.getContext();
-
                     TableLayout input = new TableLayout(dialogContext);
                     int rows, cols;
-
+                    //builds grid of vocab words here by iterating over wordIndex
                     for (rows = 1; rows < 4; rows++) {
 
                         TableRow tableRow = new TableRow(dialogContext);
                         for (cols = 1; cols < 4; cols++) {
+                            place++;
                             Button newButton = new Button(dialogContext);
                             newButton.setText(wordIndex.get(place).second);
+                            int finalPlace = place;
+                            //Essentially same functionality as manual input mode above
+                            newButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    String userInput = wordIndex.get(finalPlace).second;
+
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(finalPlace);
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).first);
+                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).second);
+
+
+                                    //If the answer is correct
+                                    if ((finalPlace == answerTable[buttonPressed.index1][buttonPressed.index2].mValue)) {
+
+                                        //Green if spot is valid
+                                        buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
+                                        //Lock the button, cannot be changed after correct input
+                                        buttonPressed.setLocked(true);
+                                        //Update the cell with the userInput text
+                                        buttonPressed.setText(userInput);
+                                    }
+                                    //If the answer is incorrect
+                                    else {
+                                        //Red if spot is invalid, button remains locked, text unchanged
+                                        buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
+                                        //Update the cell with the userInput text
+                                        buttonPressed.setText(userInput);
+                                    }
+                                    //closes dialog box after a button is pressed
+                                    alert.cancel();
+                                }
+                            });
                             tableRow.addView(newButton);
-                            place++;
+
                         }
                         input.addView(tableRow);
                     }
-                    builder.setView(input);
-                    int finalPlace = place;
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String userInput = wordIndex.get(finalPlace).second;
-
-                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(finalPlace);
-                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).first);
-                            mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).second);
-
-
-                            //If the answer is correct
-                            if ((finalPlace == answerTable[buttonPressed.index1][buttonPressed.index2].mValue)) {
-
-                                //Green if spot is valid
-                                buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
-                                //Lock the button, cannot be changed after correct input
-                                buttonPressed.setLocked(true);
-                                //Update the cell with the userInput text
-                                buttonPressed.setText(userInput);
-
-                            }
-                            //If the answer is incorrect
-                            else {
-                                //Red if spot is invalid, button remains locked, text unchanged
-                                buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
-                                //Update the cell with the userInput text
-                                buttonPressed.setText(userInput);
-                            }
-
-                        }
-
-                    });
-                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                    builder.show();
+                    alert.setView(input);
+                    alert.show();
                 }
             }
         }
