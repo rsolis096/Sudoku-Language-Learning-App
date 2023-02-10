@@ -3,6 +3,7 @@
     <string name="start">Start</string>
     <string name="options">Options</string>
     <string name="confirm">Confirm</string>
+    <string name="input_mode">Manual Input</string>
     <string name="difficulty">Difficulty:</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
