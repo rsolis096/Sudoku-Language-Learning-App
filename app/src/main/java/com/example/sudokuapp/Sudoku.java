@@ -27,14 +27,17 @@ public class Sudoku
     public HashMap<Integer, Pair<String,String>> wordIndex;
     public HashMap<Pair<String,String>, Integer>  numberIndex;
     private final ElementButton[][] answerTable;
-    public static int difficulty;
-    public static boolean manual;
+    private static int difficulty;
+    private static boolean manual;
+    private static boolean translationDirection = true;
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
     public static void setInputMode(boolean m) {manual = m;}
+    public static void setTranslationDirection(boolean t) {translationDirection = t;}
     //getters for game settings
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
+    public static boolean getTranslationDirection() {return translationDirection;}
     Sudoku(Context context, Resources res)
     {
         //Saves getResources from MainActivity to be used in this class
@@ -201,6 +204,7 @@ public class Sudoku
                 board[row][col].setEnglish(wordIndex.get(num).first);
                 board[row][col].setTranslation(wordIndex.get(num).second);
 
+
                 //If you are at column 8 (last column), move onto the next row
                 if (col == 8)
                 {
@@ -227,6 +231,7 @@ public class Sudoku
                 board[row][col].setValue(0);
                 board[row][col].setEnglish(wordIndex.get(0).first);
                 board[row][col].setTranslation(wordIndex.get(0).second);
+
             }
         }
         return false;
@@ -260,14 +265,25 @@ public class Sudoku
                             for (int i = 1; i <= 9; i++) {
                                 //converting all words (both dictionary and user input) to lowercase makes case sensitivity irrelevant
                                 //may cause a bug when accents are included as not sure how exactly toLowerCase() works with them
-                                if (Objects.equals(wordIndex.get(i).second.toLowerCase(), userInput.toLowerCase())) {
-                                    validUserInput = true;
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).second);
+                                //translationDirection = true -> english to spanish
+                                if (translationDirection) {
+                                    if (Objects.equals(wordIndex.get(i).second.toLowerCase(), userInput.toLowerCase())) {
+                                        validUserInput = true;
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).first);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).second);
+                                    }
+                                }
+
+                                else {
+                                    if (Objects.equals(wordIndex.get(i).first.toLowerCase(), userInput.toLowerCase())) {
+                                        validUserInput = true;
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(i).second);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(i).first);
+                                    }
                                 }
                             }
-
                             //If the answer is correct
                             if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == answerTable[buttonPressed.index1][buttonPressed.index2].mValue) && validUserInput) {
 
@@ -315,17 +331,31 @@ public class Sudoku
                         for (cols = 1; cols < 4; cols++) {
                             place++;
                             Button newButton = new Button(dialogContext);
-                            newButton.setText(wordIndex.get(place).second);
+                            //translationDirection = true -> english to spanish
+                            if(translationDirection)
+                                newButton.setText(wordIndex.get(place).second);
+                            else
+                                newButton.setText(wordIndex.get(place).first);
                             int finalPlace = place;
                             //Essentially same functionality as manual input mode above
                             newButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    String userInput = wordIndex.get(finalPlace).second;
+                                    String userInput;
+                                    //translationDirection = true -> english to spanish
+                                    if(translationDirection) {
+                                        userInput = wordIndex.get(finalPlace).second;
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).first);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).second);
+                                    }
+                                    else {
+                                        userInput = wordIndex.get(finalPlace).first;
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).second);
+                                        mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).first);
+                                    }
 
                                     mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(finalPlace);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(wordIndex.get(finalPlace).first);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(wordIndex.get(finalPlace).second);
+
 
 
                                     //If the answer is correct
