@@ -1,6 +1,8 @@
 package com.example.sudokuapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         for(int rows = 0; rows < 9; rows++)
         {
-//hi
             TableRow tableRow = new TableRow(this);
             for(int cols = 0; cols < 9; cols++)
             {
