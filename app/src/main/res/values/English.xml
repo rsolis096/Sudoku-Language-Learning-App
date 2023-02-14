@@ -1,54 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="family">
-        <item>Mother,Madre</item>
-        <item>Father,Padre</item>
-        <item>Sister,Hermana</item>
-        <item>Brother,Hermano</item>
-        <item>Aunt,Tia</item>
-        <item>Uncle,Tio</item>
-        <item>Daughter,Hija</item>
-        <item>Son,Hijo</item>
-        <item>Friend,Amigo</item>
+    <string-array name="numbers_english">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
     </string-array>
-
-    <string-array name="greetings">
-        <item>Hello,Hola</item>
-        <item>Goodbye,Adios</item>
-        <item>Please,Por favor</item>
-        <item>Thank you,Gracias</item>
-        <item>Sorry,Lo siento</item>
-        <item>Yes,Si</item>
-        <item>No,No</item>
-        <item>Hi,Alo</item>
-        <item>Bye,Chao</item>
-    </string-array>
-
-    <string-array name="food_drinks">
-        <item>Water,Agua</item>
-        <item>Bread,Pan</item>
-        <item>Milk,Leche</item>
-        <item>Tea,Te</item>
-        <item>Coffee,Cafe</item>
-        <item>Juice,Jugo</item>
-        <item>Cheese,Queso</item>
-        <item>Fruits,Frutas</item>
-        <item>Lemonade,Limonada</item>
-    </string-array>
-
-    <string-array name="directions">
-        <item>Go,Ir</item>
-        <item>Come,Venir</item>
-        <item>Stop,Parar</item>
-        <item>Run,Correr</item>
-        <item>Turn,Girar</item>
-        <item>Look,Mirar</item>
-        <item>Walk,Caminar</item>
-        <item>Up,Arriba</item>
-        <item>Down,Abajo</item>
-    </string-array>
-
 
 
 </resources>
