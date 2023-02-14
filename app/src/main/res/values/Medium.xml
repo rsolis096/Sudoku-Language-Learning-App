@@ -13,7 +13,7 @@
         <item>Nine,Nueve</item>
     </string-array>
 
-    <string-array name="family">
+    <string-array name="family_medium">
         <item>Godmother,Madrina</item>
         <item>Godfather,Padrino</item>
         <item>Stepdaughter,Hijastra</item>
@@ -25,7 +25,7 @@
         <item>Friend,Amigo</item>
     </string-array>
 
-    <string-array name="greetings">
+    <string-array name="greetings_medium">
         <item>Nice to meet you,Mucho gusto</item>
         <item>I am fine,Estoy bien</item>
         <item>Please,Por favor</item>
@@ -37,7 +37,7 @@
         <item>Sir,Senor</item>
     </string-array>
 
-    <string-array name="food_drinks">
+    <string-array name="food_drinks_medium">
         <item>Breakfast,Desayuno</item>
         <item>Smoothie,Batido</item>
         <item>Chicken,Pollo</item>
@@ -49,7 +49,7 @@
         <item>Lemonade,Limonada</item>
     </string-array>
 
-    <string-array name="directions">
+    <string-array name="directions_medium">
         <item>Straight,Derecho</item>
         <item>Far,Lejos</item>
         <item>Near,Cerca</item>
