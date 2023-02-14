@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="family">
+        <item>Grandmother,Abuela</item>
+        <item>Grandfather,Abuelo</item>
+        <item>Granddaughter,Nieta</item>
+        <item>Grandson,Nieto</item>
+        <item>Cousin,Primo</item>
+        <item>Niece,Sobrina</item>
+        <item>Nephew,Sobrino</item>
+        <item>Half-sister,Hermanastra</item>
+        <item>Half-brother,Hermanastro</item>
+    </string-array>
+
+    <string-array name="greetings">
+        <item>Good morning,Buenos dias</item>
+        <item>Good afternoon,Buenas tardes</item>
+        <item>Good evening,Buenas noches</item>
+        <item>Nice to meet you,Mucho gusto</item>
+        <item>See you later,Hasta luego</item>
+        <item>What is up?,Que pasa? </item>
+        <item>How are you?,Como estas?</item>
+        <item>Welcome,Bienvenido</item>
+        <item>Take care,Cuidate</item>
+    </string-array>
+
+    <string-array name="food_drinks">
+        <item>Vegetables,Verduras</item>
+        <item>Breakfast,Desayuno</item>
+        <item>Lunch,Comida</item>
+        <item>Dinner,Cena</item>
+        <item>Smoothie,Batido</item>
+        <item>Butter,Mantequilla</item>
+        <item>Burger,Hamburguesa</item>
+        <item>Salad,Ensalada</item>
+        <item>Rice,Arroz</item>
+    </string-array>
+
+    <string-array name="directions">
+        <item>Left,Izquierda</item>
+        <item>Right,Derecha</item>
+        <item>Straight,Derecho</item>
+        <item>Back,Atras</item>
+        <item>Near,Cerca</item>
+        <item>Far,Lejos</item>
+        <item>Inside,Adentro</item>
+        <item>Outside,Afuera</item>
+        <item>Forward,Adelante</item>
+    </string-array>
+
+
+</resources>

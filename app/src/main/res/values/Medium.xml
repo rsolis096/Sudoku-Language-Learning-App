@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="numbers_english">
+        <item>One,Uno</item>
+        <item>Two,Dos</item>
+        <item>Three,Tres</item>
+        <item>Four,Cuatro</item>
+        <item>Five,Cinco</item>
+        <item>Six,Seis</item>
+        <item>Seven,Siete</item>
+        <item>Eight,Ocho</item>
+        <item>Nine,Nueve</item>
+    </string-array>
+
+    <string-array name="family">
+        <item>Godmother,Madrina</item>
+        <item>Godfather,Padrino</item>
+        <item>Stepdaughter,Hijastra</item>
+        <item>Stepson,Hijostra</item>
+        <item>Grandmother,Abuela</item>
+        <item>Grandfather,Abuelo</item>
+        <item>Cousin,Primo</item>
+        <item>Family,Familia</item>
+        <item>Friend,Amigo</item>
+    </string-array>
+
+    <string-array name="greetings">
+        <item>Nice to meet you,Mucho gusto</item>
+        <item>I am fine,Estoy bien</item>
+        <item>Please,Por favor</item>
+        <item>See you next time,Hasta la vista</item>
+        <item>Goodnight,Buenas noches</item>
+        <item>Take care,Cuidate</item>
+        <item>Sorry,Perdon</item>
+        <item>Maam,Senora</item>
+        <item>Sir,Senor</item>
+    </string-array>
+
+    <string-array name="food_drinks">
+        <item>Breakfast,Desayuno</item>
+        <item>Smoothie,Batido</item>
+        <item>Chicken,Pollo</item>
+        <item>Salad,Ensalada</item>
+        <item>Bread,Pan</item>
+        <item>Dinner,Cena</item>
+        <item>Cheese,Queso</item>
+        <item>Fruits,Frutas</item>
+        <item>Lemonade,Limonada</item>
+    </string-array>
+
+    <string-array name="directions">
+        <item>Straight,Derecho</item>
+        <item>Far,Lejos</item>
+        <item>Near,Cerca</item>
+        <item>Run,Correr</item>
+        <item>Outside,Afuera</item>
+        <item>Inside,Adentro</item>
+        <item>Walk,Caminar</item>
+        <item>Up,Arriba</item>
+        <item>Down,Abajo</item>
+    </string-array>
+
+
+</resources>
