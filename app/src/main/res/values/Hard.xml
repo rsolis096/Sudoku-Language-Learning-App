@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="family">
+    <string-array name="family_hard">
         <item>Grandmother,Abuela</item>
         <item>Grandfather,Abuelo</item>
         <item>Granddaughter,Nieta</item>

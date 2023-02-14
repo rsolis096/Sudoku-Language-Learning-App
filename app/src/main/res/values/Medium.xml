@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="numbers_english">
+    <string-array name="numbers_english_medium">
         <item>One,Uno</item>
         <item>Two,Dos</item>
         <item>Three,Tres</item>

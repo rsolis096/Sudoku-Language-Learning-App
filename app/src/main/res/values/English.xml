@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="family_english">
+    <string-array name="numbers_english">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+    </string-array>
+
+    <string-array name="family_easy">
         <item>Mother,Madre</item>
         <item>Father,Padre</item>
         <item>Sister,Hermana</item>
@@ -13,7 +25,7 @@
         <item>Friend,Amigo</item>
     </string-array>
 
-    <string-array name="greetings_english">
+    <string-array name="greetings_easy">
         <item>Hello,Hola</item>
         <item>Goodbye,Adios</item>
         <item>Please,Por favor</item>
@@ -25,7 +37,7 @@
         <item>Bye,Chao</item>
     </string-array>
 
-    <string-array name="food_drinks_english">
+    <string-array name="food_drinks_easy">
         <item>Water,Agua</item>
         <item>Bread,Pan</item>
         <item>Milk,Leche</item>
@@ -37,7 +49,7 @@
         <item>Lemonade,Limonada</item>
     </string-array>
 
-    <string-array name="directions_english">
+    <string-array name="directions_easy">
         <item>Go,Ir</item>
         <item>Come,Venir</item>
         <item>Stop,Parar</item>
