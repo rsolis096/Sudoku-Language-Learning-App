@@ -33,7 +33,6 @@
         android:layout_marginStart="53dp"
         android:layout_marginTop="5dp"
         android:checked="true"
-        android:text="@string/easy"
         android:textOff="@string/easy"
         android:textOn="@string/easy"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,6 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:text="ToggleButton"
         android:textOff="@string/medium"
         android:textOn="@string/medium"
         app:layout_constraintEnd_toStartOf="@+id/tgBtnHard"
@@ -59,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="ToggleButton"
         android:textOff="@string/hard"
         android:textOn="@string/hard"
         app:layout_constraintStart_toEndOf="@+id/tgBtnMedium"
@@ -73,5 +70,50 @@
         android:text="@string/back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/swtchInputMode"
+        android:layout_width="141dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginBottom="50dp"
+        android:showText="false"
+        android:splitTrack="false"
+        android:text="@string/input_mode"
+        app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/tgBtnEngToSpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="5dp"
+        android:checked="true"
+        android:textOff="@string/english"
+        android:textOn="@string/english"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <ToggleButton
+        android:id="@+id/tgBtnSpanToEng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="5dp"
+        android:textOff="@string/spanish"
+        android:textOn="@string/spanish"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tgBtnEngToSpan" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/language"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tgBtnEasy" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
