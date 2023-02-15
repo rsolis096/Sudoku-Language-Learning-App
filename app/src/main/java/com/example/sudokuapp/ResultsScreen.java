@@ -15,6 +15,7 @@ public class ResultsScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results_screen);
 
+        setTitle("Congratulations!");
         // goto MainMenu
         setupBackToMain();
     }
