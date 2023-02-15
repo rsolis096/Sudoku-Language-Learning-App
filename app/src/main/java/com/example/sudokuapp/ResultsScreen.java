@@ -13,19 +13,18 @@ public class ResultsScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options_page);
+        setContentView(R.layout.activity_results_screen);
 
-        // close this activity
+        // goto MainMenu
         setupBackToMain();
-
-        // theme/colour
-        // leaderboard
-        // modify word bank
     }
 
     // close this activity
     private void setupBackToMain() {
-        Button btn = findViewById(R.id.backToMenu);
-        btn.setOnClickListener(view -> finish());
+        Button btn = findViewById(R.id.btnEndGameReturn);
+        btn.setOnClickListener(view -> {
+            Intent intent = new Intent(ResultsScreen.this, MainMenu.class);
+            startActivity(intent);
+        });
     }
 }

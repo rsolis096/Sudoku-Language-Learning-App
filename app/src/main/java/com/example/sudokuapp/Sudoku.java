@@ -36,9 +36,6 @@ public class Sudoku extends AppCompatActivity
     private static boolean manual;
     private static boolean translationDirection = true;
     private int mRemainingCells;
-    public int getEmptyCells() {
-        return mRemainingCells;
-    }
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
     public static void setInputMode(boolean m) {manual = m;}
@@ -254,19 +251,17 @@ public class Sudoku extends AppCompatActivity
 
 
     public void checkIfCompleted(View view) {
-        Log.i("test", "Menu Called");
         if(mRemainingCells == 0) {
-            Log.i("test", "0 check passed");
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("Game Finished!");
             builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Sudoku.this, ResultsScreen.class);
-                    startActivity(intent);
+                    Intent intent = new Intent(view.getContext(), ResultsScreen.class);
+                    view.getContext().startActivity(intent);
                 }
             });
-            Log.i("test", "Everything called");
+            builder.show();
         }
     }
 
