@@ -4,9 +4,11 @@ package com.example.sudokuapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -15,21 +17,25 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.HashMap;
 import java.util.Objects;
 
 
-public class Sudoku
+public class Sudoku extends AppCompatActivity
 {
     public ElementButton[][] mSudokuBoard;
     public Button solveButton;
     private final Context THIS;
     public HashMap<Integer, Pair<String,String>> wordIndex;
-    public HashMap<Pair<String,String>, Integer>  numberIndex;
+    public HashMap<Pair<String,String>, Integer> numberIndex;
     private final ElementButton[][] answerTable;
     private static int difficulty;
     private static boolean manual;
     private static boolean translationDirection = true;
+    private int mRemainingCells;
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
     public static void setInputMode(boolean m) {manual = m;}
@@ -61,6 +67,8 @@ public class Sudoku
         //Builds a valid integer board
         GenerateBoard generatedBoard = new GenerateBoard(9, 9, difficulty);
         generatedBoard.createBoard();
+
+        mRemainingCells = generatedBoard.getEmptyCells();
 
         //Converts the integer board into and Element board.
         mSudokuBoard = new ElementButton[9][9];
@@ -124,16 +132,14 @@ public class Sudoku
     public void updateGame()
     {
         //Updates the text of buttons
-        for(int i = 0; i < 9; i++)
-        {
-            for(int j = 0; j < 9; j++)
-            {
-                if(!mSudokuBoard[i][j].getLocked())
-                {
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (!mSudokuBoard[i][j].getLocked()) {
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
                 }
             }
         }
+        mRemainingCells = 0;
     }
 
     public boolean checkBox(int row, int col, int num, ElementButton[][] board)
@@ -201,8 +207,15 @@ public class Sudoku
             {
                 //If so, set num
                 board[row][col].setValue(num);
-                board[row][col].setEnglish(wordIndex.get(num).first);
-                board[row][col].setTranslation(wordIndex.get(num).second);
+                if(translationDirection) {
+                    board[row][col].setEnglish(wordIndex.get(num).first);
+                    board[row][col].setTranslation(wordIndex.get(num).second);
+                }
+                else {
+                    board[row][col].setEnglish(wordIndex.get(num).second);
+                    board[row][col].setTranslation(wordIndex.get(num).first);
+                }
+
 
 
                 //If you are at column 8 (last column), move onto the next row
@@ -237,10 +250,27 @@ public class Sudoku
         return false;
     }
 
+
+    public void checkIfCompleted(View view) {
+        if(mRemainingCells == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("Game Finished!");
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(view.getContext(), ResultsScreen.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
+            builder.show();
+        }
+    }
+
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
+
             //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
 
@@ -291,9 +321,10 @@ public class Sudoku
                                 buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
                                 //Lock the button, cannot be changed after correct input
                                 buttonPressed.setLocked(true);
+                                mRemainingCells--;
+                                checkIfCompleted(view);
                                 //Update the cell with the userInput text
                                 buttonPressed.setText(userInput);
-
                             }
                             //If the answer is incorrect
                             else {
@@ -365,6 +396,9 @@ public class Sudoku
                                         buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
                                         //Lock the button, cannot be changed after correct input
                                         buttonPressed.setLocked(true);
+                                        mRemainingCells--;
+
+                                        checkIfCompleted(view);
                                         //Update the cell with the userInput text
                                         buttonPressed.setText(userInput);
                                     }
