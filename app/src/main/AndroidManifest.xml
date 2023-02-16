@@ -22,6 +22,9 @@
             android:name=".GameSetting"
             android:exported="false" />
         <activity
+            android:name=".ResultsScreen"
+            android:exported="false" />
+        <activity
             android:name=".MainMenu"
             android:exported="true">
             <intent-filter>
