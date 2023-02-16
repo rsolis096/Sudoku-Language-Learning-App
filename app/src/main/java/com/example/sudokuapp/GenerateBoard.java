@@ -43,7 +43,7 @@ public class GenerateBoard {
         //If hiddenMax = 70, there are 70 hidden cells, and 11 given cells.
         //dif multiplier alters number of hidden cells by 10, easy = 40 given, medium = 30 given, hard = 20 given
         //TODO: add random variance to hidden cell generation (hard:19-26, med:27-36, easy:37-40)
-        int hiddenMax = 1 + 10*dif;
+        int hiddenMax = 41 + 10*dif;
         remainingCells = hiddenMax;
         while (hiddenCounter < hiddenMax)
         {

@@ -139,6 +139,7 @@ public class Sudoku extends AppCompatActivity
                 }
             }
         }
+        mRemainingCells = 0;
     }
 
     public boolean checkBox(int row, int col, int num, ElementButton[][] board)
