@@ -46,9 +46,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     public void setTranslation(String translation) {
         mTranslation = translation;
     }
-    public void setLocked(boolean locked) {
-        isLocked = locked;
-    }
     public void setIndex(int i, int j)
     {
         index1 = i;
@@ -57,13 +54,21 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
 
 
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
+
         super(context);
+
+        if((v > 9 || v < 0) || (i1 > 9 || i1 < 0) || (i2 > 9 || i2 < 0))
+        {
+            throw new IllegalArgumentException("Index or value out of range!");
+        }
+
         index1 = i1;
         index2 = i2;
         mValue = v;
         mEnglish = e;
         mTranslation = t;
         isLocked = locked;
+
         if(mValue == 0)
         {
             this.setText(" ");
