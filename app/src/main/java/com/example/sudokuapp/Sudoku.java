@@ -262,6 +262,13 @@ public class Sudoku extends AppCompatActivity
                     view.getContext().startActivity(intent);
                 }
             });
+            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    Intent intent = new Intent(view.getContext(), ResultsScreen.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
             builder.show();
         }
     }
