@@ -320,7 +320,7 @@ public class Sudoku extends AppCompatActivity
                                 //Green if spot is valid
                                 buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
                                 //Lock the button, cannot be changed after correct input
-                                buttonPressed.setLocked(true);
+                                buttonPressed.setLock(true);
                                 mRemainingCells--;
                                 checkIfCompleted(view);
                                 //Update the cell with the userInput text
@@ -395,7 +395,7 @@ public class Sudoku extends AppCompatActivity
                                         //Green if spot is valid
                                         buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
                                         //Lock the button, cannot be changed after correct input
-                                        buttonPressed.setLocked(true);
+                                        buttonPressed.setLock(true);
                                         mRemainingCells--;
 
                                         checkIfCompleted(view);
