@@ -19,7 +19,12 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.TypedArrayUtils;
 
+import org.w3c.dom.DOMStringList;
+
+import java.util.AbstractCollection;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -33,7 +38,7 @@ public class Sudoku extends AppCompatActivity
     public HashMap<Pair<String,String>, Integer> numberIndex;
     private final ElementButton[][] answerTable;
     private static int difficulty;
-    private static boolean[] wordBank = {true,false,false,false,false};
+    private static final boolean[] wordBank = {true,false,false,false,false};
     private static boolean manual;
     private static boolean translationDirection = true;
     private int mRemainingCells;
@@ -46,6 +51,12 @@ public class Sudoku extends AppCompatActivity
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
+
+    //return an array of 9 that is selected from the correct difficulty and categories
+    String[] getWords(){
+        return getResources().getStringArray(R.array.numbers_english);
+    }
+
     Sudoku(Context context, Resources res)
     {
         //Saves getResources from MainActivity to be used in this class
