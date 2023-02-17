@@ -13,7 +13,9 @@ import androidx.preference.PreferenceFragmentCompat;
 
 public class WordBank extends AppCompatActivity {
 
-    public int checkedIndex;
+    public static int checkedIndex = 0;
+    public ToggleButton[] toggleButtons;
+
 
     public static Intent makeIntent(Context gameSetting) {
         return new Intent(gameSetting, WordBank.class);
@@ -24,20 +26,29 @@ public class WordBank extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_bank);
 
+
+
+
+        setupWordBank();
         // back button close activity
+        setupClose();
+    }
+
+    private void setupClose() {
         Button btnback = findViewById(R.id.btnback);
         btnback.setOnClickListener(view -> finish());
-        setupWordBank();
     }
 
     private void setupWordBank() {
 
-        ToggleButton[] toggleButtons = new ToggleButton[5];
+        toggleButtons = new ToggleButton[5];
         toggleButtons[0] = findViewById(R.id.btnNumbers);
         toggleButtons[1] = findViewById(R.id.btnfamily);
         toggleButtons[2] = findViewById(R.id.btnGreeting);
         toggleButtons[3] = findViewById(R.id.btnFood);
         toggleButtons[4] = findViewById(R.id.btnDirection);
+
+        toggleButtons[checkedIndex].setChecked(true);
 
         toggleButtons[0].setOnClickListener(view-> {
             Sudoku.setWordBank(0);
