@@ -38,13 +38,16 @@ public class Sudoku extends AppCompatActivity
     public HashMap<Pair<String,String>, Integer> numberIndex;
     private final ElementButton[][] answerTable;
     private static int difficulty;
-    private static final boolean[] wordBank = {true,false,false,false,false};
+
+    public int getWordBank() {return wordBank;}
+
+    private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
     private int mRemainingCells;
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
-    public static void setWordBank(int index) {wordBank[index] =  !wordBank[index];}
+    public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
     //getters for game settings
@@ -52,17 +55,40 @@ public class Sudoku extends AppCompatActivity
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
 
-    //return an array of 9 that is selected from the correct difficulty and categories
-    String[] getWords(){
-        return getResources().getStringArray(R.array.numbers_english);
-    }
-
     Sudoku(Context context, Resources res)
     {
+
+        //Temporarily hardcoded, another solution should best be found
+        int[] categoryArrays = {
+                        R.array.numbers,//0
+                        R.array.greetings_easy,//1
+                        R.array.greetings_medium,
+                        R.array.greetings_hard,
+                        R.array.directions_easy,//4
+                        R.array.directions_medium,
+                        R.array.directions_hard,
+                        R.array.family_easy,//7
+                        R.array.family_medium,
+                        R.array.family_hard,
+                        R.array.food_drinks_easy,//10
+                        R.array.food_drinks_medium,
+                        R.array.food_drinks_hard
+                };
+
+
+
         //Saves getResources from MainActivity to be used in this class
-        //Get words
-        String[] english = res.getStringArray(R.array.numbers_english);
-        String[] spanish = res.getStringArray(R.array.numbers_spanish);
+        //Find a way to change this variable selectedArrayId upon user request before board generation
+        int selectedArrayId = categoryArrays[getWordBank()];
+        String[] inputString = res.getStringArray(selectedArrayId);
+        String[] english = new String[9];
+        String[] spanish = new String[9];
+        for(int i = 0; i < 9; i++)
+        {
+            String [] wordPair = inputString[i].split(",");
+            english[i] = wordPair[0];
+            spanish[i] = wordPair[1];
+        }
 
         //Hashmap is used for indexing of words TODO: make efficient or switch data structure
         wordIndex = new HashMap<>();
