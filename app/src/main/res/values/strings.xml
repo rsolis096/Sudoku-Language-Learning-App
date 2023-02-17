@@ -15,4 +15,11 @@
     <string name="congratulations">Congratulations</string>
     <string name="back">Back</string>
     <string name="home">Home</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="go_to_word_bank_selection_page">Go to Word Bank Selection page</string>
+    <string name="numbers">Numbers</string>
+    <string name="family">Family</string>
+    <string name="food_and_drinks">food and drinks</string>
+    <string name="direction">direction</string>
+    <string name="greetings">greetings</string>
 </resources>
