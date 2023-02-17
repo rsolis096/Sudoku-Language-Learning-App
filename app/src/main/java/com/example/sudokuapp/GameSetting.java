@@ -102,8 +102,8 @@ public class GameSetting extends AppCompatActivity {
             startActivity(intent);
         });
         //return to main menu
-        Button btnPrevious = findViewById(R.id.btnPrevious);
-        btnPrevious.setOnClickListener(view -> finish());
+        Button btn = findViewById(R.id.backToMenu);
+        btn.setOnClickListener(view -> finish());
         }
 
     public static Intent makeIntent(Context context) {
