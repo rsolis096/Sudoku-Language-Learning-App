@@ -40,8 +40,10 @@ public class Sudoku extends AppCompatActivity
     public static void setDifficulty(int d) {difficulty = d;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
+    public void setRemainingCells(int c) {mRemainingCells = c;}
     //getters for game settings
     public static int getDifficulty() {return difficulty;}
+    public int getRemainingCells() {return mRemainingCells;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
     Sudoku(Context context, Resources res)
@@ -139,7 +141,6 @@ public class Sudoku extends AppCompatActivity
                 }
             }
         }
-        mRemainingCells = 0;
     }
 
     public boolean checkBox(int row, int col, int num, ElementButton[][] board)

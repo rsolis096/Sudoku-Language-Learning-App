@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             myGame.solveGrid(0,0, myGame.mSudokuBoard);
             //Re draw the grid to set it with the new values
             myGame.updateGame();
+            myGame.setRemainingCells(0);
             myGame.checkIfCompleted(view);
         });
 
