@@ -22,7 +22,6 @@ public class GameSetting extends AppCompatActivity {
 
         // difficulty level
         setupDifficulty();
-        // word bank selection
         // fill in english or spanish
         setupLanguageMode();
         // type in answer or choose answer

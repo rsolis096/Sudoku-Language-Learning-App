@@ -33,11 +33,13 @@ public class Sudoku extends AppCompatActivity
     public HashMap<Pair<String,String>, Integer> numberIndex;
     private final ElementButton[][] answerTable;
     private static int difficulty;
+    private static boolean[] wordBank = {true,false,false,false,false};
     private static boolean manual;
     private static boolean translationDirection = true;
     private int mRemainingCells;
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
+    public static void setWordBank(int index) {wordBank[index] =  !wordBank[index];}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
     //getters for game settings

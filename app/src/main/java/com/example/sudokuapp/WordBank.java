@@ -23,5 +23,10 @@ public class WordBank extends AppCompatActivity {
         // back button close activity
         Button btnback = findViewById(R.id.btnback);
         btnback.setOnClickListener(view -> finish());
+        setupWordBank();
+    }
+
+    private void setupWordBank() {
+
     }
 }
