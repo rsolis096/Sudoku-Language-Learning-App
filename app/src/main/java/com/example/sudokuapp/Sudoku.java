@@ -31,7 +31,8 @@ import java.util.Objects;
 
 public class Sudoku extends AppCompatActivity
 {
-    public ElementButton[][] mSudokuBoard;
+    private final ElementButton[][] mSudokuBoard;
+    private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
     private final Context context;
     private static int difficulty;
@@ -49,6 +50,11 @@ public class Sudoku extends AppCompatActivity
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
 
     //getters for game settings
+    public ElementButton getElement(int rows, int cols)
+    {
+        return mSudokuBoard[rows][cols];
+    }
+
     public int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
@@ -97,7 +103,11 @@ public class Sudoku extends AppCompatActivity
         mRemainingCells = generatedBoard.getEmptyCells();
 
         //Converts the integer board into and Element board.
+
+        //mSudokuBoard is the play board
         mSudokuBoard = new ElementButton[9][9];
+        //mSudokuAnswerBoard is a complete board with words used to reference for input checking
+        mSudokuAnswerBoard = new ElementButton[9][9];
         for(int rows = 0; rows < 9; rows++)
         {
             for(int cols = 0; cols < 9; cols++)
@@ -117,11 +127,24 @@ public class Sudoku extends AppCompatActivity
                                 rows,
                                 cols
                             );
+
                 }
                 else
                 {
                     mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols);
                 }
+
+                mSudokuAnswerBoard[rows][cols] =
+                        new ElementButton(
+                                generatedBoard.mAnswerBoard[rows][cols],
+                                english[generatedBoard.mAnswerBoard[rows][cols] - 1],
+                                spanish[generatedBoard.mAnswerBoard[rows][cols] - 1],
+                                context,
+                                true,
+                                rows,
+                                cols
+                        );
+
                 mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
             }
         }
@@ -257,7 +280,6 @@ public class Sudoku extends AppCompatActivity
                                 //Update the cell with the userInput text
                                 buttonPressed.setText(userInput);
                             }
-
                         }
 
                     });
@@ -270,76 +292,82 @@ public class Sudoku extends AppCompatActivity
                     //creating the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
                     AlertDialog alert = builder.create();
                     alert.setTitle("Enter Word:");
-                    int place = 0;
                     Context dialogContext = builder.getContext();
                     TableLayout input = new TableLayout(dialogContext);
-                    int rows, cols;
+
+
                     //builds grid of vocab words here by iterating over wordIndex
-                    for (rows = 0; rows < 3; rows++) {
-
+                    for (int rows = 0; rows < 3; rows++)
+                    {
                         TableRow tableRow = new TableRow(dialogContext);
-                        for (cols = 0; cols < 3; cols++) {
-                            place++;
-                            Button newButton = new Button(dialogContext);
-                            //translationDirection = true -> english to spanish
+                        for (int cols = 0; cols < 3; cols++)
+                        {
+                            //These buttons represents the 1 of 9 buttons user can choose words from
+                            AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
+
+                            //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                newButton.setText(spanish[(rows*3) + cols]);
+                                wordButton.setText(spanish[(rows*3) + cols]);
                             else
-                                newButton.setText(english[(rows*3) + cols]);
-                            int finalPlace = place - 1;
+                                wordButton.setText(english[(rows*3) + cols]);
 
-                            //Essentially same functionality as manual input mode above
-                            newButton.setOnClickListener(view1 -> {
-                                String userInput;
-                                //translationDirection = true -> english to spanish
-                                if(translationDirection) {
-                                    userInput = spanish[finalPlace];
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(english[finalPlace]);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(spanish[finalPlace]);
-                                }
-                                else {
-                                    userInput = english[finalPlace];
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(spanish[finalPlace]);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(english[finalPlace]);
-                                }
+                            //Button holds its index of where it is in 3x3 grid
+                            wordButton.setIndex((rows*3) + cols);
+                            //Button stores a reference to the AlertDialog so close it in onclicklistener
+                            wordButton.setAssociatedAlertDialog(alert);
+                            //Stores the ElementButton that called it when it was pressed
+                            wordButton.setCallingButton(buttonPressed);
 
-                                mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(finalPlace);
+                            //Button Functionality
+                            wordButton.setOnClickListener(new AssistedInputButtonListener());
 
-
-
-                                //If the answer is correct
-                                if ((finalPlace == generatedBoard.mAnswerBoard[buttonPressed.index1][buttonPressed.index2])) {
-
-                                    //Green if spot is valid
-                                    buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
-                                    //Lock the button, cannot be changed after correct input
-                                    buttonPressed.setLock(true);
-                                    mRemainingCells--;
-
-                                    checkIfCompleted(view1);
-                                    //Update the cell with the userInput text
-                                    buttonPressed.setText(userInput);
-                                }
-                                //If the answer is incorrect
-                                else {
-                                    //Red if spot is invalid, button remains locked, text unchanged
-                                    buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
-                                    //Update the cell with the userInput text
-                                    buttonPressed.setText(userInput);
-                                }
-                                //closes dialog box after a button is pressed
-                                alert.cancel();
-                            });
-                            tableRow.addView(newButton);
-
+                            tableRow.addView(wordButton);
                         }
                         input.addView(tableRow);
                     }
+
                     alert.setView(input);
                     alert.show();
                 }
             }
         }
+    }
+
+    //Class used for OnClickListener for userInput buttons when manual input is turned off
+    private class AssistedInputButtonListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View view)
+        {
+            AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
+            String userInput = wordButtonPressed.getText().toString();
+            Log.i("Word Pressed:",userInput);
+            Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
+
+            //If the answer is correct
+            if (userInput.equals(mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection))) {
+
+                //Green if spot is valid
+                wordButtonPressed.callingButton.setBackgroundColor(Color.rgb(173, 223, 179));
+                //Lock the button, cannot be changed after correct input
+                wordButtonPressed.callingButton.setLock(true);
+                mRemainingCells--;
+
+                checkIfCompleted(view);
+                //Update the cell with the userInput text
+                wordButtonPressed.callingButton.setText(userInput);
+            }
+            //If the answer is incorrect
+            else {
+                //Red if spot is invalid, button remains locked, text unchanged
+                wordButtonPressed.callingButton.setBackgroundColor(Color.rgb(255, 114, 118));
+                //Update the cell with the userInput text
+                wordButtonPressed.callingButton.setText(userInput);
+            }
+            //closes dialog box after a button is pressed
+            wordButtonPressed.AssociatedAlertDialog.cancel();
+        }
+
     }
 }
 

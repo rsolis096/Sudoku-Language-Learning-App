@@ -72,7 +72,7 @@ public class ElementButtonTest {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
 
-        assertEquals("Spanish", testButton.getTranslation());
+        assertEquals("Spanish", testButton.getTranslation(true));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class ElementButtonTest {
         testButton.setTranslation("Spanish Word");
 
 
-        assertEquals(testButton.getTranslation(), "Spanish Word");
+        assertEquals(testButton.getTranslation(true), "Spanish Word");
     }
 
 
