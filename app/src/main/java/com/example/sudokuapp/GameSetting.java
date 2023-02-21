@@ -92,7 +92,7 @@ public class GameSetting extends AppCompatActivity {
         btnConfirm.setOnClickListener(view -> {
             Toast.makeText(GameSetting.this, "Generating game.", Toast.LENGTH_SHORT)
                     .show();
-            Intent intent = MainActivity.makeIntent(GameSetting.this);
+            Intent intent = SudokuPage.makeIntent(GameSetting.this);
             startActivity(intent);
         });
         Button btnWB = findViewById(R.id.btnWB);
