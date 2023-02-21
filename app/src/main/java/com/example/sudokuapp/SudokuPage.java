@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,7 +25,7 @@ public class SudokuPage extends AppCompatActivity {
         setContentView(R.layout.activity_sudoku_page);
 
         //Create Sudoku object, probably should change the way the board is initialized
-        Sudoku myGame = new Sudoku(this, getResources());
+        Sudoku myGame = new Sudoku(this);
 
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
 
@@ -42,15 +43,14 @@ public class SudokuPage extends AppCompatActivity {
             //This adds the created row into the table
             tableLayout.addView(tableRow);
         }
-        //Adds the button to the layout as another row
-        tableLayout.addView(myGame.solveButton);
         //This shrinks all columns to fit the screen
         //tableLayout.setShrinkAllColumns(true);
 
 
-        //Button Functionality
-        myGame.solveButton.setOnClickListener(view -> {
-            myGame.solveGrid(0,0, myGame.mSudokuBoard);
+        //Solve button Functionality
+        Button solveButton = findViewById(R.id.solveButton);
+        solveButton.setOnClickListener(view -> {
+            myGame.solveGrid();
             //Re draw the grid to set it with the new values
             myGame.updateGame();
             myGame.checkIfCompleted(view);

@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class GenerateBoard {
     int[][] mGeneratedBoard;
+    int[][] mAnswerBoard;
     int rows, cols;
     int dif, remainingCells;
 
@@ -37,7 +38,12 @@ public class GenerateBoard {
         mGeneratedBoard[row][col] = num+1;
         //Solve the grid based off that seed.
         solveBoard(0,0,mGeneratedBoard);
-        //demoTableGenerated and generatedTable are the same. Remove some givens from demoTableGenerated
+        //mGeneratedBoard is now a complete board, copy it to another member array
+        mAnswerBoard = new int[9][9];
+        for(int i = 0; i < 9; i++)
+        {
+            System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, 9);
+        }
         int hiddenCounter = 0;
         //Adjusting hiddenMax can be used to set a difficulty
         //If hiddenMax = 70, there are 70 hidden cells, and 11 given cells.
@@ -54,8 +60,6 @@ public class GenerateBoard {
                 mGeneratedBoard[row][col] = 0;
                 hiddenCounter++;
             }
-
-
         }
     }
 
