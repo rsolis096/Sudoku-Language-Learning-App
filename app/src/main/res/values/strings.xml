@@ -22,4 +22,6 @@
     <string name="food_and_drinks">food and drinks</string>
     <string name="direction">direction</string>
     <string name="greetings">greetings</string>
+    <string name="solve">Solve</string>
+    <string name="use_mouse_or_finger_to_scroll_side_to_side">Use mouse or finger to scroll side to side</string>
 </resources>
