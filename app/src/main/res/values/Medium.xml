@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="numbers_english_medium">
-        <item>One,Uno</item>
-        <item>Two,Dos</item>
-        <item>Three,Tres</item>
-        <item>Four,Cuatro</item>
-        <item>Five,Cinco</item>
-        <item>Six,Seis</item>
-        <item>Seven,Siete</item>
-        <item>Eight,Ocho</item>
-        <item>Nine,Nueve</item>
-    </string-array>
-
     <string-array name="family_medium">
         <item>Godmother,Madrina</item>
         <item>Godfather,Padrino</item>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="numbers_english">
-        <item>One</item>
-        <item>Two</item>
-        <item>Three</item>
-        <item>Four</item>
-        <item>Five</item>
-        <item>Six</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
+    <string-array name="numbers">
+        <item>One,Uno</item>
+        <item>Two,Dos</item>
+        <item>Three,Tres</item>
+        <item>Four,Cuatro</item>
+        <item>Five,Cinco</item>
+        <item>Six,Seis</item>
+        <item>Seven,Siete</item>
+        <item>Eight,Ocho</item>
+        <item>Nine,Nueve</item>
     </string-array>
 
     <string-array name="family_easy">
@@ -42,7 +42,7 @@
         <item>Bread,Pan</item>
         <item>Milk,Leche</item>
         <item>Tea,Te</item>
-        <item>Coffee,Cafe</item>
+        <item>Coffee,Café</item>
         <item>Juice,Jugo</item>
         <item>Cheese,Queso</item>
         <item>Fruits,Frutas</item>
@@ -54,7 +54,7 @@
         <item>Come,Venir</item>
         <item>Stop,Parar</item>
         <item>Run,Correr</item>
-        <item>Turn,Girar</item>
+        <item>Turn,Birar</item>
         <item>Look,Mirar</item>
         <item>Walk,Caminar</item>
         <item>Up,Arriba</item>

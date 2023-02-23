@@ -22,13 +22,12 @@ public class GameSetting extends AppCompatActivity {
 
         // difficulty level
         setupDifficulty();
-        // word bank selection
         // fill in english or spanish
         setupLanguageMode();
         // type in answer or choose answer
         setUpModeSwitch();
 
-        // once the settings are chosen, click confirm to launch the game
+        // Set up buttons: back, confirm, word bank
         setupLaunchButton();
     }
 
@@ -93,7 +92,12 @@ public class GameSetting extends AppCompatActivity {
         btnConfirm.setOnClickListener(view -> {
             Toast.makeText(GameSetting.this, "Generating game.", Toast.LENGTH_SHORT)
                     .show();
-            Intent intent = MainActivity.makeIntent(GameSetting.this);
+            Intent intent = SudokuPage.makeIntent(GameSetting.this);
+            startActivity(intent);
+        });
+        Button btnWB = findViewById(R.id.btnWB);
+        btnWB.setOnClickListener(view -> {
+            Intent intent = WordBank.makeIntent(GameSetting.this);
             startActivity(intent);
         });
         //return to main menu

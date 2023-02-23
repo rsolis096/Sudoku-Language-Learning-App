@@ -23,8 +23,15 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     public String getEnglish() {
         return mEnglish;
     }
-    public String getTranslation() {
-        return mTranslation;
+    public String getTranslation(boolean direction)
+    {
+        if(direction)
+        {
+            return mTranslation;
+        }
+        else {
+            return mEnglish;
+        }
     }
     public int getIndex1() {
         return index1;
