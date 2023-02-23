@@ -18,6 +18,7 @@ public class MainMenu extends AppCompatActivity {
         // set up the two buttons on main menu to switch to the correct activities
         setupStartButton();
         setupOptionsButton();
+        setuptutButton();
     }
 
     // click options button, go into options page
@@ -25,6 +26,13 @@ public class MainMenu extends AppCompatActivity {
         Button btnOptions = findViewById(R.id.btnOptions);
         btnOptions.setOnClickListener(view -> {
             Intent intent = OptionsPage.makeIntent(MainMenu.this);
+            startActivity(intent);
+        });
+    }
+    private void setuptutButton() {
+        Button btnTut = findViewById(R.id.btnTut);
+        btnTut.setOnClickListener(view -> {
+            Intent intent = Tutorialpage1.makeIntent(MainMenu.this);
             startActivity(intent);
         });
     }
