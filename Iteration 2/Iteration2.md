@@ -1,4 +1,4 @@
-﻿
+
 **ITERATION 2 - SUDOKU Language Learning App**
 
 **Submitted By:** 
@@ -21,6 +21,7 @@ Asmita Srivastava, asa313 (Product Owner)
 
 ***Future scope:*** Further in the app development process, the options page on the home screen would include tutorials and instructions as to the game requirements and how to play the puzzle as well. 
 
+![alt text](https://csil-git1.cs.surrey.sfu.ca/sudoko-app/sudoku-app-cmpt-276/-/blob/main/Iteration%202/Iteration%202%20Images/imp1-1.png)
 
 
 **IMPLEMENTATION #2**
