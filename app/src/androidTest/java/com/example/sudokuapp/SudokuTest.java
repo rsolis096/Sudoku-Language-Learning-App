@@ -11,51 +11,47 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 
-import java.util.Random;
 
-
-public class SudokuTest extends AppCompatActivity {
+public class SudokuTest {
 
     @Test
     public void setDifficulty() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setDifficulty(1);
-        assertEquals(1, testSudoku.getDifficulty());
+        Sudoku.setDifficulty(1);
+        assertEquals(1, Sudoku.getDifficulty());
     }
     @Test
     public void setInputMode() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setInputMode(true);
-        assertTrue(testSudoku.getInputMode());
+        Sudoku.setInputMode(true);
+        assertTrue(Sudoku.getInputMode());
     }
     @Test
     public void setTranslationDirection() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setTranslationDirection(true);
-        assertTrue(testSudoku.getTranslationDirection());
+        Sudoku.setTranslationDirection(true);
+        assertTrue(Sudoku.getTranslationDirection());
     }
     @Test
     public void getDifficulty() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setDifficulty(1);
-        assertEquals(1, testSudoku.getDifficulty());
+        Sudoku.setDifficulty(1);
+        assertEquals(1, Sudoku.getDifficulty());
     }
     @Test
     public void getInputMode() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setInputMode(true);
-        assertTrue(testSudoku.getInputMode());
+        Sudoku.setInputMode(true);
+        assertTrue(Sudoku.getInputMode());
     }
     @Test
     public void getTranslationDirection() {
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        Sudoku testSudoku = new Sudoku(context, getResources());
-        testSudoku.setTranslationDirection(true);
-        assertTrue(testSudoku.getTranslationDirection());
+        Sudoku.setTranslationDirection(true);
+        assertTrue(Sudoku.getTranslationDirection());
+    }
+    @Test
+    public void setWordBank() {
+        Sudoku.setWordBank(2);
+        assertEquals(2, Sudoku.getWordBank());
+    }
+    @Test
+    public void getWordBank() {
+        Sudoku.setWordBank(2);
+        assertEquals(2, Sudoku.getWordBank());
     }
 }
