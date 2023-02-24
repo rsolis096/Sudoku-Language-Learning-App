@@ -50,12 +50,8 @@ public class Sudoku extends AppCompatActivity
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
 
     //getters for game settings
-    public ElementButton getElement(int rows, int cols)
-    {
-        return mSudokuBoard[rows][cols];
-    }
-
-    public int getWordBank() {return wordBank;}
+    public ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
+    public static int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
