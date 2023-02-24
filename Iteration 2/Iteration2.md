@@ -1,4 +1,3 @@
-
 **ITERATION 2 - SUDOKU Language Learning App**
 
 **Submitted By:** 
@@ -21,7 +20,8 @@ Asmita Srivastava, asa313 (Product Owner)
 
 ***Future scope:*** Further in the app development process, the options page on the home screen would include tutorials and instructions as to the game requirements and how to play the puzzle as well. 
 
-![alt text](https://csil-git1.cs.surrey.sfu.ca/sudoko-app/sudoku-app-cmpt-276/-/blob/main/Iteration%202/Iteration%202%20Images/imp1-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp1-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp1-2.png)
 
 
 **IMPLEMENTATION #2**
@@ -32,7 +32,8 @@ Asmita Srivastava, asa313 (Product Owner)
 
 ***Scope for future*:** Users may drag their cursor to the red incorrect tiles to reveal hints to help them solve the puzzle. Once the hint is displayed, the user may re-attempt to solve for the entry to yield a green correct answer. 
 
-`  `**=>**   
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp2-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp2-2.png)
 
 
 
@@ -42,7 +43,8 @@ Asmita Srivastava, asa313 (Product Owner)
 
 **Tdd:** When a user chooses to start a game, a menu will pop up, one of the options will be whether or not the user wants to type their answers manually. When this mode is selected, the game played will look different as opposed to the standard mode, where the user will be displayed an on-screen keyboard to type their responses.
 
-
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp3-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp3-2.png)
 
 
 **IMPLEMENTATION #4**
@@ -51,6 +53,8 @@ Asmita Srivastava, asa313 (Product Owner)
 
 **Tdd:** When the app is opened for the first time, the user is displayed with three buttons conveying the game settings, START will begin a Sudoku puzzle game with a 9x9 grid, and TUTORIAL leads to a page containing game instructions and basic rules to begin solving an easy level puzzle. These instructions will help the user get the understanding of the board logic and how to solve the puzzle using words from a bank/ user input. 
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp4-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp4-2.png)
 
 
 **IMPLEMENTATION #5**
@@ -59,6 +63,10 @@ Asmita Srivastava, asa313 (Product Owner)
 
 **Tdd:** When a user chooses to start a game, a choice of selection is offered to the user to choose from 5 different categories of words namely, Numbers (this is the traditional choice for the Sudoku game at beginner level), Family, Greetings, Food&Drinks and Directions. All the categories are word banks containings English-Spanish word pairs for each of the three difficulty levels - easy, medium and hard. If no choice is made for the word bank selection, it will default to a bank of numbers 1 to 9 (similar to normal sudoku). The difficulty mode and word bank options combined will decide the possible words to appear in the game.
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp5-1.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp5-2.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp5-3.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/imp5-4.png)
 
 
 ***Scope for future:*** Language teachers have an option to make their custom word bank using user input, to incorporate a glossary of words as an exercise for students to solve the Sudoku puzzle using. This will help design new puzzles to help with each new lesson taught.
@@ -70,27 +78,36 @@ Asmita Srivastava, asa313 (Product Owner)
 **Tdd:** The app should be made to fit to screen for different devices. The layout will be relative with respect to the device the app is opened on. For example, on a tablet the menu page will be enlarged with buttons and texts with bigger and enlarged fonts. The sudoku board, as well, will fit the screen relatively. 
 
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-1.png)
+
 
 **User story:** As a vocabulary learner taking the bus, I want to use my phone in landscape mode for Sudoku vocabulary practice, so that longer words are displayed in a larger font than standard mode. 
 
 **Tdd:** When the user turns the screen, the game settings adapt according to the landscape/portrait settings on the device the game is being played on. This could be an automatic enhancement as soon as the user switches phone layout, the sudoku app settings adapt to the external device settings. All resulting in an enlarged, fit-to-screen and clear sudoku board for better game view and play.
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-2.png)
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-3.png)
 
 
 **User story:** As a teacher of elementary and junior high school children, I want scaled versions of Sudoku that use 4x4 and 6x6 grids. In the 6x6 grid version, the overall grid should be divided into rectangles of six cells each (2x3).
 
 **Tdd:** This opportunity will be presented in the Game Menu options where the user can select the dimensions of the Sudoku board for generating the puzzle. Traditionally, the 9x9 grid option will be selected as default to generate a basic sudoku puzzle, but additionally, user may select 4x4 grid or a 6x6 rectangle grid, for easy play. On choosing the options and starting the menu, the sudoku puzzle will be generated in accordance with user choices.  
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-4.jpg)
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-5.jpg)
 
 
 **User story:** As a vocabulary learner who wants an extra challenging mode, I want a 12x12 version of Sudoku to play on my tablet. The overall grid should be divided into rectangles of 12 cells each (3x4).
 
 **Tdd:** This opportunity will be presented in the Game Menu options where the user can select the dimensions of the Sudoku board for generating the puzzle. Traditionally, the 9x9 grid option will be selected as default to generate a basic sudoku puzzle, but additionally, user may select a 12x12 tablet grid, for a challenging version of play. On choosing the options and starting the menu, the sudoku puzzle will be generated in accordance with user choices.  The 12x12 is a rectangular board which has a difficult mode, due to more boxes to fill. 
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-6.jpg)
+
 **User story:** As an expert language learner, I want a timed mode so that I can improve my translation speed and compete against myself.
 
 **Tdd:** While the user is playing the game, there will be a timer in the corner that begins when the game begins. This timer will have digits for hours, minutes, and seconds for flexibility. After the game is solved, the player will be displayed with a timer under the results screen. 
 
+![Alt Text](/Iteration%202/Iteration%202%20Images/iter3-7.png)
 
 **User story:** As a language teacher, I want the ability to add my own words to the puzzles, so that I can make new puzzles to help with each new lesson I teach.
 
