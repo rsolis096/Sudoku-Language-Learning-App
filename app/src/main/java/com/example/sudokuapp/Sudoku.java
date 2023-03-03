@@ -7,11 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.SystemClock;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -25,7 +27,6 @@ import org.w3c.dom.DOMStringList;
 
 import java.util.AbstractCollection;
 import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -42,6 +43,7 @@ public class Sudoku extends AppCompatActivity
     private static boolean manual;
     private static boolean translationDirection = true;
     private int mRemainingCells;
+    private static long minutes, seconds;
 
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
@@ -55,6 +57,14 @@ public class Sudoku extends AppCompatActivity
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
+    //returns time in MM:SS format
+    public static String getElapsedTime() {
+        String sec;
+        if(seconds < 10) {sec = "0" + seconds;}
+        else {sec = seconds+""; }
+
+        return minutes + ":" + sec;
+    }
 
     Sudoku(Context THIS)
     {
@@ -146,6 +156,23 @@ public class Sudoku extends AppCompatActivity
         }
     }
 
+    public void startTimer(Chronometer t) {
+        t.start();
+        t.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                //convert base time to readable minutes and seconds
+                minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
+                seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
+                //Log.i("time", getElapsedTime());
+
+                if(mRemainingCells == 0) {
+                    t.stop();
+                }
+            }
+        });
+    }
+
     public void solveGrid()
     {
         for(int i = 0; i < 9; i++)
@@ -206,7 +233,6 @@ public class Sudoku extends AppCompatActivity
             builder.show();
         }
     }
-
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
