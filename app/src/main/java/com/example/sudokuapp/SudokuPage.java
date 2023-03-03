@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -14,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 
 public class SudokuPage extends AppCompatActivity {
-
     public static Intent makeIntent(Context context) {
         return new Intent(context, SudokuPage.class);
     }
@@ -43,6 +44,10 @@ public class SudokuPage extends AppCompatActivity {
             //This adds the created row into the table
             tableLayout.addView(tableRow);
         }
+
+        //creates a timer on the game page
+        Chronometer cmTimer = findViewById(R.id.gameTimerText);
+        myGame.startTimer(cmTimer);
 
         //This shrinks all columns to fit the screen
         //tableLayout.setShrinkAllColumns(true);

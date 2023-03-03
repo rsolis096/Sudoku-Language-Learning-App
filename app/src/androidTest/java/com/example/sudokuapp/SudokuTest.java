@@ -1,14 +1,6 @@
 package com.example.sudokuapp;
 
 import static org.junit.Assert.*;
-
-import android.content.Context;
-
-import androidx.annotation.NonNull;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.test.platform.app.InstrumentationRegistry;
-
 import org.junit.Test;
 
 
