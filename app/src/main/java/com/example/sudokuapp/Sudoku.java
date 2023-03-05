@@ -21,9 +21,11 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.TypedArrayUtils;
 
 import org.w3c.dom.DOMStringList;
+import org.w3c.dom.Element;
 
 import java.util.AbstractCollection;
 import java.util.ArrayDeque;
@@ -133,7 +135,6 @@ public class Sudoku extends AppCompatActivity
                                 rows,
                                 cols
                             );
-
                 }
                 else
                 {
@@ -233,6 +234,44 @@ public class Sudoku extends AppCompatActivity
             builder.show();
         }
     }
+
+    //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
+    public void setCellDesign(int rows, int cols, ElementButton cell, Context c) {
+        if(cols == 0 || cols == 1 || cols == 4 || cols == 7 || cols == 8) {
+            if(rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border));
+            }
+            else if(rows == 2 || rows == 5) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom));
+            }
+            else if(rows == 3 || rows == 6) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top));
+            }
+        }
+        else if(cols == 2 || cols == 5) {
+            if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_right));
+            }
+            else if(rows == 2 || rows == 5) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_right));
+            }
+            else if(rows == 3 || rows == 6) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_right));
+            }
+        }
+        else if(cols == 3 || cols == 6) {
+            if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_left));
+            }
+            else if(rows == 2 || rows == 5) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_left));
+            }
+            else if(rows == 3 || rows == 6) {
+                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_left));
+            }
+        }
+    }
+
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
@@ -381,7 +420,7 @@ public class Sudoku extends AppCompatActivity
             }
             //If the answer is incorrect
             else {
-                //Red if spot is invalid, button remains locked, text unchanged
+                //Red if spot is invalid, button remains unlocked, text unchanged
                 wordButtonPressed.callingButton.setBackgroundColor(Color.rgb(255, 114, 118));
                 //Update the cell with the userInput text
                 wordButtonPressed.callingButton.setText(userInput);

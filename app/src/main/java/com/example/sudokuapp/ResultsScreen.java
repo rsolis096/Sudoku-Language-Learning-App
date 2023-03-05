@@ -18,6 +18,7 @@ public class ResultsScreen extends AppCompatActivity {
 
         setTitle("Congratulations!");
         // goto MainMenu
+        //display
         TextView txt = findViewById(R.id.resultTime);
         txt.setText(Sudoku.getElapsedTime());
         setupBackToMain();
