@@ -12,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import java.util.Arrays;
 
@@ -40,6 +41,7 @@ public class SudokuPage extends AppCompatActivity {
             {
                 //This adds the created ElementButton into the row
                 tableRow.addView(myGame.getElement(rows, cols));
+                myGame.setCellDesign(rows,cols, myGame.getElement(rows,cols), this);
             }
             //This adds the created row into the table
             tableLayout.addView(tableRow);
