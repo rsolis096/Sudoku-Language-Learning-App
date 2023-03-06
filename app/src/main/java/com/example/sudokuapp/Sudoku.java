@@ -5,34 +5,24 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.TypedArrayUtils;
 
-import org.w3c.dom.DOMStringList;
-import org.w3c.dom.Element;
-
-import java.util.AbstractCollection;
-import java.util.ArrayDeque;
+import java.io.Serializable;
 import java.util.Objects;
 
 
-public class Sudoku extends AppCompatActivity
+public class Sudoku extends AppCompatActivity implements Serializable
 {
     private final ElementButton[][] mSudokuBoard;
     private final ElementButton[][] mSudokuAnswerBoard;
@@ -44,7 +34,7 @@ public class Sudoku extends AppCompatActivity
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
-    private int mRemainingCells;
+    public int mRemainingCells;
     private static long minutes, seconds;
 
     //setters for game settings
@@ -197,7 +187,6 @@ public class Sudoku extends AppCompatActivity
         }
         updateGame();
     }
-
 
     public void updateGame()
     {
@@ -430,6 +419,7 @@ public class Sudoku extends AppCompatActivity
         }
 
     }
+
 }
 
 

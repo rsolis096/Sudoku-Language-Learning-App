@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
@@ -17,6 +19,11 @@ import androidx.appcompat.content.res.AppCompatResources;
 import java.util.Arrays;
 
 public class SudokuPage extends AppCompatActivity {
+
+    private static final String CURRENT_BOARD = "currentBoard";
+    private Sudoku myGame;
+
+
     public static Intent makeIntent(Context context) {
         return new Intent(context, SudokuPage.class);
     }
@@ -26,33 +33,41 @@ public class SudokuPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_page);
 
-        Sudoku myGame = new Sudoku(this);
+        //If savedInstanceState == null, this is the first time launching the game
+        //If savedInstanceState != null, the screen has been rotated during gameplay
+        if (savedInstanceState != null)
+        {
+            myGame = (Sudoku) savedInstanceState.getSerializable("CURRENT_BOARD");
+            //Resume timer here
+        }
+        else {
+            //Initial call, before rotation
+            myGame = new Sudoku(this);
+            Log.i("Before Rotate: ", String.valueOf(myGame.mRemainingCells));
+
+            //Creates a timer on the game page
+            Chronometer cmTimer = findViewById(R.id.gameTimerText);
+            myGame.startTimer(cmTimer);
+        }
 
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
-
-        // Place holders for checkerboard pattern
-        int lightGray = Color.rgb(	128, 128, 128);
-        int darkGray = Color.rgb(90, 90, 90);
-
-        for(int rows = 0; rows < 9; rows++)
-        {
+        for (int rows = 0; rows < 9; rows++) {
             TableRow tableRow = new TableRow(this);
-            for(int cols = 0; cols < 9; cols++)
+            for (int cols = 0; cols < 9; cols++)
             {
-                //This adds the created ElementButton into the row
+                //This if statement is used to remove child from parent
+                ElementButton element = myGame.getElement(rows, cols);
+                // remove existing parent of the view before adding it to the table row
+                if (element.getParent() != null) {
+                    ((ViewGroup) element.getParent()).removeView(element);
+                }
                 tableRow.addView(myGame.getElement(rows, cols));
-                myGame.setCellDesign(rows,cols, myGame.getElement(rows,cols), this);
+                myGame.setCellDesign(rows, cols, myGame.getElement(rows, cols), this);
+
             }
             //This adds the created row into the table
             tableLayout.addView(tableRow);
         }
-
-        //creates a timer on the game page
-        Chronometer cmTimer = findViewById(R.id.gameTimerText);
-        myGame.startTimer(cmTimer);
-
-        //This shrinks all columns to fit the screen
-        //tableLayout.setShrinkAllColumns(true);
 
         //Solve button Functionality
         Button solveButton = findViewById(R.id.solveButton);
@@ -62,5 +77,12 @@ public class SudokuPage extends AppCompatActivity {
             myGame.updateGame();
             myGame.checkIfCompleted(view);
         });
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the values you need into "outState"
+        super.onSaveInstanceState(savedInstanceState);
+        //Saves the Sudoku Object myGame to bundle
+        savedInstanceState.putSerializable("CURRENT_BOARD", myGame);
     }
 }
