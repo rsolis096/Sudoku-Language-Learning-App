@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -79,7 +80,7 @@ public class SudokuPage extends AppCompatActivity {
         });
     }
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
+    protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         // Save the values you need into "outState"
         super.onSaveInstanceState(savedInstanceState);
         //Saves the Sudoku Object myGame to bundle
