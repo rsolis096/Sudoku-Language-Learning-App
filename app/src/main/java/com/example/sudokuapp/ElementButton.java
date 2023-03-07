@@ -11,6 +11,8 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     int mValue;
     String mTranslation;
     String mEnglish;
+
+    private int GRID_SIZE;
     public int index1;
     public int index2;
     public boolean isLocked;
@@ -63,8 +65,8 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
 
         super(context);
-
-        if((v > 9 || v < 0) || (i1 > 9 || i1 < 0) || (i2 > 9 || i2 < 0))
+        GRID_SIZE = 16;
+        if((v > GRID_SIZE || v < 0) || (i1 > GRID_SIZE || i1 < 0) || (i2 > GRID_SIZE || i2 < 0))
         {
             throw new IllegalArgumentException("Index or value out of range!");
         }

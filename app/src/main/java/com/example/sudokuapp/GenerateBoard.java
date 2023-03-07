@@ -6,6 +6,7 @@ public class GenerateBoard {
     int[][] mGeneratedBoard;
     int[][] mAnswerBoard;
     int rows, cols;
+    int GRID_SIZE;
     int dif, remainingCells;
 
     public int getEmptyCells() {
@@ -13,6 +14,7 @@ public class GenerateBoard {
     }
     GenerateBoard(int r, int c, int d)
     {
+        GRID_SIZE = r;
         rows = r;
         cols = c;
         dif = d;
@@ -30,7 +32,7 @@ public class GenerateBoard {
 
         Random random = new Random();
         int min = 0;
-        int max = 8;
+        int max = GRID_SIZE-1;
         int row = random.nextInt((max - min) + 1) + min;
         int col = random.nextInt((max - min) + 1) + min;
         int num = random.nextInt((max - min) + 1) + min;
@@ -39,10 +41,10 @@ public class GenerateBoard {
         //Solve the grid based off that seed.
         solveBoard(0,0,mGeneratedBoard);
         //mGeneratedBoard is now a complete board, copy it to another member array
-        mAnswerBoard = new int[9][9];
-        for(int i = 0; i < 9; i++)
+        mAnswerBoard = new int[rows][cols];
+        for(int i = 0; i < GRID_SIZE; i++)
         {
-            System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, 9);
+            System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, GRID_SIZE);
         }
         int hiddenCounter = 0;
         //Adjusting hiddenMax can be used to set a difficulty
@@ -63,14 +65,26 @@ public class GenerateBoard {
         }
     }
 
-    public boolean checkBox(int row, int col, int num, int[][] board)
+
+
+    //Return true if num is in the correct position given row and col coordinates
+    public boolean validSpot(int row, int col, int num, int[][] board)
     {
-        //This function checks a 3x3 mSudokuBoard area the proposed number is within to verify its not repeated
-        int box_start_row = (row / 3) * 3;
-        int box_start_col = (col / 3) * 3;
-        for (int i = 0; i < 3; i++)
+        //Check rows and cols
+        for (int i = 0; i < GRID_SIZE; i++)
         {
-            for (int j = 0; j < 3; j++)
+            if (board[row][i] == num || board[i][col]== num)
+            {
+                return false;
+            }
+        }
+
+        //Check box
+        int box_start_row = (row / (int) Math.sqrt(GRID_SIZE)) * (int) Math.sqrt(GRID_SIZE);
+        int box_start_col = (col / (int) Math.sqrt(GRID_SIZE)) * (int) Math.sqrt(GRID_SIZE);
+        for (int i = 0; i < (int) Math.sqrt(GRID_SIZE); i++)
+        {
+            for (int j = 0; j < (int) Math.sqrt(GRID_SIZE); j++)
             {
                 if (board[i + box_start_row][j + box_start_col] == num)
                 {
@@ -81,25 +95,10 @@ public class GenerateBoard {
         return true;
     }
 
-    //Return true if num is in the correct position given row and col coordinates
-    public boolean validSpot(int row, int col, int num, int[][] board)
-    {
-        //TO DO: Throw an error for num outside [0,9]
-        for (int i = 0; i < 9; i++)
-        {
-            if (board[row][i] == num || board[i][col]== num)
-            {
-                return false;
-            }
-        }
-        //Check box
-        return checkBox(row, col, num, board);
-    }
-
     public boolean solveBoard(int row, int col, int[][] board)
     {
         //Stops recursion if all rows are filled
-        if (row == 9)
+        if (row == GRID_SIZE)
         {
             return true;
         }
@@ -108,7 +107,7 @@ public class GenerateBoard {
         if (board[row][col] != 0)
         {
             //If at the last column, move to the next row and start column at 0 again
-            if (col == 8)
+            if (col == GRID_SIZE-1)
             {
                 return solveBoard(row + 1, 0, board);
             }
@@ -122,13 +121,13 @@ public class GenerateBoard {
         //Random number prevents first row and box from containing values 1 through 9 in that order
         Random random = new Random();
         int min = 1;
-        int max = 9;
+        int max = GRID_SIZE;
         int checkNum = random.nextInt((max - min) + 1) + min;
         int counter = 0;
         //If at a zero position, attempt to fill it with numbers [1,9]
 
         //Must iterate enough times for row + 1 and col+1 to reach 8
-        while (counter < 9)
+        while (counter < GRID_SIZE)
         {
             //Check the passed parameters coordinates if they are valid
             if (validSpot(row, col, checkNum, board))
@@ -137,7 +136,7 @@ public class GenerateBoard {
                 board[row][col] = checkNum;
 
                 //If you are at column 8 (last column), move onto the next row
-                if (col == 8)
+                if (col == GRID_SIZE-1)
                 {
                     //Calling this function will test numbers at the next index
                     //If the numbers are suitable, and passes validSpot() then it will continue until row =9

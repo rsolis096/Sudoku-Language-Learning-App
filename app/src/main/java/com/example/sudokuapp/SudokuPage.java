@@ -61,9 +61,9 @@ public class SudokuPage extends AppCompatActivity {
         }
 
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
-        for (int rows = 0; rows < 9; rows++) {
+        for (int rows = 0; rows < 16; rows++) {
             TableRow tableRow = new TableRow(this);
-            for (int cols = 0; cols < 9; cols++)
+            for (int cols = 0; cols < 16; cols++)
             {
                 //This if statement is used to remove child from parent
                 ElementButton element = myGame.getElement(rows, cols);
@@ -72,7 +72,7 @@ public class SudokuPage extends AppCompatActivity {
                     ((ViewGroup) element.getParent()).removeView(element);
                 }
                 tableRow.addView(myGame.getElement(rows, cols));
-                myGame.setCellDesign(rows, cols, myGame.getElement(rows, cols), this);
+                //myGame.setCellDesign(rows, cols, myGame.getElement(rows, cols), this);
 
             }
             //This adds the created row into the table
