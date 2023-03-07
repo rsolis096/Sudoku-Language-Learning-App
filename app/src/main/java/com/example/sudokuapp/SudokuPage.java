@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,6 +41,14 @@ public class SudokuPage extends AppCompatActivity {
         {
             myGame = (Sudoku) savedInstanceState.getSerializable("CURRENT_BOARD");
             //Resume timer here
+
+            //Access timer in activity
+            Chronometer cmTimer = findViewById(R.id.gameTimerText);
+            //Get the time saved at the moment the screen was rotated, key: "timer"
+            long elapsedTime = savedInstanceState.getLong("timer");
+            //Set timer to start at elapsed time then start to resume it
+            cmTimer.setBase(SystemClock.elapsedRealtime() + elapsedTime);
+            cmTimer.start();
         }
         else {
             //Initial call, before rotation
@@ -85,5 +94,8 @@ public class SudokuPage extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         //Saves the Sudoku Object myGame to bundle
         savedInstanceState.putSerializable("CURRENT_BOARD", myGame);
+        //Save timer to bundle
+        Chronometer cmTimer = findViewById(R.id.gameTimerText);
+        savedInstanceState.putLong("timer", cmTimer.getBase() - SystemClock.elapsedRealtime());
     }
 }
