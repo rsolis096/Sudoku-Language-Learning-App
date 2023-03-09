@@ -1,5 +1,6 @@
 package com.example.sudokuapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -90,6 +91,21 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             myGame.updateCells();
             myGame.checkIfCompleted(view);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Context context = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Are you sure you want to quit?");
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            Intent intent = new Intent(context, MainMenu.class);
+            context.startActivity(intent);
+        });
+        builder.setNegativeButton("No", (dialog, which) -> {
+
+        });
+        builder.show();
     }
     @Override
     protected void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
