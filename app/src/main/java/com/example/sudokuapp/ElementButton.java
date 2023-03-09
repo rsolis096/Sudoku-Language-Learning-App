@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 //This class inherits button to add some useful attributes.
-public class ElementButton extends androidx.appcompat.widget.AppCompatButton
+public class ElementButton extends androidx.appcompat.widget.AppCompatButton implements Serializable
 {
     int mValue;
     String mTranslation;
@@ -16,6 +16,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     public int index1;
     public int index2;
     public boolean isLocked;
+    public boolean isWrong;
 
     //Getter methods
     public int getValue() {
@@ -41,6 +42,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     public int getIndex2() {
         return index2;
     }
+    public boolean getWrong() {return isWrong;}
 
     //Setter methods
     public void setValue(int value) {
@@ -60,6 +62,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
         index1 = i;
         index2 = j;
     }
+    public void setWrong(boolean w) {isWrong = w;}
 
 
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
