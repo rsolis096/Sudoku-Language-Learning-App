@@ -144,14 +144,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 context,
                                 true,
                                 rows,
-                                cols,
-                                    GRID_SIZE
+                                cols
                             );
                 }
                 //This initializes ElementButtons that correspond to empty Cells
                 else
                 {
-                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols, GRID_SIZE);
+                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols);
                     //Set listener only for buttons that can change
                     mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
                 }
@@ -164,8 +163,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 context,
                                 true,
                                 rows,
-                                cols,
-                                GRID_SIZE
+                                cols
                         );
 
 

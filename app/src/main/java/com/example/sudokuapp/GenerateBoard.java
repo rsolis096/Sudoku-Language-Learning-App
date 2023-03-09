@@ -2,9 +2,10 @@ package com.example.sudokuapp;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class GenerateBoard {
+public class GenerateBoard implements Serializable {
     public int[][] mGeneratedBoard;
     public int[][] mAnswerBoard;
     public int rows, cols;
@@ -39,6 +40,12 @@ public class GenerateBoard {
         mGeneratedBoard[row][col] = num + 1;
         //Solve the grid based off that seed.
         solveBoard(0,0,mGeneratedBoard);
+        //solveBoard failed for some reason. Not sure why, re do it
+        while(mGeneratedBoard[0][0] == 0 || mGeneratedBoard[0][1] == 0)
+        {
+            Log.i("Board Failed","Recursion Failed, attempting again...");
+            solveBoard(0,0,mGeneratedBoard);
+        }
         //mGeneratedBoard is now a complete board, copy it to another member array
         for (int i = 0; i < Sudoku.getGridSize(); i++) {
             for (int j = 0; j < Sudoku.getGridSize(); j++) {
@@ -68,7 +75,7 @@ public class GenerateBoard {
             if (mGeneratedBoard[row][col] != 0) {
                 mGeneratedBoard[row][col] = 0;
                 hiddenCounter++;
-                Log.i("Status:", "In Loop");
+                //Log.i("Status:", "In Loop");
             }
         }
         Log.i("Status:", "Given Cells placed");
@@ -98,7 +105,7 @@ public class GenerateBoard {
     }
 
     public boolean solveBoard(int row, int col, int[][] board) {
-        Log.i("SolveBoard:", "In recursion");
+        //Log.i("SolveBoard:", "In recursion");
         //Stops recursion if all rows are filled
         if (row == Sudoku.getGridSize()) {
             return true;
@@ -130,7 +137,7 @@ public class GenerateBoard {
             if (validSpot(row, col, checkNum, board)) {
                 //If so, set to checkNum
                 board[row][col] = checkNum;
-                System.out.println("Value placed into 2d array: " + mGeneratedBoard[row][col]);
+                //System.out.println("Value placed into 2d array: " + mGeneratedBoard[row][col]);
 
                 //If you are at column 8 (last column), move onto the next row
                 if (col == Sudoku.getGridSize() - 1) {

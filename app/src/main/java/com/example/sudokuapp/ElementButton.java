@@ -5,14 +5,14 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+
 //This class inherits button to add some useful attributes.
 public class ElementButton extends androidx.appcompat.widget.AppCompatButton
 {
     int mValue;
     String mTranslation;
     String mEnglish;
-
-    private int GRID_SIZE;
     public int index1;
     public int index2;
     public boolean isLocked;
@@ -62,11 +62,10 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton
     }
 
 
-    public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2, int size) {
+    public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
 
         super(context);
-        GRID_SIZE = size;
-        if((v > GRID_SIZE || v < 0) || (i1 > GRID_SIZE || i1 < 0) || (i2 > GRID_SIZE || i2 < 0))
+        if((v > Sudoku.getGridSize() || v < 0) || (i1 > Sudoku.getGridSize() || i1 < 0) || (i2 > Sudoku.getGridSize() || i2 < 0))
         {
             throw new IllegalArgumentException("Index or value out of range!");
         }
