@@ -23,18 +23,18 @@ import java.util.Objects;
 
 public class Sudoku extends AppCompatActivity implements Serializable
 {
-    private int GRID_SIZE;
+    private static int GRID_SIZE;
     private final ElementButton[][] mSudokuBoard;
     private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
     private final Context context;
     private static int difficulty;
-    private  String[] english;
-    private  String[] spanish;
+    private String[] english;
+    private String[] spanish;
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
-    public int mRemainingCells;
+    private int mRemainingCells;
     private static long minutes, seconds;
 
     //setters for game settings
@@ -42,6 +42,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
+    public void setRemainingCells(int remainingCells) {
+        mRemainingCells = remainingCells;
+    }
+    public static void setGRID_SIZE(int size) {
+        GRID_SIZE = size;
+    }
 
     //getters for game settings
     public ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
@@ -57,10 +63,19 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
         return minutes + ":" + sec;
     }
+    public int getRemainingCells() {
+        return mRemainingCells;
+    }
+    public static int getGridSize() {
+        return GRID_SIZE;
+    }
 
-    Sudoku(Context THIS)
-    {
-        GRID_SIZE = 16;
+    Sudoku(Context THIS) throws Exception {
+        //Default GRID_SIZE
+        if(getGridSize() == 0)
+        {
+            GRID_SIZE = 9;
+        }
         context = THIS;
         //Temporarily hardcoded, another solution should best be found
         int[] categoryArrays = {
@@ -95,8 +110,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
             spanish[i] = wordPair[1];
         }*/
 
-        english  = new String[] {"One","Two","Three", "Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen"};
-        spanish = new String[]{"uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis"};
+        english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
+        spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -104,23 +119,23 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //int[][] mAnswerBoard;    This board is the completed board used to reference for answer checking
         generatedBoard = new GenerateBoard(GRID_SIZE, GRID_SIZE, getDifficulty());
         generatedBoard.createBoard();
-        System.out.print("ashdikasd");
         //Initialize number of unfilled cells
         mRemainingCells = generatedBoard.getEmptyCells();
-
-        //mSudokuBoard is the play board
+        Log.i("Status:","Board Generated");
+        //mSudokuBoard is the play board of ElementButtons (what the player interacts with)
         mSudokuBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
-        //mSudokuAnswerBoard is a complete board with words used to reference for input checking
+        //mSudokuAnswerBoard is a complete board of ElementButtons used to reference for input checking
         mSudokuAnswerBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
 
+        //Copy mGeneratedBoard into mSudokuBoard, skip empty cells which == 0
         for(int rows = 0; rows < GRID_SIZE; rows++)
         {
             for(int cols = 0; cols < GRID_SIZE; cols++)
             {
-                //Iterated through the generatedBoard
+                //This initializes ElementButtons that correspond to given cells
                 if(generatedBoard.mGeneratedBoard[rows][cols] != 0)
                 {
-                    //Initialize each ElementButton (cells in table)
+
                     mSudokuBoard[rows][cols] =
                             new ElementButton(
                                 generatedBoard.mGeneratedBoard[rows][cols],
@@ -129,17 +144,18 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 context,
                                 true,
                                 rows,
-                                cols
+                                cols,
+                                    GRID_SIZE
                             );
                 }
+                //This initializes ElementButtons that correspond to empty Cells
                 else
                 {
-                    //Initialize an empty cell
-                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols);
+                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols, GRID_SIZE);
                     //Set listener only for buttons that can change
                     mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
                 }
-
+                //This initializes the answer board of ElementButtons used to be matched with mSudokuBoard for error checking
                 mSudokuAnswerBoard[rows][cols] =
                         new ElementButton(
                                 generatedBoard.mAnswerBoard[rows][cols],
@@ -148,7 +164,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 context,
                                 true,
                                 rows,
-                                cols
+                                cols,
+                                GRID_SIZE
                         );
 
 
@@ -175,6 +192,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public void solveGrid()
     {
+        setRemainingCells(0);
         for(int i = 0; i < GRID_SIZE; i++)
         {
             for(int j = 0; j < GRID_SIZE; j++)
@@ -208,7 +226,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 }
             }
         }
-        mRemainingCells = 0;
     }
 
     public void checkIfCompleted(View view) {
@@ -242,7 +259,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             else if(rows == 2 || rows == 5) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom));
             }
-            else if(rows == 3 || rows == 6) {
+            else if(rows % (int) Math.sqrt(GRID_SIZE) == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top));
             }
         }
@@ -253,18 +270,18 @@ public class Sudoku extends AppCompatActivity implements Serializable
             else if(rows == 2 || rows == 5) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_right));
             }
-            else if(rows == 3 || rows == 6) {
+            else if(rows % (int) Math.sqrt(GRID_SIZE) == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_right));
             }
         }
-        else if(cols == 3 || cols == 6) {
+        else if(cols % (int) Math.sqrt(GRID_SIZE) == 0) {
             if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_left));
             }
             else if(rows == 2 || rows == 5) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_left));
             }
-            else if(rows == 3 || rows == 6) {
+            else if(rows % (int) Math.sqrt(GRID_SIZE) == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_left));
             }
         }

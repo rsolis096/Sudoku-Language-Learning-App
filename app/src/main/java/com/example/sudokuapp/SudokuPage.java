@@ -22,9 +22,7 @@ import java.util.Arrays;
 
 public class SudokuPage extends AppCompatActivity {
 
-    private static final String CURRENT_BOARD = "currentBoard";
     private Sudoku myGame;
-
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, SudokuPage.class);
@@ -34,7 +32,7 @@ public class SudokuPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_page);
-
+        Log.i("Status:","Open activity_sudoku_page");
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
         if (savedInstanceState != null)
@@ -52,8 +50,13 @@ public class SudokuPage extends AppCompatActivity {
         }
         else {
             //Initial call, before rotation
-            myGame = new Sudoku(this);
-            Log.i("Before Rotate: ", String.valueOf(myGame.mRemainingCells));
+            try {
+                myGame = new Sudoku(this);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            Log.i("Status","Board Fully Loaded");
+            Log.i("Remaining Cells", String.valueOf(myGame.getRemainingCells()));
 
             //Creates a timer on the game page
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
@@ -61,9 +64,9 @@ public class SudokuPage extends AppCompatActivity {
         }
 
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
-        for (int rows = 0; rows < 16; rows++) {
+        for (int rows = 0; rows < Sudoku.getGridSize(); rows++) {
             TableRow tableRow = new TableRow(this);
-            for (int cols = 0; cols < 16; cols++)
+            for (int cols = 0; cols < Sudoku.getGridSize(); cols++)
             {
                 //This if statement is used to remove child from parent
                 ElementButton element = myGame.getElement(rows, cols);
