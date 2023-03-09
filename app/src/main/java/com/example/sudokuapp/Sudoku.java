@@ -242,40 +242,44 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
 
     //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
+    //currently working for grid sizes with whole number roots
     public void setCellDesign(ElementButton cell) {
         int rows = cell.getIndex1();
         int cols = cell.getIndex2();
-        if(cols == 0 || cols == 1 || cols == 4 || cols == 7 || cols == 8) {
-            if(rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
+        //int size = Sudoku.getGridSize();
+        int size = 9;
+
+        if(cols == Math.sqrt(size) || cols == Math.sqrt(size) * 2) {
+            if (rows == Math.sqrt(size) || rows == (Math.sqrt(size) * 2)) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
             }
-            else if(rows == 2 || rows == 5) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
-            }
-            else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
-            }
-        }
-        else if(cols == 2 || cols == 5) {
-            if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
-            }
-            else if(rows == 2 || rows == 5) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
-            }
-            else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
-            }
-        }
-        else if(cols == 3 || cols == 6) {
-            if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
-            }
-            else if(rows == 2 || rows == 5) {
+            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
             }
-            else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
+            else {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
+            }
+        }
+        else if(cols == (Math.sqrt(size) - 1) || cols == ((Math.sqrt(size) * 2) - 1)) {
+            if (rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
+            }
+            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
+            }
+            else {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
+            }
+        }
+        else {
+            if(rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
+            }
+            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
+            }
+            else {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
             }
         }
     }
