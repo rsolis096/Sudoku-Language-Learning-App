@@ -28,13 +28,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
     private final Context context;
+    private final Chronometer mTimer;
     private static int difficulty;
     private final String[] english;
     private final String[] spanish;
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
-    public int mRemainingCells;
     private static long minutes, seconds;
 
     //setters for game settings
@@ -58,9 +58,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
         return minutes + ":" + sec;
     }
 
-    Sudoku(Context THIS)
+    Sudoku(Context THIS, Chronometer t)
     {
         context = THIS;
+        mTimer = t;
         //Temporarily hardcoded, another solution should best be found
         int[] categoryArrays = {
                         R.array.numbers,//0
@@ -97,8 +98,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //GenerateBoard has member arrays of a completed table and a partially completed table
         generatedBoard = new GenerateBoard(9, 9, getDifficulty());
         generatedBoard.createBoard();
-
-        mRemainingCells = generatedBoard.getEmptyCells();
 
         //Converts the integer board into and Element board.
 
@@ -149,18 +148,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public void startTimer(Chronometer t) {
         t.start();
-        t.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                //convert base time to readable minutes and seconds
-                minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
-                seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
-                //Log.i("time", getElapsedTime());
-
-                if(mRemainingCells == 0) {
-                    t.stop();
-                }
-            }
+        t.setOnChronometerTickListener(chronometer -> {
+            //convert base time to readable minutes and seconds
+            minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
+            seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
+            //Log.i("time", getElapsedTime());
         });
     }
 
@@ -199,68 +191,150 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 }
             }
         }
-        mRemainingCells = 0;
+        mTimer.stop();
+    }
+    public void updateCells() {
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                //don't check empty cells, their values are technically the same as other empty cells but thats ok
+                if(mSudokuBoard[i][j].getValue() != 0) {
+                    //check if each cell has a conflict
+                    checkElement(mSudokuBoard[i][j]);
+                    //if so, set the cell to red
+                    if(mSudokuBoard[i][j].getWrong()) {
+                        mSudokuBoard[i][j].setBackgroundColor(Color.rgb(255, 114, 118));
+                    }
+                    //otherwise, reset cell background
+                    else {
+                        setCellDesign(mSudokuBoard[i][j]);
+                    }
+                }
+            }
+        }
     }
 
     public void checkIfCompleted(View view) {
-        if(mRemainingCells == 0) {
+        boolean isComplete = true;
+        for(int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (mSudokuBoard[i][j].getWrong() || mSudokuBoard[i][j].getValue() == 0) {
+                    isComplete = false;
+                    break;
+                }
+            }
+        }
+
+        if(isComplete) {
+            mTimer.stop();
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("Game Finished!");
-            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(view.getContext(), ResultsScreen.class);
-                    view.getContext().startActivity(intent);
-                }
+            builder.setPositiveButton("Continue", (dialog, which) -> {
+                Intent intent = new Intent(context, ResultsScreen.class);
+                context.startActivity(intent);
             });
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    Intent intent = new Intent(view.getContext(), ResultsScreen.class);
-                    view.getContext().startActivity(intent);
-                }
+            builder.setOnDismissListener(dialogInterface -> {
+                Intent intent = new Intent(context, ResultsScreen.class);
+                context.startActivity(intent);
             });
             builder.show();
         }
     }
 
     //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
-    public void setCellDesign(int rows, int cols, ElementButton cell, Context c) {
+    public void setCellDesign(ElementButton cell) {
+        int rows = cell.getIndex1();
+        int cols = cell.getIndex2();
         if(cols == 0 || cols == 1 || cols == 4 || cols == 7 || cols == 8) {
             if(rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
             }
             else if(rows == 2 || rows == 5) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
             }
             else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
             }
         }
         else if(cols == 2 || cols == 5) {
             if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_right));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
             }
             else if(rows == 2 || rows == 5) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_right));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
             }
             else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_right));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
             }
         }
         else if(cols == 3 || cols == 6) {
             if (rows == 0 || rows == 1 || rows == 4 || rows == 7 || rows == 8) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_left));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
             }
             else if(rows == 2 || rows == 5) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_bottom_left));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
             }
             else if(rows == 3 || rows == 6) {
-                cell.setBackground(AppCompatResources.getDrawable(c, R.drawable.border_thick_top_left));
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
             }
         }
     }
 
+    //checks a given element for any conflicts with other cell values
+    //currently only designed for use with updateCells(), but can be modified to return a bool if needed (just return flag)
+    public void checkElement(ElementButton cell) {
+        boolean flag = false;
+        int r = cell.getIndex1();
+        int c = cell.getIndex2();
+        int given = cell.getValue();
+
+        Log.i("given value:", Integer.toString(given));
+        Log.i("given row index:", Integer.toString(r));
+        Log.i("given col index:", Integer.toString(c));
+
+        //******ROW AND COLUMN CHECKING******
+        //check column values, set ALL conflicting values to be wrong
+        for(int i = 0; i < 9; i++) {
+            //dont check value with itself, will always fail
+            if(c != i) {
+                //duplicate is found, trip flag and set the element as wrong
+                if (mSudokuBoard[r][i].getValue() == given) { //this statement is iterating over COLUMN (horizontal) values in row r from 0 to 8
+                    Log.i("f", "checked at (" + r + "," + i + ") " + ", given value " + given + " matched value of " + mSudokuBoard[r][i].getValue());
+                    flag = true;
+                    mSudokuBoard[r][i].setWrong(true);
+                }
+            }
+        }
+        //check row values, set ALL conflicting values to be wrong
+        for(int j = 0; j < 9; j++) {
+            //dont check value with itself, will always fail
+            if(r != j) {
+                //duplicate is found, trip flag and set the element as wrong
+                if (mSudokuBoard[j][c].getValue() == given) { //this statement is iterating over ROW (vertical) values in column c from 0 to 8
+                    Log.i("f", "checked at (" + j + "," + c + ") " + ", given value " + given + " matched value of " + mSudokuBoard[j][c].getValue());
+                    flag = true;
+                    mSudokuBoard[j][c].setWrong(true);
+                }
+            }
+        }
+        //******BOX CHECKING******
+        //calculate box coords relative to other boxes (ie: coordinates are 3x3 not 9x9 for an 81 cell board)
+        //these values are used to find the top left corner cell of the box, so that iteration can begin akin to reading left to right
+        int boxRow = (int)Math.floor(r / 3.0); // either 0 1 or 2
+        int boxCol = (int)Math.floor(c / 3.0); // either 0 1 or 2
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++)
+                //dont check value with itself, will always fail
+                if(!(r == boxRow * 3 + i && c == boxCol * 3 + j)) {
+                    if (mSudokuBoard[boxRow * 3 + i][boxCol * 3 + j].getValue() == given) {
+                        flag = true;
+                        cell.setWrong(true);
+                    }
+                }
+        }
+        //if an error is detected, value in this box is wrong
+        //otherwise, value does not cause an error
+        cell.setWrong(flag);
+    }
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
@@ -272,6 +346,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             //Only allow unlocked cells to be changed (givens cannot be changed)
             if (!buttonPressed.isLocked) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                buttonPressed.setTextColor(view.getResources().getColor(R.color.user_input_text));
                 if (manual) {
                     builder.setTitle("Enter Word:");
                     EditText input = new EditText(view.getContext());
@@ -281,6 +356,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         String userInput = input.getText().toString();
                         //Check if userInput is in the hashmap
                         boolean validUserInput = false;
+
                         for (int i = 1; i <= 9; i++) {
 
                             //converting all words (both dictionary and user input) to lowercase makes case sensitivity irrelevant
@@ -307,14 +383,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         }
                         if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == generatedBoard.mAnswerBoard[buttonPressed.index1][buttonPressed.index2]) && validUserInput)
                         {
-                            //Green if spot is valid
-                            buttonPressed.setBackgroundColor(Color.rgb(173, 223, 179));
-                            //Lock the button, cannot be changed after correct input
-                            buttonPressed.setLock(true);
-                            mRemainingCells--;
-                            checkIfCompleted(view);
                             //Update the cell with the userInput text
                             buttonPressed.setText(userInput);
+                            //update cells and check for completion
+                            updateCells();
+                            checkIfCompleted(view);
                         }
                         //If the answer is incorrect
                         else {
@@ -325,13 +398,20 @@ public class Sudoku extends AppCompatActivity implements Serializable
                             }
                             //Case 2: Valid input (in vocab) but incorrect word
                             else {
-                                //Red if spot is invalid, button remains locked, text unchanged
-                                buttonPressed.setBackgroundColor(Color.rgb(255, 114, 118));
                                 //Update the cell with the userInput text
                                 buttonPressed.setText(userInput);
+                                //update cells
+                                updateCells();
                             }
                         }
 
+                    });
+                    builder.setNeutralButton("Clear Answer", (dialog, which) -> {
+                        //reverts cell to default state, then updates cells
+                        buttonPressed.setText("");
+                        buttonPressed.setValue(0);
+                        setCellDesign(buttonPressed);
+                        updateCells();
                     });
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     builder.show();
@@ -339,6 +419,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 //Below if statement uses buttons to assist user with word input
                 else
                 {
+                    builder.setNeutralButton("Clear Answer", (dialog, which) -> {
+                        buttonPressed.setText("");
+                        buttonPressed.setValue(0);
+                        updateCells();
+                        setCellDesign(buttonPressed);
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     //creating the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
                     AlertDialog alert = builder.create();
                     alert.setTitle("Enter Word:");
@@ -390,30 +477,16 @@ public class Sudoku extends AppCompatActivity implements Serializable
         public void onClick(View view)
         {
             AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
-            String userInput = wordButtonPressed.getText().toString();
-            Log.i("Word Pressed:",userInput);
+            Log.i("Word Pressed:", wordButtonPressed.getText().toString());
             Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
 
-            //If the answer is correct
-            if (userInput.equals(mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection))) {
+            //the +1 here converts the index from the wordIndex into a value that compares with elementButton values properly
+            wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
+            wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
+            //update cells and check completion
+            updateCells();
+            checkIfCompleted(view);
 
-                //Green if spot is valid
-                wordButtonPressed.callingButton.setBackgroundColor(Color.rgb(173, 223, 179));
-                //Lock the button, cannot be changed after correct input
-                wordButtonPressed.callingButton.setLock(true);
-                mRemainingCells--;
-
-                checkIfCompleted(view);
-                //Update the cell with the userInput text
-                wordButtonPressed.callingButton.setText(userInput);
-            }
-            //If the answer is incorrect
-            else {
-                //Red if spot is invalid, button remains unlocked, text unchanged
-                wordButtonPressed.callingButton.setBackgroundColor(Color.rgb(255, 114, 118));
-                //Update the cell with the userInput text
-                wordButtonPressed.callingButton.setText(userInput);
-            }
             //closes dialog box after a button is pressed
             wordButtonPressed.AssociatedAlertDialog.cancel();
         }

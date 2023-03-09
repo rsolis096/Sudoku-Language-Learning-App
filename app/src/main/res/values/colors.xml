@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="border">#000</color>
     <color name="cell_background">#FFF</color>
+    <color name="user_input_text">#89CFF0</color>
 </resources>
