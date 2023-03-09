@@ -50,16 +50,8 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             cmTimer.setBase(SystemClock.elapsedRealtime() + elapsedTime);
             cmTimer.start();
         }
-        else {
-            //Initial call, before rotation
-            try {
-                myGame = new Sudoku(this);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-            Log.i("Status","Board Fully Loaded");
-            Log.i("Remaining Cells", String.valueOf(myGame.getRemainingCells()));
-
+        else
+        {
             //Creates a timer on the game page
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
             //changed the sudoku constructor to pass the timer so it could be assigned as a member variable, not sure if there's a cleaner way to implement this
