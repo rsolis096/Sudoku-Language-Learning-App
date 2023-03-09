@@ -28,7 +28,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
     private final Context context;
-    private final Chronometer mTimer;
+    private transient final Chronometer mTimer;
     private static int difficulty;
     private final String[] english;
     private final String[] spanish;

@@ -1,8 +1,11 @@
 package com.example.sudokuapp;
 
+import android.widget.TableLayout;
+
+import java.io.Serializable;
 import java.util.Random;
 
-public class GenerateBoard {
+public class GenerateBoard implements Serializable {
     int[][] mGeneratedBoard;
     int[][] mAnswerBoard;
     int rows, cols;

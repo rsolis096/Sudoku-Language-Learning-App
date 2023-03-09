@@ -5,8 +5,10 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+
 //This class inherits button to add some useful attributes.
-public class ElementButton extends androidx.appcompat.widget.AppCompatButton
+public class ElementButton extends androidx.appcompat.widget.AppCompatButton implements Serializable
 {
     int mValue;
     String mTranslation;

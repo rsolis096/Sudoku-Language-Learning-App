@@ -18,12 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class SudokuPage extends AppCompatActivity {
+public class SudokuPage extends AppCompatActivity implements Serializable {
 
     private static final String CURRENT_BOARD = "currentBoard";
     private Sudoku myGame;
+    private Bundle mBundle;
 
 
     public static Intent makeIntent(Context context) {
@@ -34,7 +36,7 @@ public class SudokuPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_page);
-
+        mBundle = savedInstanceState;
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
         if (savedInstanceState != null)
@@ -94,7 +96,13 @@ public class SudokuPage extends AppCompatActivity {
         // Save the values you need into "outState"
         super.onSaveInstanceState(savedInstanceState);
         //Saves the Sudoku Object myGame to bundle
+
+
+        //THIS LINE
+
         savedInstanceState.putSerializable("CURRENT_BOARD", myGame);
+
+
         //Save timer to bundle
         Chronometer cmTimer = findViewById(R.id.gameTimerText);
         savedInstanceState.putLong("timer", cmTimer.getBase() - SystemClock.elapsedRealtime());
