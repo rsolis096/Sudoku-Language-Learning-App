@@ -22,7 +22,7 @@ public class GenerateBoard implements Serializable {
         mGeneratedBoard = null;
     }
 
-    public void createBoard() throws Exception {
+    public void createBoard() {
 
         mGeneratedBoard = new int[rows][cols];
         Random random = new Random();
@@ -34,9 +34,6 @@ public class GenerateBoard implements Serializable {
         int col = random.nextInt((max - min) + 1) + min;
         int num = random.nextInt((max - min) + 1) + min;
         //Place a random number anywhere on the table, this acts as a seed.
-        if (mGeneratedBoard == null) {
-            throw new Exception("mGeneratedBoard is null");
-        }
         mGeneratedBoard[row][col] = num + 1;
         //Solve the grid based off that seed.
         solveBoard(0,0,mGeneratedBoard);

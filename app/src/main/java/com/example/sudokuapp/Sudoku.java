@@ -71,7 +71,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         return GRID_SIZE;
     }
 
-    Sudoku(Context THIS) throws Exception {
+    Sudoku(Context THIS, Chronometer t){
         //Default GRID_SIZE
         if(getGridSize() == 0)
         {
@@ -223,8 +223,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
         mTimer.stop();
     }
     public void updateCells() {
-        for(int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < Sudoku.getGridSize(); i++) {
+            for (int j = 0; j < Sudoku.getGridSize(); j++) {
                 //don't check empty cells, their values are technically the same as other empty cells but thats ok
                 if(mSudokuBoard[i][j].getValue() != 0) {
                     //check if each cell has a conflict
@@ -244,8 +244,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public void checkIfCompleted(View view) {
         boolean isComplete = true;
-        for(int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
+            for (int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++) {
                 if (mSudokuBoard[i][j].getWrong() || mSudokuBoard[i][j].getValue() == 0) {
                     isComplete = false;
                     break;
@@ -274,8 +274,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public void setCellDesign(ElementButton cell) {
         int rows = cell.getIndex1();
         int cols = cell.getIndex2();
-        //int size = Sudoku.getGridSize();
-        int size = 9;
+        int size = Sudoku.getGridSize();
 
         if(cols == Math.sqrt(size) || cols == Math.sqrt(size) * 2) {
             if (rows == Math.sqrt(size) || rows == (Math.sqrt(size) * 2)) {
@@ -326,7 +325,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
         //******ROW AND COLUMN CHECKING******
         //check column values, set ALL conflicting values to be wrong
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < Sudoku.getGridSize(); i++) {
             //dont check value with itself, will always fail
             if(c != i) {
                 //duplicate is found, trip flag and set the element as wrong
@@ -338,7 +337,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
         }
         //check row values, set ALL conflicting values to be wrong
-        for(int j = 0; j < 9; j++) {
+        for(int j = 0; j < Sudoku.getGridSize(); j++) {
             //dont check value with itself, will always fail
             if(r != j) {
                 //duplicate is found, trip flag and set the element as wrong
@@ -352,13 +351,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //******BOX CHECKING******
         //calculate box coords relative to other boxes (ie: coordinates are 3x3 not 9x9 for an 81 cell board)
         //these values are used to find the top left corner cell of the box, so that iteration can begin akin to reading left to right
-        int boxRow = (int)Math.floor(r / 3.0); // either 0 1 or 2
-        int boxCol = (int)Math.floor(c / 3.0); // either 0 1 or 2
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++)
+        int boxRow = (int)Math.floor(r / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
+        int boxCol = (int)Math.floor(c / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
+        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
+            for(int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++)
                 //dont check value with itself, will always fail
-                if(!(r == boxRow * 3 + i && c == boxCol * 3 + j)) {
-                    if (mSudokuBoard[boxRow * 3 + i][boxCol * 3 + j].getValue() == given) {
+                if(!(r == boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i && c == boxCol * (int) Math.sqrt(Sudoku.getGridSize()) + j)) {
+                    if (mSudokuBoard[boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i][boxCol * (int)Math.sqrt(Sudoku.getGridSize()) + j].getValue() == given) {
                         flag = true;
                         cell.setWrong(true);
                     }
