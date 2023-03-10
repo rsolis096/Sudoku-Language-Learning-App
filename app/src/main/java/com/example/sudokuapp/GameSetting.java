@@ -1,13 +1,12 @@
 package com.example.sudokuapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -22,11 +21,12 @@ public class GameSetting extends AppCompatActivity {
 
         // difficulty level
         setupDifficulty();
+        // setup grid size
+        setupGridSize();
         // fill in english or spanish
         setupLanguageMode();
         // type in answer or choose answer
         setUpModeSwitch();
-
         // Set up buttons: back, confirm, word bank
         setupLaunchButton();
     }
@@ -52,7 +52,7 @@ public class GameSetting extends AppCompatActivity {
 
     //set up for the input mode switch
     private void setUpModeSwitch() {
-        Switch switchInputMode = findViewById(R.id.swtchInputMode);
+        SwitchCompat switchInputMode = findViewById(R.id.switchInputMode);
         switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
             Sudoku.setInputMode(!Sudoku.getInputMode());
@@ -65,6 +65,7 @@ public class GameSetting extends AppCompatActivity {
         ToggleButton btnHard = findViewById(R.id.tgBtnHard);
         //sets difficulty to 'easy' and unchecks the other buttons
         btnEasy.setOnClickListener(view -> {
+            Log.i("Difficulty ", "Called at launch");
             Sudoku.setDifficulty(0);
             btnEasy.setChecked(true);
             btnMedium.setChecked(false);
@@ -83,6 +84,35 @@ public class GameSetting extends AppCompatActivity {
             btnEasy.setChecked(false);
             btnMedium.setChecked(false);
             btnHard.setChecked(true);
+        });
+    }
+
+    private void setupGridSize() {
+        ToggleButton nineXNine = findViewById(R.id.tgBtn9);
+        ToggleButton sixteenXSixteen = findViewById(R.id.tgBtn16);
+        ToggleButton twentyFiveXTwentyFive = findViewById(R.id.tgBtn4);
+
+        //sets difficulty to 'easy' and unchecks the other buttons
+        nineXNine.setOnClickListener(view -> {
+
+            Sudoku.setGRID_SIZE(9);
+            nineXNine.setChecked(true);
+            sixteenXSixteen.setChecked(false);
+            twentyFiveXTwentyFive.setChecked(false);
+        });
+        //sets difficulty to 'medium' and unchecks the other buttons
+        sixteenXSixteen.setOnClickListener(view -> {
+            Sudoku.setGRID_SIZE(16);
+            nineXNine.setChecked(false);
+            sixteenXSixteen.setChecked(true);
+            twentyFiveXTwentyFive.setChecked(false);
+        });
+        //sets difficulty to 'hard' and unchecks the other buttons
+        twentyFiveXTwentyFive.setOnClickListener(view -> {
+            Sudoku.setGRID_SIZE(4);
+            nineXNine.setChecked(false);
+            sixteenXSixteen.setChecked(false);
+            twentyFiveXTwentyFive.setChecked(true);
         });
     }
 

@@ -24,10 +24,8 @@ import java.util.Arrays;
 
 public class SudokuPage extends AppCompatActivity implements Serializable {
 
-    private static final String CURRENT_BOARD = "currentBoard";
     private Sudoku myGame;
     private Bundle mBundle;
-
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, SudokuPage.class);
@@ -53,8 +51,8 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             cmTimer.setBase(SystemClock.elapsedRealtime() + elapsedTime);
             cmTimer.start();
         }
-        else {
-            //Initial call, before rotation
+        else
+        {
             //Creates a timer on the game page
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
             //changed the sudoku constructor to pass the timer so it could be assigned as a member variable, not sure if there's a cleaner way to implement this
@@ -63,9 +61,9 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         }
 
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
-        for (int rows = 0; rows < 9; rows++) {
+        for (int rows = 0; rows < Sudoku.getGridSize(); rows++) {
             TableRow tableRow = new TableRow(this);
-            for (int cols = 0; cols < 9; cols++)
+            for (int cols = 0; cols < Sudoku.getGridSize(); cols++)
             {
                 //This if statement is used to remove child from parent
                 ElementButton element = myGame.getElement(rows, cols);
