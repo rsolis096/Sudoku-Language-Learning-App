@@ -17,24 +17,25 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 
 public class Sudoku extends AppCompatActivity implements Serializable
 {
+    private static int GRID_SIZE;
     private final ElementButton[][] mSudokuBoard;
     private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
     private final Context context;
     private transient final Chronometer mTimer;
     private static int difficulty;
-    private final String[] english;
-    private final String[] spanish;
+    private String[] english;
+    private String[] spanish;
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
+    private int mRemainingCells;
     private static long minutes, seconds;
 
     //setters for game settings
@@ -42,6 +43,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
+    public void setRemainingCells(int remainingCells) {
+        mRemainingCells = remainingCells;
+    }
+    public static void setGRID_SIZE(int size) {
+        GRID_SIZE = size;
+    }
 
     //getters for game settings
     public ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
@@ -57,9 +64,19 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
         return minutes + ":" + sec;
     }
+    public int getRemainingCells() {
+        return mRemainingCells;
+    }
+    public static int getGridSize() {
+        return GRID_SIZE;
+    }
 
-    Sudoku(Context THIS, Chronometer t)
-    {
+    Sudoku(Context THIS, Chronometer t){
+        //Default GRID_SIZE
+        if(getGridSize() == 0)
+        {
+            GRID_SIZE = 9;
+        }
         context = THIS;
         mTimer = t;
         //Temporarily hardcoded, another solution should best be found
@@ -83,37 +100,44 @@ public class Sudoku extends AppCompatActivity implements Serializable
         int selectedArrayId = categoryArrays[getWordBank()];
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
+        /*
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
-        english = new String[9];
-        spanish = new String[9];
-        //Pairs of words are split by a comma
-        for(int i = 0; i < 9; i++)
+        english = new String[GRID_SIZE];
+        spanish = new String[GRID_SIZE];
+        //From word pair, words are split by commas. Separate and place in corresponding array. Eg. inputString[0] = "english,spanish"
+        for(int i = 0; i < GRID_SIZE; i++)
         {
             String [] wordPair = inputString[i].split(",");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
-        }
+        }*/
+
+        english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
+        spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
 
         //Builds a valid integer board
-        //GenerateBoard has member arrays of a completed table and a partially completed table
-        generatedBoard = new GenerateBoard(9, 9, getDifficulty());
+        //GenerateBoard class has member 2d arrays:
+        //int[][] mGeneratedBoard; This board is the partially filled array of integers
+        //int[][] mAnswerBoard;    This board is the completed board used to reference for answer checking
+        generatedBoard = new GenerateBoard(GRID_SIZE, GRID_SIZE, getDifficulty());
         generatedBoard.createBoard();
+        //Initialize number of unfilled cells
+        mRemainingCells = generatedBoard.getEmptyCells();
+        Log.i("Status:","Board Generated");
+        //mSudokuBoard is the play board of ElementButtons (what the player interacts with)
+        mSudokuBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
+        //mSudokuAnswerBoard is a complete board of ElementButtons used to reference for input checking
+        mSudokuAnswerBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
 
-        //Converts the integer board into and Element board.
-
-        //mSudokuBoard is the play board
-        mSudokuBoard = new ElementButton[9][9];
-        //mSudokuAnswerBoard is a complete board with words used to reference for input checking
-        mSudokuAnswerBoard = new ElementButton[9][9];
-        for(int rows = 0; rows < 9; rows++)
+        //Copy mGeneratedBoard into mSudokuBoard, skip empty cells which == 0
+        for(int rows = 0; rows < GRID_SIZE; rows++)
         {
-            for(int cols = 0; cols < 9; cols++)
+            for(int cols = 0; cols < GRID_SIZE; cols++)
             {
-                //Iterated through the generatedBoard
+                //This initializes ElementButtons that correspond to given cells
                 if(generatedBoard.mGeneratedBoard[rows][cols] != 0)
                 {
 
-                    //Initialize each ElementButton (cell in table)
                     mSudokuBoard[rows][cols] =
                             new ElementButton(
                                 generatedBoard.mGeneratedBoard[rows][cols],
@@ -125,11 +149,14 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 cols
                             );
                 }
+                //This initializes ElementButtons that correspond to empty Cells
                 else
                 {
                     mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols);
+                    //Set listener only for buttons that can change
+                    mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
                 }
-
+                //This initializes the answer board of ElementButtons used to be matched with mSudokuBoard for error checking
                 mSudokuAnswerBoard[rows][cols] =
                         new ElementButton(
                                 generatedBoard.mAnswerBoard[rows][cols],
@@ -141,7 +168,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 cols
                         );
 
-                mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
+
             }
         }
     }
@@ -158,9 +185,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public void solveGrid()
     {
-        for(int i = 0; i < 9; i++)
+        setRemainingCells(0);
+        for(int i = 0; i < GRID_SIZE; i++)
         {
-            for(int j = 0; j < 9; j++)
+            for(int j = 0; j < GRID_SIZE; j++)
             {
                 mSudokuBoard[i][j].setValue(generatedBoard.mAnswerBoard[i][j]);
 
@@ -183,8 +211,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public void updateGame()
     {
         //Updates the text of buttons
-        for(int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
                 if (!mSudokuBoard[i][j].getLocked()) {
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
                     mSudokuBoard[i][j].setTextColor(Color.rgb(0,0,0));
@@ -195,8 +223,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
         mTimer.stop();
     }
     public void updateCells() {
-        for(int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < Sudoku.getGridSize(); i++) {
+            for (int j = 0; j < Sudoku.getGridSize(); j++) {
                 //don't check empty cells, their values are technically the same as other empty cells but thats ok
                 if(mSudokuBoard[i][j].getValue() != 0) {
                     //check if each cell has a conflict
@@ -216,8 +244,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public void checkIfCompleted(View view) {
         boolean isComplete = true;
-        for(int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
+            for (int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++) {
                 if (mSudokuBoard[i][j].getWrong() || mSudokuBoard[i][j].getValue() == 0) {
                     isComplete = false;
                     break;
@@ -246,8 +274,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public void setCellDesign(ElementButton cell) {
         int rows = cell.getIndex1();
         int cols = cell.getIndex2();
-        //int size = Sudoku.getGridSize();
-        int size = 9;
+        int size = Sudoku.getGridSize();
 
         if(cols == Math.sqrt(size) || cols == Math.sqrt(size) * 2) {
             if (rows == Math.sqrt(size) || rows == (Math.sqrt(size) * 2)) {
@@ -298,7 +325,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
         //******ROW AND COLUMN CHECKING******
         //check column values, set ALL conflicting values to be wrong
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < Sudoku.getGridSize(); i++) {
             //dont check value with itself, will always fail
             if(c != i) {
                 //duplicate is found, trip flag and set the element as wrong
@@ -310,7 +337,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
         }
         //check row values, set ALL conflicting values to be wrong
-        for(int j = 0; j < 9; j++) {
+        for(int j = 0; j < Sudoku.getGridSize(); j++) {
             //dont check value with itself, will always fail
             if(r != j) {
                 //duplicate is found, trip flag and set the element as wrong
@@ -324,13 +351,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //******BOX CHECKING******
         //calculate box coords relative to other boxes (ie: coordinates are 3x3 not 9x9 for an 81 cell board)
         //these values are used to find the top left corner cell of the box, so that iteration can begin akin to reading left to right
-        int boxRow = (int)Math.floor(r / 3.0); // either 0 1 or 2
-        int boxCol = (int)Math.floor(c / 3.0); // either 0 1 or 2
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++)
+        int boxRow = (int)Math.floor(r / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
+        int boxCol = (int)Math.floor(c / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
+        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
+            for(int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++)
                 //dont check value with itself, will always fail
-                if(!(r == boxRow * 3 + i && c == boxCol * 3 + j)) {
-                    if (mSudokuBoard[boxRow * 3 + i][boxCol * 3 + j].getValue() == given) {
+                if(!(r == boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i && c == boxCol * (int) Math.sqrt(Sudoku.getGridSize()) + j)) {
+                    if (mSudokuBoard[boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i][boxCol * (int)Math.sqrt(Sudoku.getGridSize()) + j].getValue() == given) {
                         flag = true;
                         cell.setWrong(true);
                     }
@@ -361,8 +388,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         String userInput = input.getText().toString();
                         //Check if userInput is in the hashmap
                         boolean validUserInput = false;
-
-                        for (int i = 1; i <= 9; i++) {
+                        for (int i = 1; i <= GRID_SIZE; i++) {
 
                             //converting all words (both dictionary and user input) to lowercase makes case sensitivity irrelevant
                             //may cause a bug when accents are included as not sure how exactly toLowerCase() works with them
@@ -439,22 +465,22 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
 
                     //builds grid of vocab words here by iterating over wordIndex
-                    for (int rows = 0; rows < 3; rows++)
+                    for (int rows = 0; rows < (int) Math.sqrt(GRID_SIZE); rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
-                        for (int cols = 0; cols < 3; cols++)
+                        for (int cols = 0; cols < (int) Math.sqrt(GRID_SIZE); cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows*3) + cols]);
+                                wordButton.setText(spanish[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
                             else
-                                wordButton.setText(english[(rows*3) + cols]);
+                                wordButton.setText(english[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
 
                             //Button holds its index of where it is in 3x3 grid
-                            wordButton.setIndex((rows*3) + cols);
+                            wordButton.setIndex((rows*(int) Math.sqrt(GRID_SIZE)) + cols);
                             //Button stores a reference to the AlertDialog so close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
                             //Stores the ElementButton that called it when it was pressed

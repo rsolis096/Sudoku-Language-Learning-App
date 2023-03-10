@@ -10,10 +10,11 @@
         android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -72,8 +73,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/swtchInputMode"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchInputMode"
         android:layout_width="141dp"
         android:layout_height="59dp"
         android:layout_marginStart="53dp"
@@ -126,5 +127,47 @@
         android:text="@string/go_to_word_bank_selection_page"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tgBtnSpanToEng" />
+
+    <ToggleButton
+        android:id="@+id/tgBtn9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="@string/_9x9"
+        android:textOn="@string/_9x9"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66" />
+
+    <ToggleButton
+        android:id="@+id/tgBtn16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_16x16"
+        android:textOff="@string/_16x16"
+        android:textOn="@string/_16x16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66" />
+
+    <ToggleButton
+        android:id="@+id/tgBtn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_4x4"
+        android:textOff="@string/_4x4"
+        android:textOn="@string/_4x4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.845"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.66" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
