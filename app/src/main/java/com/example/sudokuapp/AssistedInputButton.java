@@ -6,6 +6,7 @@ import android.widget.Button;
 
 public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButton {
     public int index;
+    public int value;
     public boolean translationDirection;
 
     public void setCallingButton(ElementButton callingButton) {

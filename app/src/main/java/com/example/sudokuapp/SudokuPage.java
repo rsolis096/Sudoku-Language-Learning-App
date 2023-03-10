@@ -18,12 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class SudokuPage extends AppCompatActivity {
+public class SudokuPage extends AppCompatActivity implements Serializable {
 
     private static final String CURRENT_BOARD = "currentBoard";
     private Sudoku myGame;
+    private Bundle mBundle;
 
 
     public static Intent makeIntent(Context context) {
@@ -34,7 +36,7 @@ public class SudokuPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku_page);
-
+        mBundle = savedInstanceState;
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
         if (savedInstanceState != null)
@@ -52,11 +54,10 @@ public class SudokuPage extends AppCompatActivity {
         }
         else {
             //Initial call, before rotation
-            myGame = new Sudoku(this);
-            Log.i("Before Rotate: ", String.valueOf(myGame.mRemainingCells));
-
             //Creates a timer on the game page
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
+            //changed the sudoku constructor to pass the timer so it could be assigned as a member variable, not sure if there's a cleaner way to implement this
+            myGame = new Sudoku(this, cmTimer);
             myGame.startTimer(cmTimer);
         }
 
@@ -72,11 +73,13 @@ public class SudokuPage extends AppCompatActivity {
                     ((ViewGroup) element.getParent()).removeView(element);
                 }
                 tableRow.addView(myGame.getElement(rows, cols));
-                myGame.setCellDesign(rows, cols, myGame.getElement(rows, cols), this);
+                myGame.setCellDesign(myGame.getElement(rows, cols));
 
             }
             //This adds the created row into the table
             tableLayout.addView(tableRow);
+            //Update error cells, putting this specifically here fixes cell colors/errors not carrying over on screen rotate
+            myGame.updateCells();
         }
 
         //Solve button Functionality
@@ -84,7 +87,7 @@ public class SudokuPage extends AppCompatActivity {
         solveButton.setOnClickListener(view -> {
             myGame.solveGrid();
             //Re draw the grid to set it with the new values
-            myGame.updateGame();
+            myGame.updateCells();
             myGame.checkIfCompleted(view);
         });
     }
@@ -93,7 +96,13 @@ public class SudokuPage extends AppCompatActivity {
         // Save the values you need into "outState"
         super.onSaveInstanceState(savedInstanceState);
         //Saves the Sudoku Object myGame to bundle
+
+
+        //THIS LINE
+
         savedInstanceState.putSerializable("CURRENT_BOARD", myGame);
+
+
         //Save timer to bundle
         Chronometer cmTimer = findViewById(R.id.gameTimerText);
         savedInstanceState.putLong("timer", cmTimer.getBase() - SystemClock.elapsedRealtime());

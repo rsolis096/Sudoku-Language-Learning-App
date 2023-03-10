@@ -5,17 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ResultsScreen extends AppCompatActivity {
+import java.io.Serializable;
+
+public class ResultsScreen extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results_screen);
-
+        //savedInstanceState.remove("CURRENT_BOARD");
         setTitle("Congratulations!");
         // goto MainMenu
         //display
@@ -23,6 +26,7 @@ public class ResultsScreen extends AppCompatActivity {
         txt.setText(Sudoku.getElapsedTime());
         setupBackToMain();
     }
+
 
     // close this activity
     private void setupBackToMain() {
