@@ -3,7 +3,6 @@ package com.example.sudokuapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
@@ -100,11 +99,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         R.array.food_drinks_hard
                 };
 
+        /*
         //Given a category from categoryArrays, generate a puzzle using that category.
         int selectedArrayId = categoryArrays[getWordBank()];
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
-        /*
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
         english = new String[GRID_SIZE];
         spanish = new String[GRID_SIZE];
@@ -401,8 +400,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 buttonPressed.setText(userInput);
                                 buttonPressed.setTextColor(Color.rgb(0, 138, 216));
                                 userInputButtons.add(buttonPressed);
+                                if(buttonPressed.isWrong)
+                                {
+                                    decreaseRemainingCells();
+                                }
                                 buttonPressed.isWrong = false;
-                                decreaseRemainingCells();
                                 //Check if the game is complete.
                                 checkIfCompleted(view);
                             }
@@ -411,6 +413,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 buttonPressed.setValue(index + 1);
                                 buttonPressed.setText(userInput);
                                 buttonPressed.setTextColor(Color.rgb(255, 114, 118));
+                                if(!buttonPressed.isWrong)
+                                {
+                                    increaseRemainingCells();
+                                }
                                 buttonPressed.isWrong = true;
                                 userInputButtons.add(buttonPressed);
                             }
@@ -459,7 +465,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         buttonPressed.setValue(0);
                         userInputButtons.remove(buttonPressed);
                         buttonPressed.setBackgroundResource(android.R.drawable.btn_default);
-                        increaseRemainingCells();
+                        if(!buttonPressed.isWrong)
+                        {
+                            increaseRemainingCells();
+                            buttonPressed.isWrong = true;
+                        }
                         setCellDesign(buttonPressed);
                     });
                     // Exit the popup with no changes made
@@ -515,7 +525,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
                 wordButtonPressed.callingButton.setTextColor(Color.rgb(	0,138,216));
                 userInputButtons.add(wordButtonPressed.callingButton);
-                decreaseRemainingCells();
+                if(wordButtonPressed.callingButton.isWrong)
+                {
+                    decreaseRemainingCells();
+                }
                 wordButtonPressed.callingButton.isWrong = false;
             }
             else
@@ -523,7 +536,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
                 wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
                 wordButtonPressed.callingButton.setTextColor(Color.rgb(255,114,118));
+                if(!wordButtonPressed.callingButton.isWrong)
+                {
+                    increaseRemainingCells();
+                }
                 wordButtonPressed.callingButton.isWrong = true;
+
                 userInputButtons.add(wordButtonPressed.callingButton);
             }
             //update cells and check completion
