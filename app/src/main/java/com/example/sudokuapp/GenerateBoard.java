@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.Random;
 
-public class GenerateBoard implements Serializable {
+public class GenerateBoard implements Serializable  {
     public int[][] mGeneratedBoard;
     public int[][] mAnswerBoard;
     public int rows, cols;
@@ -36,12 +36,11 @@ public class GenerateBoard implements Serializable {
         //Place a random number anywhere on the table, this acts as a seed.
         mGeneratedBoard[row][col] = num + 1;
         //Solve the grid based off that seed.
-        solveBoard(0,0,mGeneratedBoard);
+        solveBoard(0, 0, mGeneratedBoard);
         //solveBoard failed for some reason. Not sure why, re do it
-        while(mGeneratedBoard[0][0] == 0 || mGeneratedBoard[0][1] == 0)
-        {
-            Log.i("Board Failed","Recursion Failed, attempting again...");
-            solveBoard(0,0,mGeneratedBoard);
+        while (mGeneratedBoard[0][0] == 0 || mGeneratedBoard[0][1] == 0) {
+            Log.i("Status", "Recursion Failed, attempting again...");
+            solveBoard(0, 0, mGeneratedBoard);
         }
         //mGeneratedBoard is now a complete board, copy it to another member array
         for (int i = 0; i < Sudoku.getGridSize(); i++) {
