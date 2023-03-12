@@ -10,10 +10,12 @@
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
         app:layout_constraintBottom_toTopOf="@+id/solveButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <ScrollView
             android:id="@+id/ScrollView"
