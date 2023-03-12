@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -49,17 +51,37 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             myGame.startTimer(cmTimer);
         }
 
+        int elementButtonCounterForTag = 0;
+        boolean foundEmptyCell = false;
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
         for (int rows = 0; rows < Sudoku.getGridSize(); rows++) {
             TableRow tableRow = new TableRow(this);
+            //Sets a tag for each tableRow to be used with testing
+            tableRow.setTag("tableRowTag" + rows);
+
             for (int cols = 0; cols < Sudoku.getGridSize(); cols++)
             {
                 //This if statement is used to remove child from parent
                 ElementButton element = myGame.getElement(rows, cols);
-                // remove existing parent of the view before adding it to the table row
+
+                //Remove existing parent of the view before adding it to the table row
                 if (element.getParent() != null) {
                     ((ViewGroup) element.getParent()).removeView(element);
                 }
+                //Sets a tag for each elementButton for easier testing
+                myGame.getElement(rows, cols).setTag("elementButtonTag" + (elementButtonCounterForTag));
+
+                //Set a tag for an empty cell for testing
+                if(myGame.getElement(rows, cols).getValue() == 0 &&  !foundEmptyCell)
+                {
+                    myGame.getElement(rows, cols).setTag("emptyCell");
+                    foundEmptyCell = true;
+                }
+                else{
+                    ++elementButtonCounterForTag;
+                }
+
+                //Display the tables
                 tableRow.addView(myGame.getElement(rows, cols));
                 myGame.setCellDesign(myGame.getElement(rows, cols));
 
@@ -67,8 +89,6 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             //This adds the created row into the table
             tableLayout.addView(tableRow);
         }
-
-        System.out.println(myGame.userInputButtons.size());
 
         //Sets colours for validButtons (specifically for screen rotation)
         for (ElementButton btn : myGame.userInputButtons)
