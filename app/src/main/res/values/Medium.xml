@@ -16,8 +16,8 @@
         <item>Niece,Sobrina</item>
         <item>Nephew,Sobrino</item>
         <item>Godson,Ahijado</item>
-        <item>Godmother,Madrina</item>
-        <item>Godfather,Padrino</item>
+        <item>Wife,Esposa</item>
+        <item>Husband,Esposo</item>
     </string-array>
 
     <string-array name="greetings_medium">
