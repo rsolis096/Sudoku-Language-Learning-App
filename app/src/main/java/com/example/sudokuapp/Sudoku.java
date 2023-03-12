@@ -86,22 +86,24 @@ public class Sudoku extends AppCompatActivity implements Serializable
         int[] categoryArrays = {
                         R.array.numbers,//0
                         R.array.greetings_easy,//1
-                        R.array.greetings_medium,
-                        R.array.greetings_hard,
+                        R.array.greetings_medium,//2
+                        R.array.greetings_hard,//3
                         R.array.directions_easy,//4
-                        R.array.directions_medium,
-                        R.array.directions_hard,
+                        R.array.directions_medium,//5
+                        R.array.directions_hard,//6
                         R.array.family_easy,//7
-                        R.array.family_medium,
-                        R.array.family_hard,
+                        R.array.family_medium,//7
+                        R.array.family_hard,//8
                         R.array.food_drinks_easy,//10
-                        R.array.food_drinks_medium,
-                        R.array.food_drinks_hard
+                        R.array.food_drinks_medium,//9
+                        R.array.food_drinks_hard//10
                 };
 
-        /*
+
         //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank()];
+        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
+        if(getWordBank() == 0)
+            selectedArrayId = categoryArrays[0];
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
@@ -113,10 +115,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
             String [] wordPair = inputString[i].split(",");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
-        }*/
+        }
 
-        english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
-        spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
+        //english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
+        //spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
