@@ -83,14 +83,15 @@
         android:id="@+id/switchInputMode"
         android:layout_width="141dp"
         android:layout_height="59dp"
-        android:layout_marginStart="53dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="52dp"
         android:showText="false"
         android:splitTrack="false"
         android:text="@string/input_mode"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/btnConfirm"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tgBtn4"
+        app:layout_constraintVertical_bias="0.528" />
 
     <ToggleButton
         android:id="@+id/tgBtnEngToSpan"
@@ -144,7 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="416dp"
         android:text="@string/choose_a_grid_size"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -154,45 +155,39 @@
         android:id="@+id/tgBtn9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:checked="true"
         android:textOff="@string/_9x9"
         android:textOn="@string/_9x9"
         android:textSize="15sp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintStart_toEndOf="@+id/tgBtn4"
+        app:layout_constraintTop_toBottomOf="@+id/choosegrid" />
 
     <ToggleButton
         android:id="@+id/tgBtn16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:text="@string/_16x16"
         android:textOff="@string/_16x16"
         android:textOn="@string/_16x16"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintStart_toEndOf="@+id/tgBtn9"
+        app:layout_constraintTop_toBottomOf="@+id/choosegrid" />
 
     <ToggleButton
         android:id="@+id/tgBtn4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
         android:text="@string/_4x4"
         android:textOff="@string/_4x4"
         android:textOn="@string/_4x4"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.845"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintTop_toBottomOf="@+id/choosegrid" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
