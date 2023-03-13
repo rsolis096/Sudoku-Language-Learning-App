@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 
@@ -25,6 +26,11 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
         TextView txt = findViewById(R.id.resultTime);
         txt.setText(Sudoku.getElapsedTime());
         setupBackToMain();
+    }
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(ResultsScreen.this,"You can't return to a completed game, press Home to return to home screen!",Toast.LENGTH_LONG).show();
     }
 
 

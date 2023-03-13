@@ -20,6 +20,11 @@ public class MainMenu extends AppCompatActivity {
         setupOptionsButton();
         setuptutButton();
     }
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+        Toast.makeText(MainMenu.this,"Can't go back further than the home screen!",Toast.LENGTH_LONG).show();
+    }
 
     // click options button, go into options page
     private void setupOptionsButton() {
