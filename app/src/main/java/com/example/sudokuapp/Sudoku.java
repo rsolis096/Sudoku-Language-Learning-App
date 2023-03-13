@@ -86,22 +86,24 @@ public class Sudoku extends AppCompatActivity implements Serializable
         int[] categoryArrays = {
                         R.array.numbers,//0
                         R.array.greetings_easy,//1
-                        R.array.greetings_medium,
-                        R.array.greetings_hard,
+                        R.array.greetings_medium,//2
+                        R.array.greetings_hard,//3
                         R.array.directions_easy,//4
-                        R.array.directions_medium,
-                        R.array.directions_hard,
+                        R.array.directions_medium,//5
+                        R.array.directions_hard,//6
                         R.array.family_easy,//7
-                        R.array.family_medium,
-                        R.array.family_hard,
+                        R.array.family_medium,//7
+                        R.array.family_hard,//8
                         R.array.food_drinks_easy,//10
-                        R.array.food_drinks_medium,
-                        R.array.food_drinks_hard
+                        R.array.food_drinks_medium,//9
+                        R.array.food_drinks_hard//10
                 };
 
-        /*
+
         //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank()];
+        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
+        if(getWordBank() == 0)
+            selectedArrayId = categoryArrays[0];
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
@@ -113,10 +115,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
             String [] wordPair = inputString[i].split(",");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
-        }*/
+        }
 
-        english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
-        spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
+        //english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
+        //spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -475,14 +477,25 @@ public class Sudoku extends AppCompatActivity implements Serializable
                     // Exit the popup with no changes made
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                     // Builds the pre defined inputs the user may choose from
+
+
                     TableLayout input = new TableLayout(dialogContext);
+
+                    //Set tag counter for assistButtons
+                    int assistButtonTagCounter = 0;
                     for (int rows = 0; rows < (int) Math.sqrt(GRID_SIZE); rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
+                        //Set tag for each table row to be used in testing
+                        tableRow.setTag("assistTableRowTag" + (rows));
+
                         for (int cols = 0; cols < (int) Math.sqrt(GRID_SIZE); cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
+                            //Set tag each AssistedInputButton for testing
+                            wordButton.setTag("assistButtonTag" + (assistButtonTagCounter));
+                            assistButtonTagCounter++;
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
@@ -494,10 +507,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                             wordButton.setIndex((rows*(int) Math.sqrt(GRID_SIZE)) + cols);
                             //Button stores a reference to the AlertDialog so it can close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
-                            //Stores the ElementButton that called it when it was pressed
+                            //Stores a reference to the ElementButton that called it when it was pressed
                             wordButton.setCallingButton(buttonPressed);
                             //Button Functionality
                             wordButton.setOnClickListener(new AssistedInputButtonListener());
+                            tableRow.setId(View.generateViewId());
                             tableRow.addView(wordButton);
                         }
                         input.addView(tableRow);
