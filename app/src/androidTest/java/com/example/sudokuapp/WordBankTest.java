@@ -4,7 +4,9 @@ package com.example.sudokuapp;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isSelected;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
@@ -50,7 +52,7 @@ public class WordBankTest {
         materialButton.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.btnWB), withText("Go to Word Bank Selection page"),
+                allOf(withId(R.id.btnWB), withText("Categories"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -72,6 +74,7 @@ public class WordBankTest {
                                 withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
                         isDisplayed()));
         toggleButton.check(matches(isDisplayed()));
+        toggleButton.check(matches(isChecked()));
 
         ViewInteraction toggleButton2 = onView(
                 allOf(withId(R.id.btnfamily), withText("FAMILY"),
@@ -101,12 +104,19 @@ public class WordBankTest {
                         isDisplayed()));
         toggleButton5.check(matches(isDisplayed()));
 
-        ViewInteraction toggleButton6 = onView(
-                allOf(withId(R.id.btnDirection), withText("DIRECTION"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton6.check(matches(isDisplayed()));
+        //clicking a button should check it
+        toggleButton2.perform(click());
+        toggleButton2.check(matches(isChecked()));
+        toggleButton3.perform(click());
+        toggleButton3.check(matches(isChecked()));
+        toggleButton4.perform(click());
+        toggleButton4.check(matches(isChecked()));
+        toggleButton5.perform(click());
+        toggleButton5.check(matches(isChecked()));
+        //Go back to settings and come back to categories the last clicked should still be selected
+        button.perform(click());
+        materialButton2.perform(click());
+        toggleButton5.check(matches(isChecked()));
 
         ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.btnback), withText("Back"),
@@ -168,7 +178,7 @@ public class WordBankTest {
         toggleButton11.check(matches(isDisplayed()));
 
         ViewInteraction button3 = onView(
-                allOf(withId(R.id.btnWB), withText("GO TO WORD BANK SELECTION PAGE"),
+                allOf(withId(R.id.btnWB), withText("Categories"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         button3.check(matches(isDisplayed()));
@@ -203,12 +213,6 @@ public class WordBankTest {
                         isDisplayed()));
         button4.check(matches(isDisplayed()));
 
-        ViewInteraction button5 = onView(
-                allOf(withId(R.id.btnConfirm), withText("CONFIRM"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button5.check(matches(isDisplayed()));
-
         ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.backToMenu), withText("Back"),
                         childAtPosition(
@@ -237,11 +241,6 @@ public class WordBankTest {
                         isDisplayed()));
         button8.check(matches(isDisplayed()));
 
-        ViewInteraction button9 = onView(
-                allOf(withId(R.id.btnTut), withText("TUTORIAL"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button9.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(
