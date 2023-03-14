@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -56,7 +55,6 @@ public class ElementButtonTest {
 
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
-
         assertEquals("English", testButton.getEnglish());
     }
 

@@ -11,6 +11,13 @@
         <item>Seven,Siete</item>
         <item>Eight,Ocho</item>
         <item>Nine,Nueve</item>
+        <item>Ten,Diez</item>
+        <item>Eleven,Once</item>
+        <item>Twelve,Doce</item>
+        <item>Thirteen,Trece</item>
+        <item>Fourteen,Catorce</item>
+        <item>Fifteen,Quince</item>
+        <item>Sixteen,Dieciseis</item>
     </string-array>
 
     <string-array name="family_easy">
@@ -22,7 +29,14 @@
         <item>Uncle,Tio</item>
         <item>Daughter,Hija</item>
         <item>Son,Hijo</item>
-        <item>Friend,Amigo</item>
+        <item>Wife,Esposa</item>
+        <item>Husband,Esposo</item>
+        <item>Baby,Bebe</item>
+        <item>Child,Nino</item>
+        <item>Cousin,Primo</item>
+        <item>Family,Familia</item>
+        <item>Grandmother,Abuela</item>
+        <item>Grandfather,Abuelo</item>
     </string-array>
 
     <string-array name="greetings_easy">
@@ -35,6 +49,13 @@
         <item>No,No</item>
         <item>Hi,Alo</item>
         <item>Bye,Chao</item>
+        <item>Take Care,Cuidate</item>
+        <item>Excuse Me,Disculpa</item>
+        <item>You are welcome,De nada</item>
+        <item>Good Morning, Buenos dias</item>
+        <item>Good Afternoon,Buenas tardes</item>
+        <item>Good Evening,Buenas noches</item>
+        <item>See you later,Hasta luego</item>
     </string-array>
 
     <string-array name="food_drinks_easy">
@@ -47,6 +68,13 @@
         <item>Cheese,Queso</item>
         <item>Fruits,Frutas</item>
         <item>Lemonade,Limonada</item>
+        <item>Meat,Carne</item>
+        <item>Soup,Sopa</item>
+        <item>Cheese,Queso</item>
+        <item>Eggs,Huevos</item>
+        <item>Salad,Ensalada</item>
+        <item>Pizza,Pizza</item>
+        <item>Chicken,Pollo</item>
     </string-array>
 
     <string-array name="directions_easy">
@@ -59,6 +87,13 @@
         <item>Walk,Caminar</item>
         <item>Up,Arriba</item>
         <item>Down,Abajo</item>
+        <item>North,Norte</item>
+        <item>South,Sur</item>
+        <item>East,Este</item>
+        <item>West,Oeste</item>
+        <item>Near,Cerca</item>
+        <item>Far,Lejos</item>
+        <item>Above,Encima</item>
     </string-array>
 
 </resources>

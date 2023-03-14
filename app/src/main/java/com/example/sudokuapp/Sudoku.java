@@ -3,7 +3,6 @@ package com.example.sudokuapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.Objects;
 
 
@@ -30,22 +30,24 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private final Context context;
     private transient final Chronometer mTimer;
     private static int difficulty;
-    private String[] english;
-    private String[] spanish;
+    private final String[] english;
+    private final String[] spanish;
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
+
+    public void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
     private int mRemainingCells;
     private static long minutes, seconds;
+    public LinkedList<ElementButton> userInputButtons;
 
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
     public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
-    public void setRemainingCells(int remainingCells) {
-        mRemainingCells = remainingCells;
-    }
+    public void decreaseRemainingCells() {--mRemainingCells;}
+    public void increaseRemainingCells() {++mRemainingCells;}
     public static void setGRID_SIZE(int size) {
         GRID_SIZE = size;
     }
@@ -77,30 +79,33 @@ public class Sudoku extends AppCompatActivity implements Serializable
         {
             GRID_SIZE = 9;
         }
+        userInputButtons = new LinkedList<>();
         context = THIS;
         mTimer = t;
         //Temporarily hardcoded, another solution should best be found
         int[] categoryArrays = {
                         R.array.numbers,//0
                         R.array.greetings_easy,//1
-                        R.array.greetings_medium,
-                        R.array.greetings_hard,
+                        R.array.greetings_medium,//2
+                        R.array.greetings_hard,//3
                         R.array.directions_easy,//4
-                        R.array.directions_medium,
-                        R.array.directions_hard,
+                        R.array.directions_medium,//5
+                        R.array.directions_hard,//6
                         R.array.family_easy,//7
-                        R.array.family_medium,
-                        R.array.family_hard,
+                        R.array.family_medium,//7
+                        R.array.family_hard,//8
                         R.array.food_drinks_easy,//10
-                        R.array.food_drinks_medium,
-                        R.array.food_drinks_hard
+                        R.array.food_drinks_medium,//9
+                        R.array.food_drinks_hard//10
                 };
 
+
         //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank()];
+        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
+        if(getWordBank() == 0)
+            selectedArrayId = categoryArrays[0];
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
-        /*
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
         english = new String[GRID_SIZE];
         spanish = new String[GRID_SIZE];
@@ -110,10 +115,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
             String [] wordPair = inputString[i].split(",");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
-        }*/
+        }
 
-        english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
-        spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
+        //english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
+        //spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -179,7 +184,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
             //convert base time to readable minutes and seconds
             minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
             seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
-            //Log.i("time", getElapsedTime());
         });
     }
 
@@ -214,46 +218,19 @@ public class Sudoku extends AppCompatActivity implements Serializable
         for(int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 if (!mSudokuBoard[i][j].getLocked()) {
-                    mSudokuBoard[i][j].setText(mSudokuBoard[i][j].mTranslation);
+                    mSudokuBoard[i][j].setText(mSudokuBoard[i][j].getTranslation(translationDirection));
                     mSudokuBoard[i][j].setTextColor(Color.rgb(0,0,0));
                     mSudokuBoard[i][j].setLock(true);
+                    mSudokuBoard[i][j].setClickable(false);
                 }
             }
         }
         mTimer.stop();
     }
-    public void updateCells() {
-        for(int i = 0; i < Sudoku.getGridSize(); i++) {
-            for (int j = 0; j < Sudoku.getGridSize(); j++) {
-                //don't check empty cells, their values are technically the same as other empty cells but thats ok
-                if(mSudokuBoard[i][j].getValue() != 0) {
-                    //check if each cell has a conflict
-                    checkElement(mSudokuBoard[i][j]);
-                    //if so, set the cell to red
-                    if(mSudokuBoard[i][j].getWrong()) {
-                        mSudokuBoard[i][j].setBackgroundColor(Color.rgb(255, 114, 118));
-                    }
-                    //otherwise, reset cell background
-                    else {
-                        setCellDesign(mSudokuBoard[i][j]);
-                    }
-                }
-            }
-        }
-    }
 
     public void checkIfCompleted(View view) {
-        boolean isComplete = true;
-        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
-            for (int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++) {
-                if (mSudokuBoard[i][j].getWrong() || mSudokuBoard[i][j].getValue() == 0) {
-                    isComplete = false;
-                    break;
-                }
-            }
-        }
 
-        if(isComplete) {
+        if(getRemainingCells() == 0) {
             mTimer.stop();
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("Game Finished!");
@@ -312,166 +289,215 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
 
     //checks a given element for any conflicts with other cell values
-    //currently only designed for use with updateCells(), but can be modified to return a bool if needed (just return flag)
-    public void checkElement(ElementButton cell) {
-        boolean flag = false;
-        int r = cell.getIndex1();
-        int c = cell.getIndex2();
-        int given = cell.getValue();
-
-        Log.i("given value:", Integer.toString(given));
-        Log.i("given row index:", Integer.toString(r));
-        Log.i("given col index:", Integer.toString(c));
-
-        //******ROW AND COLUMN CHECKING******
-        //check column values, set ALL conflicting values to be wrong
-        for(int i = 0; i < Sudoku.getGridSize(); i++) {
-            //dont check value with itself, will always fail
-            if(c != i) {
-                //duplicate is found, trip flag and set the element as wrong
-                if (mSudokuBoard[r][i].getValue() == given) { //this statement is iterating over COLUMN (horizontal) values in row r from 0 to 8
-                    Log.i("f", "checked at (" + r + "," + i + ") " + ", given value " + given + " matched value of " + mSudokuBoard[r][i].getValue());
-                    flag = true;
-                    mSudokuBoard[r][i].setWrong(true);
+    public boolean validSpot(ElementButton cell, String givenInput)
+    {
+        int checkNum = 0;
+        if(!translationDirection)
+        {
+            for(int i = 0; i < getGridSize(); i++) {
+                if(english[i].equalsIgnoreCase(givenInput))
+                {
+                    checkNum = i+1;
                 }
             }
         }
-        //check row values, set ALL conflicting values to be wrong
-        for(int j = 0; j < Sudoku.getGridSize(); j++) {
-            //dont check value with itself, will always fail
-            if(r != j) {
-                //duplicate is found, trip flag and set the element as wrong
-                if (mSudokuBoard[j][c].getValue() == given) { //this statement is iterating over ROW (vertical) values in column c from 0 to 8
-                    Log.i("f", "checked at (" + j + "," + c + ") " + ", given value " + given + " matched value of " + mSudokuBoard[j][c].getValue());
-                    flag = true;
-                    mSudokuBoard[j][c].setWrong(true);
+        else {
+            for(int i = 0; i < getGridSize(); i++) {
+                if(spanish[i].equalsIgnoreCase(givenInput))
+                {
+                    checkNum = i+1;
                 }
             }
         }
-        //******BOX CHECKING******
-        //calculate box coords relative to other boxes (ie: coordinates are 3x3 not 9x9 for an 81 cell board)
-        //these values are used to find the top left corner cell of the box, so that iteration can begin akin to reading left to right
-        int boxRow = (int)Math.floor(r / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
-        int boxCol = (int)Math.floor(c / Math.sqrt(Sudoku.getGridSize())); // either 0 1 or 2
-        for(int i = 0; i < (int)Math.sqrt(Sudoku.getGridSize()); i++) {
-            for(int j = 0; j < (int)Math.sqrt(Sudoku.getGridSize()); j++)
-                //dont check value with itself, will always fail
-                if(!(r == boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i && c == boxCol * (int) Math.sqrt(Sudoku.getGridSize()) + j)) {
-                    if (mSudokuBoard[boxRow * (int) Math.sqrt(Sudoku.getGridSize()) + i][boxCol * (int)Math.sqrt(Sudoku.getGridSize()) + j].getValue() == given) {
-                        flag = true;
-                        cell.setWrong(true);
-                    }
-                }
+        if(validSpotHelper(cell.getIndex1(), cell.getIndex2(), checkNum))
+        {
+            Log.i("Status", "Valid spot, follows game rules.");
+            return true;
         }
-        //if an error is detected, value in this box is wrong
-        //otherwise, value does not cause an error
-        cell.setWrong(flag);
+        Log.i("Status", "Not a valid spot, does not follow game rules.");
+        return false;
     }
+
+    //When the user places a value in an empty cell, we check to see if its valid according to sudoku rules
+    //This does not guarantee that the user has placed the correct value into the empty cell
+    public boolean validSpotHelper(int row, int col, int num) {
+        //Check rows and cols
+        for (int i = 0; i < Sudoku.getGridSize(); i++) {
+            if (mSudokuBoard[row][i].getValue() == num || mSudokuBoard[i][col].getValue() == num) {
+                return false;
+            }
+        }
+        //Check box
+        int box_start_row = (row / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
+        int box_start_col = (col / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
+        for (int i = 0; i < (int) Math.sqrt(Sudoku.getGridSize()); i++) {
+            for (int j = 0; j < (int) Math.sqrt(Sudoku.getGridSize()); j++) {
+                if (mSudokuBoard[i + box_start_row][j + box_start_col].getValue() == num) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
-
+            Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
             //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
-
             //Only allow unlocked cells to be changed (givens cannot be changed)
-            if (!buttonPressed.isLocked) {
+            if (!buttonPressed.getLocked()) {
+
+                //**************************************//
+                //          MANUAL INPUT                //
+                //**************************************//
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                buttonPressed.setTextColor(view.getResources().getColor(R.color.user_input_text));
                 if (manual) {
                     builder.setTitle("Enter Word:");
+                    //Set up the input type (manual text input)
                     EditText input = new EditText(view.getContext());
                     input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    //Display popup
                     builder.setView(input);
-                    builder.setPositiveButton("OK", (dialog, which) -> {
+                    //When the user hits ok
+                    builder.setPositiveButton("OK", (dialog, which) ->
+                    {
+                        //This index tracks the position userInput is in the english or spanish array
+                        int index = 0;
+                        //Get the string currently in the EditText object
                         String userInput = input.getText().toString();
-                        //Check if userInput is in the hashmap
-                        boolean validUserInput = false;
-                        for (int i = 1; i <= GRID_SIZE; i++) {
 
-                            //converting all words (both dictionary and user input) to lowercase makes case sensitivity irrelevant
-                            //may cause a bug when accents are included as not sure how exactly toLowerCase() works with them
-                            //translationDirection = true -> english to spanish
-                            if (translationDirection) {
-                                if (Objects.equals(spanish[i-1].toLowerCase(), userInput.toLowerCase())) {
-                                    validUserInput = true;
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(english[i-1]);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(spanish[i-1]);
-                                    break;
-                                }
-                            }
-                            else {
-                                if (Objects.equals(english[i-1].toLowerCase(), userInput.toLowerCase())) {
-                                    validUserInput = true;
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setValue(i);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setEnglish(spanish[i-1]);
-                                    mSudokuBoard[buttonPressed.index1][buttonPressed.index2].setTranslation(english[i-1]);
-                                    break;
-                                }
-                            }
-                        }
-                        if ((mSudokuBoard[buttonPressed.index1][buttonPressed.index2].mValue == generatedBoard.mAnswerBoard[buttonPressed.index1][buttonPressed.index2]) && validUserInput)
+                        //If nothing is entered, close and do nothing
+                        if(userInput.length() != 0)
                         {
-                            //Update the cell with the userInput text
-                            buttonPressed.setText(userInput);
-                            //update cells and check for completion
-                            updateCells();
-                            checkIfCompleted(view);
-                        }
-                        //If the answer is incorrect
-                        else {
-                            //Case 1: Invalid input, Toast message displayed button unchanged.
-                            if (!validUserInput) {
-                                Toast t = Toast.makeText(context, "Invalid Input", Toast.LENGTH_LONG);
+                            //Boolean to store whether or not the userInput string is part of the words in play
+                            boolean validUserInput = false;
+
+                            //Check if userInput string is part of the words in play
+                            for (int i = 0; i < GRID_SIZE; i++)
+                            {
+                                //User input in Spanish
+                                if (translationDirection) {
+                                    //Check to see if the userInput is a valid word in play
+                                    if (Objects.equals(spanish[i].toLowerCase(), userInput.toLowerCase())) {
+                                        index = i;
+                                        validUserInput = true;
+                                        break;
+                                    }
+                                }
+                                //User input in English
+                                else {
+                                    if (Objects.equals(english[i].toLowerCase(), userInput.toLowerCase())) {
+                                        index = i;
+                                        validUserInput = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            // If userInput string is a valid word in play, and is placed in a valid position by sudoku rules
+                            if (validSpot(buttonPressed, userInput) && validUserInput) {
+                                buttonPressed.setValue(index + 1);
+                                buttonPressed.setText(userInput);
+                                buttonPressed.setTextColor(Color.rgb(0, 138, 216));
+                                userInputButtons.add(buttonPressed);
+                                if(buttonPressed.isWrong)
+                                {
+                                    decreaseRemainingCells();
+                                }
+                                buttonPressed.isWrong = false;
+                                //Check if the game is complete.
+                                checkIfCompleted(view);
+                            }
+                            // If userInput string is a valid word in play, but is not placed in a valid position by sudoku rules
+                            else if (!validSpot(buttonPressed, userInput) && validUserInput) {
+                                buttonPressed.setValue(index + 1);
+                                buttonPressed.setText(userInput);
+                                buttonPressed.setTextColor(Color.rgb(255, 114, 118));
+                                if(!buttonPressed.isWrong)
+                                {
+                                    increaseRemainingCells();
+                                }
+                                buttonPressed.isWrong = true;
+                                userInputButtons.add(buttonPressed);
+                            }
+                            // If userInput string is not a valid word in play
+                            else {
+                                Toast t = Toast.makeText(context, "You cant place that there!", Toast.LENGTH_LONG);
                                 t.show();
                             }
-                            //Case 2: Valid input (in vocab) but incorrect word
-                            else {
-                                //Update the cell with the userInput text
-                                buttonPressed.setText(userInput);
-                                //update cells
-                                updateCells();
-                            }
+                            System.out.println("Get value: "+ buttonPressed.getValue());
                         }
-
                     });
+                    //Set up popup clear button, used to remove value in current cell
                     builder.setNeutralButton("Clear Answer", (dialog, which) -> {
-                        //reverts cell to default state, then updates cells
+                        //reverts cell to default state
                         buttonPressed.setText("");
                         buttonPressed.setValue(0);
+                        userInputButtons.remove(buttonPressed);
+                        //rgb value doesn't matter, no text is visible
+                        //If the cleared cell was in a valid position, set it to currently false (isWrong = true) and increase the number of remaining cells
+                        if(!buttonPressed.isWrong)
+                        {
+                            increaseRemainingCells();
+                            buttonPressed.isWrong = true;
+                        }
                         setCellDesign(buttonPressed);
-                        updateCells();
                     });
+                    //Set up popup cancel button
                     builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    //Display the popup
                     builder.show();
                 }
-                //Below if statement uses buttons to assist user with word input
+                //Below uses buttons to assist user with word input
                 else
                 {
-                    builder.setNeutralButton("Clear Answer", (dialog, which) -> {
-                        buttonPressed.setText("");
-                        buttonPressed.setValue(0);
-                        updateCells();
-                        setCellDesign(buttonPressed);
-                    });
-                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                    //creating the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
+                    //**************************************//
+                    //          ASSISTED INPUT              //
+                    //**************************************//
+
+                    // Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
                     AlertDialog alert = builder.create();
                     alert.setTitle("Enter Word:");
                     Context dialogContext = builder.getContext();
+                    //Set the clear answer button in the popup
+                    builder.setNeutralButton("Clear Answer", (dialog, which) -> {
+                        buttonPressed.setText("");
+                        buttonPressed.setValue(0);
+                        userInputButtons.remove(buttonPressed);
+                        buttonPressed.setBackgroundResource(android.R.drawable.btn_default);
+                        if(!buttonPressed.isWrong)
+                        {
+                            increaseRemainingCells();
+                            buttonPressed.isWrong = true;
+                        }
+                        setCellDesign(buttonPressed);
+                    });
+                    // Exit the popup with no changes made
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    // Builds the pre defined inputs the user may choose from
+
+
                     TableLayout input = new TableLayout(dialogContext);
+                    input.setContentDescription("assistDialogLayout");
 
-
-                    //builds grid of vocab words here by iterating over wordIndex
+                    //Set tag counter for assistButtons
+                    int assistButtonTagCounter = 0;
                     for (int rows = 0; rows < (int) Math.sqrt(GRID_SIZE); rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
+                        //Set tag for each table row to be used in testing
+                        tableRow.setTag("assistTableRowTag" + (rows));
+
                         for (int cols = 0; cols < (int) Math.sqrt(GRID_SIZE); cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
+                            //Set tag each AssistedInputButton for testing
+                            wordButton.setTag("assistButtonTag" + (assistButtonTagCounter));
+                            assistButtonTagCounter++;
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
@@ -479,21 +505,19 @@ public class Sudoku extends AppCompatActivity implements Serializable
                             else
                                 wordButton.setText(english[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
 
-                            //Button holds its index of where it is in 3x3 grid
+                            //Button holds its index of where it is in subgrid
                             wordButton.setIndex((rows*(int) Math.sqrt(GRID_SIZE)) + cols);
-                            //Button stores a reference to the AlertDialog so close it in onclicklistener
+                            //Button stores a reference to the AlertDialog so it can close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
-                            //Stores the ElementButton that called it when it was pressed
+                            //Stores a reference to the ElementButton that called it when it was pressed
                             wordButton.setCallingButton(buttonPressed);
-
                             //Button Functionality
                             wordButton.setOnClickListener(new AssistedInputButtonListener());
-
+                            tableRow.setId(View.generateViewId());
                             tableRow.addView(wordButton);
                         }
                         input.addView(tableRow);
                     }
-
                     alert.setView(input);
                     alert.show();
                 }
@@ -511,13 +535,33 @@ public class Sudoku extends AppCompatActivity implements Serializable
             Log.i("Word Pressed:", wordButtonPressed.getText().toString());
             Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
 
-            //the +1 here converts the index from the wordIndex into a value that compares with elementButton values properly
-            wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
-            wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
-            //update cells and check completion
-            updateCells();
-            checkIfCompleted(view);
+            if(validSpot(wordButtonPressed.callingButton, wordButtonPressed.getText().toString()))
+            {
+                wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
+                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
+                wordButtonPressed.callingButton.setTextColor(Color.rgb(	0,138,216));
+                userInputButtons.add(wordButtonPressed.callingButton);
+                if(wordButtonPressed.callingButton.isWrong)
+                {
+                    decreaseRemainingCells();
+                }
+                wordButtonPressed.callingButton.isWrong = false;
+            }
+            else
+            {
+                wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
+                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
+                wordButtonPressed.callingButton.setTextColor(Color.rgb(255,114,118));
+                if(!wordButtonPressed.callingButton.isWrong)
+                {
+                    increaseRemainingCells();
+                }
+                wordButtonPressed.callingButton.isWrong = true;
 
+                userInputButtons.add(wordButtonPressed.callingButton);
+            }
+            //update cells and check completion
+            checkIfCompleted(view);
             //closes dialog box after a button is pressed
             wordButtonPressed.AssociatedAlertDialog.cancel();
         }

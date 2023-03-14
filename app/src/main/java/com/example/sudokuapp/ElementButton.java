@@ -10,13 +10,13 @@ import java.io.Serializable;
 //This class inherits button to add some useful attributes.
 public class ElementButton extends androidx.appcompat.widget.AppCompatButton implements Serializable
 {
-    int mValue;
-    String mTranslation;
-    String mEnglish;
-    public int index1;
-    public int index2;
-    public boolean isLocked;
-    public boolean isWrong;
+    private int mValue;
+    private String mTranslation;
+    private String mEnglish;
+    private int  index1;
+    private int index2;
+    private boolean isLocked;
+    boolean isWrong;
 
     //Getter methods
     public int getValue() {
@@ -42,7 +42,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     public int getIndex2() {
         return index2;
     }
-    public boolean getWrong() {return isWrong;}
 
     //Setter methods
     public void setValue(int value) {
@@ -62,7 +61,12 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         index1 = i;
         index2 = j;
     }
-    public void setWrong(boolean w) {isWrong = w;}
+    public void setIndex1(int index1) {
+        this.index1 = index1;
+    }
+    public void setIndex2(int index2) {
+        this.index2 = index2;
+    }
 
 
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
@@ -73,12 +77,14 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
             throw new IllegalArgumentException("Index or value out of range!");
         }
 
+        isWrong = true;
         index1 = i1;
         index2 = i2;
         mValue = v;
         mEnglish = e;
         mTranslation = t;
         isLocked = locked;
+        this.setClickable(!locked);
 
         if(mValue == 0)
         {
@@ -103,6 +109,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = "";
         mTranslation ="";
         isLocked = false;
+        this.setClickable(false);
     }
 
     public ElementButton(Context context, int num)
@@ -112,5 +119,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = "";
         mTranslation ="";
         isLocked = false;
+        this.setClickable(false);
     }
 }

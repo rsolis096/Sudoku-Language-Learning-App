@@ -15,7 +15,6 @@
     <string name="back">Back</string>
     <string name="home">Home</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    <string name="go_to_word_bank_selection_page">Go to Word Bank Selection page</string>
     <string name="numbers">Numbers</string>
     <string name="family">Family</string>
     <string name="food_and_drinks">food and drinks</string>
@@ -28,4 +27,10 @@
     <string name="_9x9">9x9</string>
     <string name="_16x16">16x16</string>
     <string name="_4x4">4x4 </string>
+    <string name="categories">Categories</string>
+    <string name="select_board_size">Select board size</string>
+    <string name="choose_a_grid_size">Choose a grid size</string>
+    <string name ="congratulations_you_completed_the_puzzle">Congratulations, you completed the puzzle!</string>
+    <string name ="_0_00">0:00</string>
+    <string name="here_is_your_time" />
 </resources>
