@@ -56,8 +56,8 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
         for (int rows = 0; rows < Sudoku.getGridSize(); rows++) {
             TableRow tableRow = new TableRow(this);
-            //Sets a tag for each tableRow to be used with testing
-            tableRow.setTag("tableRowTag" + rows);
+            //Sets a content description for each tableRow to be used with UI testing
+            tableRow.setContentDescription("tableRowTag" + rows);
 
             for (int cols = 0; cols < Sudoku.getGridSize(); cols++)
             {
@@ -69,16 +69,15 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
                     ((ViewGroup) element.getParent()).removeView(element);
                 }
                 //Sets a tag for each elementButton for easier testing
-                myGame.getElement(rows, cols).setTag("elementButtonTag" + (elementButtonCounterForTag));
+                myGame.getElement(rows, cols).setContentDescription("elementButtonTag" + (elementButtonCounterForTag));
+                ++elementButtonCounterForTag;
 
                 //Set a tag for an empty cell for testing
                 if(myGame.getElement(rows, cols).getValue() == 0 &&  !foundEmptyCell)
                 {
-                    myGame.getElement(rows, cols).setTag("emptyCell");
+                    myGame.getElement(rows, cols).setContentDescription("emptyCell");
                     foundEmptyCell = true;
-                }
-                else{
-                    ++elementButtonCounterForTag;
+                    elementButtonCounterForTag--;
                 }
 
                 //Display the tables

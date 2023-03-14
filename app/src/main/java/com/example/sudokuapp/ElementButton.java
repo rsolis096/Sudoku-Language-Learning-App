@@ -84,6 +84,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = e;
         mTranslation = t;
         isLocked = locked;
+        this.setClickable(!locked);
 
         if(mValue == 0)
         {
@@ -108,6 +109,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = "";
         mTranslation ="";
         isLocked = false;
+        this.setClickable(false);
     }
 
     public ElementButton(Context context, int num)
@@ -117,5 +119,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = "";
         mTranslation ="";
         isLocked = false;
+        this.setClickable(false);
     }
 }

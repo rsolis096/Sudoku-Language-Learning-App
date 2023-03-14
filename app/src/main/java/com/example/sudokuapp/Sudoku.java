@@ -221,6 +221,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].getTranslation(translationDirection));
                     mSudokuBoard[i][j].setTextColor(Color.rgb(0,0,0));
                     mSudokuBoard[i][j].setLock(true);
+                    mSudokuBoard[i][j].setClickable(false);
                 }
             }
         }

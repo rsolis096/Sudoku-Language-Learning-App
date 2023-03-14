@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
