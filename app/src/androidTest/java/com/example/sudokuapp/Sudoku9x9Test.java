@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.widget.Chronometer;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import androidx.test.uiautomator.By;
@@ -31,7 +32,7 @@ public class Sudoku9x9Test {
     private UiDevice mDevice;
 
     @Before
-    public void startMainActivityFromHomeScreen() throws UiObjectNotFoundException {
+    public void startMainActivityFromHomeScreen() {
         // Initialize UiDevice instance
         mDevice = UiDevice.getInstance(getInstrumentation());
 
@@ -53,6 +54,15 @@ public class Sudoku9x9Test {
         // Wait for the app to appear
         mDevice.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
+    }
+
+    @Test
+    public void checkPreconditions() {
+        assertNotNull(mDevice);
+    }
+
+    @Test
+    public void assistModeCheck() throws UiObjectNotFoundException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
@@ -85,9 +95,15 @@ public class Sudoku9x9Test {
         assertTrue("Confirm button is not clickable", confirm.isClickable());
         confirm.click();
 
+        //Check Timer (wait for it to appear on screen, going to fast will cause fail)
+        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),500);
+        assertTrue("Timer is not enabled", cTimer.isEnabled());
+        //Get text to compare for later to make sure it is counting up
+        String timerText = cTimer.getText();
+
         //Wait one second for the game to load before continuing with further actions
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -100,7 +116,6 @@ public class Sudoku9x9Test {
         }
 
         //** Test the ElementButtons in the table **//
-
         // Get a reference to the sudokutable (TableLayout)
         UiObject2 tableLayout = mDevice.findObject(By.res("com.example.sudokuapp:id/sudoku_table"));
         // Get a reference to the ScrollView with horizontal scroll
@@ -112,114 +127,79 @@ public class Sudoku9x9Test {
         scrollView.scrollToEnd(2);
         //Slow down next code to give time to scroll
         try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Check the remaining buttons
+        checkElementButtons(tableLayout);
+
+        //Check Timer
+        //Verify timer is counting up
+        assertTrue("Timer is not enabled", cTimer.isEnabled());
+        assertNotEquals(cTimer.getText(), timerText);
+
+        //Scroll left to test empty ElementButton functionality
+        scrollView.scrollToBeginning(2);
+        //Slow down next code to give time to scroll
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Check single empty cell for functionality of assisted mode
+        UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
+        assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
+        emptyCell.click();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Check all the table rows that pop up in assist mode
+        tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
+        UiObject2 assistButtonToSelect = null;
+        for(UiObject2 individualButton : tableLayout.getChildren())
+        {
+            for(UiObject2 singleButton : individualButton.getChildren())
+            {
+                assertTrue("Empty Cell is not clickable", singleButton.isClickable());
+                assertTrue("Button is not enabled", singleButton.isEnabled());
+                assistButtonToSelect = singleButton;
+            }
+        }
+
+        //Select an assistedButton
+        assert assistButtonToSelect != null;
+        String assistButtonSelectedText = assistButtonToSelect.getText();
+        assistButtonToSelect.click();
+
+        //Wait so the app can catch up
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Make sure the emptyCell was updated
+        //Comparing with a string variable because assistButtonToSelect is off screen
+        assertEquals(emptyCell.getText(),assistButtonSelectedText);
+
+        // Hold to ensure app is where its expected to be
+        try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //Check the remaining buttons
-        checkElementButtons(tableLayout);
+    }
 
+    @Test
+    public void manualModeCheck() {
         /*
-        ///Table Rows
-        tableRows.clear();
-        tableRows = tableLayout.getChildren();
-        //Iterate through each button in each table row
-        for(UiObject2 individualButton : tableRows)
-        {
-            for(UiObject2 singleButton : individualButton.getChildren())
-            {
-                System.out.println(singleButton.getContentDescription());
-                assertTrue("Button is not enabled", singleButton.isEnabled());
-
-            }
-        }
-        */
-
-
-
-        /*
-        // Get a reference to the ScrollView
-        UiScrollable scrollView = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
-
-        // Set Horizontal Scroll
-        scrollView.setAsHorizontalList();
-
-        // Get a reference to the TableLayout
-        UiObject tableLayout = scrollView.getChild(new UiSelector().className("android.widget.TableLayout"));
-
-        int iteratorCounter = 0;
-        for (int i = 0; i < 9; i++) {
-            UiObject tableRow = tableLayout.getChild(new UiSelector().className("android.widget.TableRow").index(i));
-            // Iterate over each Button in the TableRow
-            for (int j = 0; j < 9; j++) {
-                UiObject button = tableRow.getChild(new UiSelector().className("android.widget.Button").index(j));
-
-                // Scroll the ScrollView until the Button is visible
-                if (!button.waitForExists(500)) {
-                    scrollView.scrollIntoView(button);
-                }
-
-                // Check if the Button is enabled
-                System.out.println("Current button " + button.getContentDescription() + " j = " + j);
-                assertTrue("Button " + i + " is not enabled", button.isEnabled());
-            }
-        }
-
-
-        //Check all of the buttons
-        for (int i = 0; i < 80; i++)
-        {
-            //Checking if it exists
-            ViewInteraction button = onView(withTagValue(is("elementButtonTag" + i)));
-            button.check(matches(isEnabled()));
-        }
-
-        //Verify timer exists
-        ViewInteraction chronometer = onView(
-                allOf(withId(R.id.gameTimerText),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        chronometer.check(matches(isDisplayed()));
-
-        //Check single empty cell for functionality of assisted mode
-        ViewInteraction elementButton = onView(withTagValue(is("emptyCell")));
-        elementButton.perform(scrollTo(), click());
-
-        //Check all the table rows that pop up in assist mode
-        for(int i =0; i < 3; i++)
-        {
-            ViewInteraction assistedTableRow = onView(withTagValue(is("assistTableRowTag" + i)));
-            assistedTableRow.check(matches(isDisplayed()));
-        }
-
-        //Check if assist buttons exist
-        for(int i =0; i < 9; i++)
-        {
-            ViewInteraction assistedButton = onView(withTagValue(is("assistButtonTag" + i)));
-            assistedButton.check(matches(isEnabled()));
-        }
-
-        ViewInteraction textView = onView(
-                allOf(IsInstanceOf.instanceOf(android.widget.TextView.class), withText("Enter Word:"),
-                        withParent(allOf(IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        textView.check(matches(withText("Enter Word:")));
-
-        //Select a assistedButton
-        ViewInteraction selectAssisted = onView(withTagValue(is("assistButtonTag2")));
-        selectAssisted.perform(click());
-
-        //Make sure the emptyCell was updated
-        onView(withTagValue(is("emptyCell"))).check(matches(withText("Tres")));
-
-        Espresso.pressBack();
-        Espresso.pressBack();
-
-
-        **************************************
-                  MANUAL INPUT
-        **************************************
         ViewInteraction materialButton1 = onView(
                 allOf(withId(R.id.btnStart), withText("Start"),
 
@@ -488,10 +468,6 @@ public class Sudoku9x9Test {
         */
     }
 
-    @Test
-    public void checkPreconditions() {
-        assertNotNull(mDevice);
-    }
 
 
     /*

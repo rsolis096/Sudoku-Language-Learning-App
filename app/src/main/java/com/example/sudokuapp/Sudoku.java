@@ -481,6 +481,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
 
                     TableLayout input = new TableLayout(dialogContext);
+                    input.setContentDescription("assistDialogLayout");
 
                     //Set tag counter for assistButtons
                     int assistButtonTagCounter = 0;
