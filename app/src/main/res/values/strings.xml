@@ -29,4 +29,8 @@
     <string name="_4x4">4x4 </string>
     <string name="categories">Categories</string>
     <string name="select_board_size">Select board size</string>
+    <string name="choose_a_grid_size">Choose a grid size</string>
+    <string name ="congratulations_you_completed_the_puzzle">Congratulations, you completed the puzzle!</string>
+    <string name ="_0_00">0:00</string>
+    <string name="here_is_your_time" />
 </resources>

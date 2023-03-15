@@ -25,7 +25,7 @@ public class OptionsPage extends AppCompatActivity {
 
     // close this activity
     private void setupBackToMain() {
-        Button btn = findViewById(R.id.backToMenu);
+        Button btn = findViewById(R.id.optionsBackToMenu);
         btn.setOnClickListener(view -> finish());
     }
 

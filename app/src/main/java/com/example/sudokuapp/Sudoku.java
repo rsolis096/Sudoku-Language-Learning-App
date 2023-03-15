@@ -217,10 +217,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //Updates the text of buttons
         for(int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
-                if (!mSudokuBoard[i][j].getLocked()) {
+                if (mSudokuBoard[i][j].isClickable()) {
                     mSudokuBoard[i][j].setText(mSudokuBoard[i][j].getTranslation(translationDirection));
                     mSudokuBoard[i][j].setTextColor(Color.rgb(0,0,0));
-                    mSudokuBoard[i][j].setLock(true);
+                    mSudokuBoard[i][j].setClickable(false);
                 }
             }
         }
@@ -347,7 +347,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
             //Only allow unlocked cells to be changed (givens cannot be changed)
-            if (!buttonPressed.getLocked()) {
+            if (buttonPressed.isClickable()) {
 
                 //**************************************//
                 //          MANUAL INPUT                //
@@ -480,6 +480,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
 
                     TableLayout input = new TableLayout(dialogContext);
+                    input.setContentDescription("assistDialogLayout");
 
                     //Set tag counter for assistButtons
                     int assistButtonTagCounter = 0;
