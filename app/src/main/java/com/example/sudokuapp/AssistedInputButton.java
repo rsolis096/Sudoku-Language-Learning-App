@@ -2,11 +2,9 @@ package com.example.sudokuapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.widget.Button;
 
 public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButton {
     public int index;
-    public int value;
     public boolean translationDirection;
 
     public void setCallingButton(ElementButton callingButton) {
@@ -23,7 +21,6 @@ public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButt
     }
 
     public void setIndex(int i){index = i;}
-    public void setTranslationDirection(boolean val) {translationDirection = val;}
 
     AssistedInputButton(Context context)
     {

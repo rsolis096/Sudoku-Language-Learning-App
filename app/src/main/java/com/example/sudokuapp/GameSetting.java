@@ -132,8 +132,18 @@ public class GameSetting extends AppCompatActivity {
         });
         //return to main menu
         Button btn = findViewById(R.id.backToMenu);
-        btn.setOnClickListener(view -> finish());
-        }
+        btn.setOnClickListener(view ->
+        {
+            Intent intent = new Intent(GameSetting.this, MainMenu.class);
+            startActivity(intent);
+        });
+     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(GameSetting.this, MainMenu.class);
+        startActivity(intent);
+    }
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, GameSetting.class);
