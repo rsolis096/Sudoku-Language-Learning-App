@@ -41,7 +41,7 @@ public class ElementButtonTest {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
 
-        assertTrue(testButton.getLocked());
+        assertTrue(testButton.isClickable());
     }
 
     @Test
@@ -131,10 +131,10 @@ public class ElementButtonTest {
 
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
-        testButton.setLock(false);
+        testButton.setClickable(false);
 
 
-        assertFalse(testButton.getLocked());
+        assertFalse(testButton.isClickable());
     }
 
     @Test

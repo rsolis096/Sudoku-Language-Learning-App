@@ -15,14 +15,12 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     private String mEnglish;
     private int  index1;
     private int index2;
-    private boolean isLocked;
     boolean isWrong;
 
     //Getter methods
     public int getValue() {
         return mValue;
     }
-    public boolean getLocked() {return isLocked;}
     public String getEnglish() {
         return mEnglish;
     }
@@ -47,9 +45,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     public void setValue(int value) {
         mValue = value;
     }
-    public void setLock(boolean val) {
-        isLocked = val;
-    }
     public void setEnglish(String english) {
         mEnglish = english;
     }
@@ -61,13 +56,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         index1 = i;
         index2 = j;
     }
-    public void setIndex1(int index1) {
-        this.index1 = index1;
-    }
-    public void setIndex2(int index2) {
-        this.index2 = index2;
-    }
-
 
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
 
@@ -83,7 +71,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = v;
         mEnglish = e;
         mTranslation = t;
-        isLocked = locked;
         this.setClickable(!locked);
 
         if(mValue == 0)
@@ -108,7 +95,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = 0;
         mEnglish = "";
         mTranslation ="";
-        isLocked = false;
         this.setClickable(false);
     }
 
@@ -118,7 +104,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = num;
         mEnglish = "";
         mTranslation ="";
-        isLocked = false;
         this.setClickable(false);
     }
 }
