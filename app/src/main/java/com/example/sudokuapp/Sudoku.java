@@ -65,6 +65,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
 
     }
+    public static int getBoxSizeX() {return boxSizeX;}
+    public static int getBoxSizeY() {return boxSizeY;}
 
     //getters for game settings
     public ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
@@ -260,11 +262,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
 
     //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
-    //currently working for grid sizes with whole number roots
     public void setCellDesign(ElementButton cell) {
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
-        int size = Sudoku.getGridSize();
 
         if((colCoordinate + 1) % boxSizeX == 0) {
             if ((rowCoordinate + 1) % boxSizeY == 0) {

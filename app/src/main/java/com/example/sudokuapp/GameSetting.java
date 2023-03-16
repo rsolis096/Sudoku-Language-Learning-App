@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -88,9 +87,11 @@ public class GameSetting extends AppCompatActivity {
     }
 
     private void setupGridSize() {
-        ToggleButton nineXNine = findViewById(R.id.tgBtn9);
+        ToggleButton nineXNine = findViewById(R.id.tgBtn12);
         ToggleButton sixteenXSixteen = findViewById(R.id.tgBtn16);
         ToggleButton twentyFiveXTwentyFive = findViewById(R.id.tgBtn4);
+        ToggleButton twelveXTwelve = findViewById(R.id.tgBtn12);
+        ToggleButton sixXSix = findViewById(R.id.tgBtn6);
 
         //sets difficulty to 'easy' and unchecks the other buttons
         nineXNine.setOnClickListener(view -> {
@@ -99,6 +100,8 @@ public class GameSetting extends AppCompatActivity {
             nineXNine.setChecked(true);
             sixteenXSixteen.setChecked(false);
             twentyFiveXTwentyFive.setChecked(false);
+            sixXSix.setChecked(false);
+            twelveXTwelve.setChecked(false);
         });
         //sets difficulty to 'medium' and unchecks the other buttons
         sixteenXSixteen.setOnClickListener(view -> {
@@ -106,6 +109,8 @@ public class GameSetting extends AppCompatActivity {
             nineXNine.setChecked(false);
             sixteenXSixteen.setChecked(true);
             twentyFiveXTwentyFive.setChecked(false);
+            sixXSix.setChecked(false);
+            twelveXTwelve.setChecked(false);
         });
         //sets difficulty to 'hard' and unchecks the other buttons
         twentyFiveXTwentyFive.setOnClickListener(view -> {
@@ -113,6 +118,24 @@ public class GameSetting extends AppCompatActivity {
             nineXNine.setChecked(false);
             sixteenXSixteen.setChecked(false);
             twentyFiveXTwentyFive.setChecked(true);
+            sixXSix.setChecked(false);
+            twelveXTwelve.setChecked(false);
+        });
+        twelveXTwelve.setOnClickListener(view -> {
+            Sudoku.setGRID_SIZE(12);
+            nineXNine.setChecked(false);
+            sixteenXSixteen.setChecked(false);
+            twentyFiveXTwentyFive.setChecked(false);
+            sixXSix.setChecked(false);
+            twelveXTwelve.setChecked(true);
+        });
+        sixXSix.setOnClickListener(view -> {
+            Sudoku.setGRID_SIZE(6);
+            nineXNine.setChecked(false);
+            sixteenXSixteen.setChecked(false);
+            twentyFiveXTwentyFive.setChecked(false);
+            sixXSix.setChecked(true);
+            twelveXTwelve.setChecked(false);
         });
     }
 
