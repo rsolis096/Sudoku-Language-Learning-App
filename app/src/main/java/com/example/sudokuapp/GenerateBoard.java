@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class GenerateBoard implements Serializable  {
-    public int[][] mGeneratedBoard;
-    public int[][] mAnswerBoard;
+    public static int[][] mGeneratedBoard;
+    public static int[][] mAnswerBoard;
     public int rows, cols;
     public int dif, remainingCells;
 
