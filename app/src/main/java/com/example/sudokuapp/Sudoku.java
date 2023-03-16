@@ -24,6 +24,8 @@ import java.util.Objects;
 public class Sudoku extends AppCompatActivity implements Serializable
 {
     private static int GRID_SIZE;
+    private static int boxSizeX = 3;
+    private static int boxSizeY = 3;
     private final ElementButton[][] mSudokuBoard;
     private final ElementButton[][] mSudokuAnswerBoard;
     private final GenerateBoard generatedBoard;
@@ -50,6 +52,18 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public void increaseRemainingCells() {++mRemainingCells;}
     public static void setGRID_SIZE(int size) {
         GRID_SIZE = size;
+        if(Math.sqrt(size) % 1 == 0) {
+            boxSizeX = boxSizeY = (int) Math.sqrt(size);
+        }
+        else if(size == 12) {
+            boxSizeX = 3;
+            boxSizeY = 4;
+        }
+        else if(size == 6) {
+            boxSizeX = 2;
+            boxSizeY = 3;
+        }
+
     }
 
     //getters for game settings
@@ -248,38 +262,38 @@ public class Sudoku extends AppCompatActivity implements Serializable
     //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
     //currently working for grid sizes with whole number roots
     public void setCellDesign(ElementButton cell) {
-        int rows = cell.getIndex1();
-        int cols = cell.getIndex2();
+        int rowCoordinate = cell.getIndex1();
+        int colCoordinate = cell.getIndex2();
         int size = Sudoku.getGridSize();
 
-        if(cols == Math.sqrt(size) || cols == Math.sqrt(size) * 2) {
-            if (rows == Math.sqrt(size) || rows == (Math.sqrt(size) * 2)) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
-            }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
-            }
-            else {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
-            }
-        }
-        else if(cols == (Math.sqrt(size) - 1) || cols == ((Math.sqrt(size) * 2) - 1)) {
-            if (rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
-            }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+        if((colCoordinate + 1) % boxSizeX == 0) {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
+            }
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
             }
             else {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
             }
         }
-        else {
-            if(rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
+        else if((colCoordinate) % boxSizeX == 0) {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
             }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
+            }
+            else {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
+            }
+        }
+        else {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
+            }
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
             }
             else {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
