@@ -24,22 +24,19 @@ import java.util.Objects;
 public class Sudoku extends AppCompatActivity implements Serializable
 {
     private static int GRID_SIZE;
+    private static ElementButton[][] mSudokuBoard;
     private static int boxSizeX = 3;
     private static int boxSizeY = 3;
-    private final ElementButton[][] mSudokuBoard;
     private final ElementButton[][] mSudokuAnswerBoard;
-    private final GenerateBoard generatedBoard;
     private final Context context;
     private transient final Chronometer mTimer;
     private static int difficulty;
-    private final String[] english;
-    private final String[] spanish;
+    public static String[] english;
+    public static String[] spanish;
     private static int wordBank;
     private static boolean manual;
     private static boolean translationDirection = true;
-
-    public void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
-    private int mRemainingCells;
+    private static int mRemainingCells;
     private static long minutes, seconds;
     public LinkedList<ElementButton> userInputButtons;
 
@@ -65,11 +62,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
 
     }
+    public static void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
+
     public static int getBoxSizeX() {return boxSizeX;}
     public static int getBoxSizeY() {return boxSizeY;}
 
     //getters for game settings
-    public ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
+    public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
     public static int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
@@ -87,6 +86,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
     public static int getGridSize() {
         return GRID_SIZE;
+    }
+    public Chronometer getTimer() {
+        return mTimer;
     }
 
     Sudoku(Context THIS, Chronometer t){
@@ -140,7 +142,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //GenerateBoard class has member 2d arrays:
         //int[][] mGeneratedBoard; This board is the partially filled array of integers
         //int[][] mAnswerBoard;    This board is the completed board used to reference for answer checking
-        generatedBoard = new GenerateBoard(GRID_SIZE, GRID_SIZE, getDifficulty());
+        GenerateBoard generatedBoard = new GenerateBoard(GRID_SIZE, GRID_SIZE, getDifficulty());
         generatedBoard.createBoard();
         //Initialize number of unfilled cells
         mRemainingCells = generatedBoard.getEmptyCells();
@@ -156,14 +158,14 @@ public class Sudoku extends AppCompatActivity implements Serializable
             for(int cols = 0; cols < GRID_SIZE; cols++)
             {
                 //This initializes ElementButtons that correspond to given cells
-                if(generatedBoard.mGeneratedBoard[rows][cols] != 0)
+                if(GenerateBoard.mGeneratedBoard[rows][cols] != 0)
                 {
 
                     mSudokuBoard[rows][cols] =
                             new ElementButton(
-                                generatedBoard.mGeneratedBoard[rows][cols],
-                                english[generatedBoard.mGeneratedBoard[rows][cols] - 1],
-                                spanish[generatedBoard.mGeneratedBoard[rows][cols] - 1],
+                                GenerateBoard.mGeneratedBoard[rows][cols],
+                                english[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
+                                spanish[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
@@ -180,9 +182,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 //This initializes the answer board of ElementButtons used to be matched with mSudokuBoard for error checking
                 mSudokuAnswerBoard[rows][cols] =
                         new ElementButton(
-                                generatedBoard.mAnswerBoard[rows][cols],
-                                english[generatedBoard.mAnswerBoard[rows][cols] - 1],
-                                spanish[generatedBoard.mAnswerBoard[rows][cols] - 1],
+                                GenerateBoard.mAnswerBoard[rows][cols],
+                                english[GenerateBoard.mAnswerBoard[rows][cols] - 1],
+                                spanish[GenerateBoard.mAnswerBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
@@ -202,47 +204,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
             seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
         });
     }
-
-    public void solveGrid()
-    {
-        setRemainingCells(0);
-        for(int i = 0; i < GRID_SIZE; i++)
-        {
-            for(int j = 0; j < GRID_SIZE; j++)
-            {
-                mSudokuBoard[i][j].setValue(generatedBoard.mAnswerBoard[i][j]);
-
-                //If true, english is board language, spanish is the language the user should input
-                if(translationDirection)
-                {
-                    mSudokuBoard[i][j].setEnglish(english[generatedBoard.mAnswerBoard[i][j]-1]);
-                    mSudokuBoard[i][j].setTranslation(spanish[generatedBoard.mAnswerBoard[i][j]-1]);
-                }
-                else
-                {
-                    mSudokuBoard[i][j].setEnglish(spanish[generatedBoard.mAnswerBoard[i][j]-1]);
-                    mSudokuBoard[i][j].setTranslation(english[generatedBoard.mAnswerBoard[i][j]-1]);
-                }
-            }
-        }
-        updateGame();
-    }
-
-    public void updateGame()
-    {
-        //Updates the text of buttons
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                if (mSudokuBoard[i][j].isClickable()) {
-                    mSudokuBoard[i][j].setText(mSudokuBoard[i][j].getTranslation(translationDirection));
-                    mSudokuBoard[i][j].setTextColor(Color.rgb(0,0,0));
-                    mSudokuBoard[i][j].setClickable(false);
-                }
-            }
-        }
-        mTimer.stop();
-    }
-
     public void checkIfCompleted(View view) {
 
         if(getRemainingCells() == 0) {
@@ -301,57 +262,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-    //checks a given element for any conflicts with other cell values
-    public boolean validSpot(ElementButton cell, String givenInput)
-    {
-        int checkNum = 0;
-        if(!translationDirection)
-        {
-            for(int i = 0; i < getGridSize(); i++) {
-                if(english[i].equalsIgnoreCase(givenInput))
-                {
-                    checkNum = i+1;
-                }
-            }
-        }
-        else {
-            for(int i = 0; i < getGridSize(); i++) {
-                if(spanish[i].equalsIgnoreCase(givenInput))
-                {
-                    checkNum = i+1;
-                }
-            }
-        }
-        if(validSpotHelper(cell.getIndex1(), cell.getIndex2(), checkNum))
-        {
-            Log.i("Status", "Valid spot, follows game rules.");
-            return true;
-        }
-        Log.i("Status", "Not a valid spot, does not follow game rules.");
-        return false;
-    }
 
-    //When the user places a value in an empty cell, we check to see if its valid according to sudoku rules
-    //This does not guarantee that the user has placed the correct value into the empty cell
-    public boolean validSpotHelper(int row, int col, int num) {
-        //Check rows and cols
-        for (int i = 0; i < Sudoku.getGridSize(); i++) {
-            if (mSudokuBoard[row][i].getValue() == num || mSudokuBoard[i][col].getValue() == num) {
-                return false;
-            }
-        }
-        //Check box
-        int box_start_row = (row / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-        int box_start_col = (col / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-        for (int i = 0; i < (int) Math.sqrt(Sudoku.getGridSize()); i++) {
-            for (int j = 0; j < (int) Math.sqrt(Sudoku.getGridSize()); j++) {
-                if (mSudokuBoard[i + box_start_row][j + box_start_col].getValue() == num) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     private class ElementButtonListener implements View.OnClickListener {
 
@@ -411,7 +322,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 }
                             }
                             // If userInput string is a valid word in play, and is placed in a valid position by sudoku rules
-                            if (validSpot(buttonPressed, userInput) && validUserInput) {
+                            if (SudokuFunctionality.validSpot(buttonPressed, userInput) && validUserInput) {
                                 buttonPressed.setValue(index + 1);
                                 buttonPressed.setText(userInput);
                                 buttonPressed.setTextColor(Color.rgb(0, 138, 216));
@@ -425,7 +336,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 checkIfCompleted(view);
                             }
                             // If userInput string is a valid word in play, but is not placed in a valid position by sudoku rules
-                            else if (!validSpot(buttonPressed, userInput) && validUserInput) {
+                            else if (!SudokuFunctionality.validSpot(buttonPressed, userInput) && validUserInput) {
                                 buttonPressed.setValue(index + 1);
                                 buttonPressed.setText(userInput);
                                 buttonPressed.setTextColor(Color.rgb(255, 114, 118));
@@ -548,7 +459,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             Log.i("Word Pressed:", wordButtonPressed.getText().toString());
             Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
 
-            if(validSpot(wordButtonPressed.callingButton, wordButtonPressed.getText().toString()))
+            if(SudokuFunctionality.validSpot(wordButtonPressed.callingButton, wordButtonPressed.getText().toString()))
             {
                 wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
                 wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());

@@ -61,27 +61,27 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             for (int cols = 0; cols < Sudoku.getGridSize(); cols++)
             {
                 //This if statement is used to remove child from parent
-                ElementButton element = myGame.getElement(rows, cols);
+                ElementButton element = Sudoku.getElement(rows, cols);
 
                 //Remove existing parent of the view before adding it to the table row
                 if (element.getParent() != null) {
                     ((ViewGroup) element.getParent()).removeView(element);
                 }
                 //Sets a tag for each elementButton for easier testing
-                myGame.getElement(rows, cols).setContentDescription("elementButtonTag" + (elementButtonCounterForTag));
+                Sudoku.getElement(rows, cols).setContentDescription("elementButtonTag" + (elementButtonCounterForTag));
                 ++elementButtonCounterForTag;
 
                 //Set a tag for an empty cell for testing
-                if(myGame.getElement(rows, cols).getValue() == 0 &&  !foundEmptyCell)
+                if(Sudoku.getElement(rows, cols).getValue() == 0 &&  !foundEmptyCell)
                 {
-                    myGame.getElement(rows, cols).setContentDescription("emptyCell");
+                    Sudoku.getElement(rows, cols).setContentDescription("emptyCell");
                     foundEmptyCell = true;
                     elementButtonCounterForTag--;
                 }
 
                 //Display the tables
-                tableRow.addView(myGame.getElement(rows, cols));
-                myGame.setCellDesign(myGame.getElement(rows, cols));
+                tableRow.addView(Sudoku.getElement(rows, cols));
+                myGame.setCellDesign(Sudoku.getElement(rows, cols));
 
             }
             //This adds the created row into the table
@@ -104,8 +104,9 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         //Solve button Functionality
         Button solveButton = findViewById(R.id.solveButton);
         solveButton.setOnClickListener(view -> {
-            myGame.solveGrid();
+            SudokuFunctionality.solveGrid();
             myGame.checkIfCompleted(view);
+            myGame.getTimer().stop();
         });
 
     }
