@@ -31,6 +31,7 @@ public class GameSetting extends AppCompatActivity {
     }
 
     private void setupLanguageMode() {
+        Sudoku.setTranslationDirection(true);
         ToggleButton btnEngToSpan = findViewById(R.id.tgBtnEngToSpan);
         ToggleButton btnSpanToEng = findViewById(R.id.tgBtnSpanToEng);
         //sets which direction the sudoku translates
@@ -59,6 +60,7 @@ public class GameSetting extends AppCompatActivity {
     }
     //set up for the three difficulty buttons
     private void setupDifficulty() {
+        Sudoku.setDifficulty(0);
         ToggleButton btnEasy = findViewById(R.id.tgBtnEasy);
         ToggleButton btnMedium = findViewById(R.id.tgBtnMedium);
         ToggleButton btnHard = findViewById(R.id.tgBtnHard);
@@ -87,6 +89,7 @@ public class GameSetting extends AppCompatActivity {
     }
 
     private void setupGridSize() {
+        Sudoku.setGRID_SIZE(9);
         ToggleButton nineXNine = findViewById(R.id.tgBtn9);
         ToggleButton sixteenXSixteen = findViewById(R.id.tgBtn16);
         ToggleButton twentyFiveXTwentyFive = findViewById(R.id.tgBtn4);
