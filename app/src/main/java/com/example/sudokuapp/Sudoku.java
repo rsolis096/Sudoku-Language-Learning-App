@@ -498,13 +498,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                     //Set tag counter for assistButtons
                     int assistButtonTagCounter = 0;
-                    for (int rows = 0; rows < (int) Math.sqrt(GRID_SIZE); rows++)
+                    for (int rows = 0; rows < boxSizeY; rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
                         //Set tag for each table row to be used in testing
                         tableRow.setTag("assistTableRowTag" + (rows));
 
-                        for (int cols = 0; cols < (int) Math.sqrt(GRID_SIZE); cols++)
+                        for (int cols = 0; cols < boxSizeX; cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
@@ -514,12 +514,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
+                                wordButton.setText(spanish[(rows* boxSizeX) + cols]);
                             else
-                                wordButton.setText(english[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
+                                wordButton.setText(english[(rows* boxSizeX) + cols]);
 
                             //Button holds its index of where it is in subgrid
-                            wordButton.setIndex((rows*(int) Math.sqrt(GRID_SIZE)) + cols);
+                            wordButton.setIndex(rows*boxSizeX + cols);
                             //Button stores a reference to the AlertDialog so it can close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
                             //Stores a reference to the ElementButton that called it when it was pressed
