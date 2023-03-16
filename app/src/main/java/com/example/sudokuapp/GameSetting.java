@@ -87,7 +87,7 @@ public class GameSetting extends AppCompatActivity {
     }
 
     private void setupGridSize() {
-        ToggleButton nineXNine = findViewById(R.id.tgBtn12);
+        ToggleButton nineXNine = findViewById(R.id.tgBtn9);
         ToggleButton sixteenXSixteen = findViewById(R.id.tgBtn16);
         ToggleButton twentyFiveXTwentyFive = findViewById(R.id.tgBtn4);
         ToggleButton twelveXTwelve = findViewById(R.id.tgBtn12);
@@ -95,7 +95,6 @@ public class GameSetting extends AppCompatActivity {
 
         //sets difficulty to 'easy' and unchecks the other buttons
         nineXNine.setOnClickListener(view -> {
-
             Sudoku.setGRID_SIZE(9);
             nineXNine.setChecked(true);
             sixteenXSixteen.setChecked(false);
