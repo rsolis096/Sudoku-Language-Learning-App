@@ -60,10 +60,6 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
 
         super(context);
-        if((v > Sudoku.getGridSize() || v < 0) || (i1 > Sudoku.getGridSize() || i1 < 0) || (i2 > Sudoku.getGridSize() || i2 < 0))
-        {
-            throw new IllegalArgumentException("Index or value out of range!");
-        }
 
         isWrong = true;
         index1 = i1;

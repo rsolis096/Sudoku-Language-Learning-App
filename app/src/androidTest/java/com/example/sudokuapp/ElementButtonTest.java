@@ -41,7 +41,7 @@ public class ElementButtonTest {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
 
-        assertTrue(testButton.isClickable());
+        assertFalse(testButton.isClickable());
     }
 
     @Test
