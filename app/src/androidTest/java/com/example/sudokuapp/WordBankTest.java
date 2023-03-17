@@ -174,7 +174,7 @@ public class WordBankTest {
         button3.check(matches(isDisplayed()));
 
         ViewInteraction toggleButton12 = onView(
-                allOf(withId(R.id.tgBtn9), withText("9X9"),
+                allOf(withId(R.id.tgBtn12), withText("9X9"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         toggleButton12.check(matches(isDisplayed()));

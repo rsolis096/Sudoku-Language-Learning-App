@@ -25,6 +25,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
 {
     private static int GRID_SIZE;
     private static ElementButton[][] mSudokuBoard;
+    private static int boxSizeX = 3;
+    private static int boxSizeY = 3;
     private final ElementButton[][] mSudokuAnswerBoard;
     private final Context context;
     private transient final Chronometer mTimer;
@@ -47,8 +49,23 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public void increaseRemainingCells() {++mRemainingCells;}
     public static void setGRID_SIZE(int size) {
         GRID_SIZE = size;
+        if(Math.sqrt(size) % 1 == 0) {
+            boxSizeX = boxSizeY = (int) Math.sqrt(size);
+        }
+        else if(size == 12) {
+            boxSizeX = 3;
+            boxSizeY = 4;
+        }
+        else if(size == 6) {
+            boxSizeX = 2;
+            boxSizeY = 3;
+        }
+
     }
     public static void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
+
+    public static int getBoxSizeX() {return boxSizeX;}
+    public static int getBoxSizeY() {return boxSizeY;}
 
     //getters for game settings
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
@@ -206,40 +223,38 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
 
     //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
-    //currently working for grid sizes with whole number roots
     public void setCellDesign(ElementButton cell) {
-        int rows = cell.getIndex1();
-        int cols = cell.getIndex2();
-        int size = Sudoku.getGridSize();
+        int rowCoordinate = cell.getIndex1();
+        int colCoordinate = cell.getIndex2();
 
-        if(cols == Math.sqrt(size) || cols == Math.sqrt(size) * 2) {
-            if (rows == Math.sqrt(size) || rows == (Math.sqrt(size) * 2)) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
-            }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
-            }
-            else {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
-            }
-        }
-        else if(cols == (Math.sqrt(size) - 1) || cols == ((Math.sqrt(size) * 2) - 1)) {
-            if (rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
-            }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+        if((colCoordinate + 1) % boxSizeX == 0) {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
+            }
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
             }
             else {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
             }
         }
-        else {
-            if(rows == Math.sqrt(size) || rows == Math.sqrt(size) * 2) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
+        else if((colCoordinate) % boxSizeX == 0) {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
             }
-            else if(rows == (Math.sqrt(size) - 1) || rows == ((Math.sqrt(size) * 2) - 1)) {
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
+            }
+            else {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
+            }
+        }
+        else {
+            if ((rowCoordinate + 1) % boxSizeY == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
+            }
+            else if((rowCoordinate) % boxSizeY == 0) {
+                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
             }
             else {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
@@ -394,13 +409,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                     //Set tag counter for assistButtons
                     int assistButtonTagCounter = 0;
-                    for (int rows = 0; rows < (int) Math.sqrt(GRID_SIZE); rows++)
+                    for (int rows = 0; rows < boxSizeY; rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
                         //Set tag for each table row to be used in testing
                         tableRow.setTag("assistTableRowTag" + (rows));
 
-                        for (int cols = 0; cols < (int) Math.sqrt(GRID_SIZE); cols++)
+                        for (int cols = 0; cols < boxSizeX; cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
@@ -410,12 +425,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
+                                wordButton.setText(spanish[(rows* boxSizeX) + cols]);
                             else
-                                wordButton.setText(english[(rows* (int) Math.sqrt(GRID_SIZE)) + cols]);
+                                wordButton.setText(english[(rows* boxSizeX) + cols]);
 
                             //Button holds its index of where it is in subgrid
-                            wordButton.setIndex((rows*(int) Math.sqrt(GRID_SIZE)) + cols);
+                            wordButton.setIndex(rows*boxSizeX + cols);
                             //Button stores a reference to the AlertDialog so it can close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
                             //Stores a reference to the ElementButton that called it when it was pressed
