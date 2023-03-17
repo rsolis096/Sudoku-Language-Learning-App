@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class GenerateBoard implements Serializable  {
-    public int[][] mGeneratedBoard;
-    public int[][] mAnswerBoard;
+    public static int[][] mGeneratedBoard;
+    public static int[][] mAnswerBoard;
     public int rows, cols;
     public int dif, remainingCells;
 
@@ -88,10 +88,10 @@ public class GenerateBoard implements Serializable  {
         }
 
         //Check box
-        int box_start_row = (row / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-        int box_start_col = (col / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-        for (int i = 0; i < (int) Math.sqrt(Sudoku.getGridSize()); i++) {
-            for (int j = 0; j < (int) Math.sqrt(Sudoku.getGridSize()); j++) {
+        int box_start_row = ((int) (row / Sudoku.getBoxSizeX()) * Sudoku.getBoxSizeX());
+        int box_start_col = ((int) (col / Sudoku.getBoxSizeY()) * Sudoku.getBoxSizeY());
+        for (int i = 0; i < Sudoku.getBoxSizeX(); i++) {
+            for (int j = 0; j < Sudoku.getBoxSizeY(); j++) {
                 if (board[i + box_start_row][j + box_start_col] == num) {
                     return false;
                 }

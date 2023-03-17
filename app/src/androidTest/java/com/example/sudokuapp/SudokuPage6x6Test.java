@@ -1,29 +1,35 @@
 package com.example.sudokuapp;
 
-import androidx.test.filters.SdkSuppress;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.UiObjectNotFoundException;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.widget.Chronometer;
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+
+import androidx.test.filters.SdkSuppress;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
-import static org.junit.Assert.*;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Objects;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
-public class SudokuPage4x4Test {
+public class SudokuPage6x6Test {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.example.sudokuapp";
@@ -74,11 +80,11 @@ public class SudokuPage4x4Test {
 
 
         //Make sure 9x9 toggle button exists
-        UiObject2 toggleButton4x4 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn4"));
-        assertTrue("Toggle button is not enabled", toggleButton4x4.isEnabled());
-        assertTrue("Toggle button is not checkable", toggleButton4x4.isCheckable());
-        toggleButton4x4.click();
-        assertTrue("Toggle button is not checked", toggleButton4x4.isChecked());
+        UiObject2 toggleButton6x6 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn6"));
+        assertTrue("Toggle button is not enabled", toggleButton6x6.isEnabled());
+        assertTrue("Toggle button is not checkable", toggleButton6x6.isCheckable());
+        toggleButton6x6.click();
+        assertTrue("Toggle button is not checked", toggleButton6x6.isChecked());
 
         // Timers to slow down test, fails otherwise.
         try {
@@ -101,13 +107,13 @@ public class SudokuPage4x4Test {
 
         //Wait one second for the game to load before continuing with further actions
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         //Check the table rows in the main game board
-        for(int i =0; i < 4; i++)
+        for(int i =0; i < 6; i++)
         {
             UiObject2 tableRows = mDevice.findObject(By.desc("tableRowTag" + i));
             assertTrue("Table Row " + i + " is not enabled", tableRows.isEnabled());
@@ -128,6 +134,7 @@ public class SudokuPage4x4Test {
         //Verify timer is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
         assertNotEquals(cTimer.getText(), timerText);
+        Assert.assertNotEquals(cTimer.getText(), timerText);
 
         //Check single empty cell for functionality of assisted mode
         UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
@@ -167,7 +174,7 @@ public class SudokuPage4x4Test {
 
         //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
-        assertEquals(emptyCell.getText(),assistButtonSelectedText);
+        Assert.assertEquals(emptyCell.getText(),assistButtonSelectedText);
 
         // Hold to ensure app is where its expected to be
         try {

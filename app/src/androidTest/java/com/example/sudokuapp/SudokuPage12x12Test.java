@@ -5,7 +5,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,16 +13,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.widget.Chronometer;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiScrollable;
+import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 import static org.junit.Assert.*;
 import java.util.Objects;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
-public class SudokuPage4x4Test {
+public class SudokuPage12x12Test {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.example.sudokuapp";
@@ -56,12 +58,7 @@ public class SudokuPage4x4Test {
     }
 
     @Test
-    public void checkPreconditions() {
-        assertNotNull(mDevice);
-    }
-
-    @Test
-    public void assistModeCheck() {
+    public void assistModeCheck() throws UiObjectNotFoundException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
@@ -72,13 +69,12 @@ public class SudokuPage4x4Test {
             e.printStackTrace();
         }
 
-
-        //Make sure 9x9 toggle button exists
-        UiObject2 toggleButton4x4 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn4"));
-        assertTrue("Toggle button is not enabled", toggleButton4x4.isEnabled());
-        assertTrue("Toggle button is not checkable", toggleButton4x4.isCheckable());
-        toggleButton4x4.click();
-        assertTrue("Toggle button is not checked", toggleButton4x4.isChecked());
+        //Make sure 16x16 toggle button exists
+        UiObject2 toggleButton16x16 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn12"));
+        assertTrue("Toggle button is not enabled", toggleButton16x16.isEnabled());
+        assertTrue("Toggle button is not checkable", toggleButton16x16.isCheckable());
+        toggleButton16x16.click();
+        assertTrue("Toggle button is not checked", toggleButton16x16.isChecked());
 
         // Timers to slow down test, fails otherwise.
         try {
@@ -93,47 +89,75 @@ public class SudokuPage4x4Test {
         assertTrue("Confirm button is not clickable", confirm.isClickable());
         confirm.click();
 
+
         //Check Timer (wait for it to appear on screen, going to fast will cause fail)
         UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),500);
         assertTrue("Timer is not enabled", cTimer.isEnabled());
         //Get text to compare for later to make sure it is counting up
         String timerText = cTimer.getText();
 
-        //Wait one second for the game to load before continuing with further actions
+        //Set scroll direction
+        UiScrollable scrollView = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+        scrollView.setAsHorizontalList();
+
+        //Start of Element Button Test//
+        // Get a reference to the sudokutable (TableLayout)
+        UiObject2 tableLayout = mDevice.findObject(By.res("com.example.sudokuapp:id/sudoku_table"));
+
+        //Check all visible ElementButtons (UPPER LEFT)
+        checkElementButtons(tableLayout);
+
+        //Scroll to right of screen (UPPER RIGHT)
+        scrollView.scrollForward(5);
+        // Timers so app can catch up
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
+            //Check all visible ElementButtons (UPPER RIGHT)
+            checkElementButtons(tableLayout);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        //Check the table rows in the main game board
-        for(int i =0; i < 4; i++)
-        {
-            UiObject2 tableRows = mDevice.findObject(By.desc("tableRowTag" + i));
-            assertTrue("Table Row " + i + " is not enabled", tableRows.isEnabled());
+        // Scroll downward (to LOWER RIGHT)
+        scrollView.setAsVerticalList();
+        scrollView.scrollForward(5);
+        // Timers so app can catch up
+        try {
+            Thread.sleep(1000);
+            //Check all visible ElementButtons (BOTTOM RIGHT)
+            checkElementButtons(tableLayout);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        //** Test the ElementButtons in the table **//
-        // Get a reference to the sudokutable (TableLayout)
-        UiObject2 tableLayout = mDevice.findObject(By.res("com.example.sudokuapp:id/sudoku_table"));
-        checkElementButtons(tableLayout);
+        // Scroll downward (LOWER LEFT)
+        scrollView.setAsHorizontalList();
+        scrollView.scrollBackward(5);
+        // Timers so app can catch up
+        try {
+            Thread.sleep(2000);
+            //Check all visible ElementButtons (LOWER LEFT)
+            checkElementButtons(tableLayout);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        //Slow down next code to give time to scroll
+        //SCROLL BACK TO BEGINNING (UPPER LEFT)
+        scrollView.setAsVerticalList();
+        scrollView.scrollBackward(5);
+        // Timers so app can catch up
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        //Verify timer is counting up
-        assertTrue("Timer is not enabled", cTimer.isEnabled());
-        assertNotEquals(cTimer.getText(), timerText);
-
         //Check single empty cell for functionality of assisted mode
         UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
+        //Wait for app to catch up
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -176,6 +200,7 @@ public class SudokuPage4x4Test {
             e.printStackTrace();
         }
     }
+
 
     @Test
     public void manualModeCheck() {

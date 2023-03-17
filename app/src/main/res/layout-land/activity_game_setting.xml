@@ -6,6 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".GameSetting">
 
+    <ToggleButton
+        android:id="@+id/tgBtn6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/_6x6"
+        android:textOff="@string/_6x6"
+        android:textOn="@string/_6x6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.64" />
+
     <Button
         android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
@@ -169,6 +185,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.352" />
+
+    <ToggleButton
+        android:id="@+id/tgBtn12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:checked="false"
+        android:text="@string/_12x12"
+        android:textOff="@string/_12x12"
+        android:textOn="@string/_12x12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.741"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.64" />
 
     <ToggleButton
         android:id="@+id/tgBtn9"

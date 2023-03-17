@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -42,7 +41,7 @@ public class ElementButtonTest {
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
 
-        assertTrue(testButton.getLocked());
+        assertFalse(testButton.isClickable());
     }
 
     @Test
@@ -132,10 +131,10 @@ public class ElementButtonTest {
 
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
         ElementButton testButton = new ElementButton(value, "English", "Spanish", context, true, index1, index2);
-        testButton.setLock(false);
+        testButton.setClickable(false);
 
 
-        assertFalse(testButton.getLocked());
+        assertFalse(testButton.isClickable());
     }
 
     @Test
