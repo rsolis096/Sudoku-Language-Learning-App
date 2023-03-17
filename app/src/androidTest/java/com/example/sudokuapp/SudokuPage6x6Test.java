@@ -3,6 +3,7 @@ package com.example.sudokuapp;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -106,7 +107,7 @@ public class SudokuPage6x6Test {
 
         //Wait one second for the game to load before continuing with further actions
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -132,7 +133,7 @@ public class SudokuPage6x6Test {
 
         //Verify timer is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
-        assertFalse(cTimer.getText().equals(timerText));
+        assertNotEquals(cTimer.getText(), timerText);
         Assert.assertNotEquals(cTimer.getText(), timerText);
 
         //Check single empty cell for functionality of assisted mode
