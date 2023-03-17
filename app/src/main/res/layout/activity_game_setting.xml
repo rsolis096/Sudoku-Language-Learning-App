@@ -180,6 +180,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.54" />
 
+    <?ignore
     <ToggleButton
         android:id="@+id/tgBtn16"
         android:layout_width="wrap_content"
@@ -195,6 +196,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.526" />
+        ?>
 
     <ToggleButton
         android:id="@+id/tgBtn4"

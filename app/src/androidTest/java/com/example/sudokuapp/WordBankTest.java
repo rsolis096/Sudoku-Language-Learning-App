@@ -1,265 +1,209 @@
 package com.example.sudokuapp;
 
+import androidx.test.filters.SdkSuppress;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
-
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.widget.Chronometer;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.Until;
+import static org.junit.Assert.*;
+import java.util.Objects;
 
-@LargeTest
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
+@SdkSuppress(minSdkVersion = 18)
 public class WordBankTest {
 
-    @Rule
-    public ActivityScenarioRule<MainMenu> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainMenu.class);
+    private static final String BASIC_SAMPLE_PACKAGE
+            = "com.example.sudokuapp";
+    private static final int LAUNCH_TIMEOUT = 5000;
+    private UiDevice mDevice;
 
-    @Test
-    public void wordBankTest() {
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.btnStart), withText("Start"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialButton.perform(click());
+    @Before
+    public void startMainActivityFromHomeScreen() {
+        // Initialize UiDevice instance
+        mDevice = UiDevice.getInstance(getInstrumentation());
 
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.btnWB), withText("Go to Word Bank Selection page"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                10),
-                        isDisplayed()));
-        materialButton2.perform(click());
+        // Start from the home screen
+        mDevice.pressHome();
 
-        ViewInteraction button = onView(
-                allOf(withId(R.id.btnback), withText("BACK"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
+        // Wait for launcher
+        final String launcherPackage = getLauncherPackageName();
+        assertNotNull(launcherPackage);
+        mDevice.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
 
-        ViewInteraction toggleButton = onView(
-                allOf(withId(R.id.btnNumbers), withText("NUMBERS"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton.check(matches(isDisplayed()));
+        // Launch the app
+        Context context = getApplicationContext();
+        final Intent intent = context.getPackageManager()
+                .getLaunchIntentForPackage(BASIC_SAMPLE_PACKAGE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);    // Clear out any previous instances
+        context.startActivity(intent);
 
-        ViewInteraction toggleButton2 = onView(
-                allOf(withId(R.id.btnfamily), withText("FAMILY"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton2.check(matches(isDisplayed()));
+        // Wait for the app to appear
+        mDevice.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
 
-        ViewInteraction toggleButton3 = onView(
-                allOf(withId(R.id.btnGreeting), withText("GREETINGS"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton3.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton4 = onView(
-                allOf(withId(R.id.btnFood), withText("FOOD AND DRINKS"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton4.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton5 = onView(
-                allOf(withId(R.id.btnDirection), withText("DIRECTION"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton5.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton6 = onView(
-                allOf(withId(R.id.btnDirection), withText("DIRECTION"),
-                        withParent(allOf(withId(R.id.settings),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        toggleButton6.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.btnback), withText("Back"),
-                        childAtPosition(
-                                allOf(withId(R.id.settings),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        materialButton3.perform(click());
-
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.backToMenu), withText("BACK"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.textView2), withText("Choose a Difficulty:"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView.check(matches(withText("Choose a Difficulty:")));
-
-        ViewInteraction toggleButton7 = onView(
-                allOf(withId(R.id.tgBtnEasy), withText("EASY"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton7.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton8 = onView(
-                allOf(withId(R.id.tgBtnMedium), withText("MEDIUM"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton8.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton9 = onView(
-                allOf(withId(R.id.tgBtnHard), withText("HARD"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton9.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.textView3), withText("Choose a Learning Method:"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView2.check(matches(withText("Choose a Learning Method:")));
-
-        ViewInteraction toggleButton10 = onView(
-                allOf(withId(R.id.tgBtnEngToSpan), withText("ENGLISH TO SPANISH TRANSLATION"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton10.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton11 = onView(
-                allOf(withId(R.id.tgBtnSpanToEng), withText("SPANISH TO ENGLISH TRANSLATION"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton11.check(matches(isDisplayed()));
-
-        ViewInteraction button3 = onView(
-                allOf(withId(R.id.btnWB), withText("GO TO WORD BANK SELECTION PAGE"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button3.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton12 = onView(
-                allOf(withId(R.id.tgBtn12), withText("9X9"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton12.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton13 = onView(
-                allOf(withId(R.id.tgBtn16), withText("16X16"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton13.check(matches(isDisplayed()));
-
-        ViewInteraction toggleButton14 = onView(
-                allOf(withId(R.id.tgBtn4), withText("4X4"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        toggleButton14.check(matches(isDisplayed()));
-
-        ViewInteraction switch_ = onView(
-                allOf(withId(R.id.switchInputMode), withText("Manual Input"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        switch_.check(matches(isDisplayed()));
-
-        ViewInteraction button4 = onView(
-                allOf(withId(R.id.btnConfirm), withText("CONFIRM"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button4.check(matches(isDisplayed()));
-
-        ViewInteraction button5 = onView(
-                allOf(withId(R.id.btnConfirm), withText("CONFIRM"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button5.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.backToMenu), withText("Back"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction button6 = onView(
-                allOf(withId(R.id.btnStart), withText("START"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button6.check(matches(isDisplayed()));
-
-        ViewInteraction button7 = onView(
-                allOf(withId(R.id.btnOptions), withText("OPTIONS"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button7.check(matches(isDisplayed()));
-
-        ViewInteraction button8 = onView(
-                allOf(withId(R.id.btnTut), withText("TUTORIAL"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button8.check(matches(isDisplayed()));
-
-        ViewInteraction button9 = onView(
-                allOf(withId(R.id.btnTut), withText("TUTORIAL"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button9.check(matches(isDisplayed()));
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
+    @Test
+    public void checkPreconditions() {
+        assertNotNull(mDevice);
+    }
 
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
+    @Test
+    public void wordBankTest() throws InterruptedException {
+        // Press the start button
+        UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
+        assertTrue(start.isEnabled());
+        assertTrue(start.isClickable());
+        start.click();
 
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        Thread.sleep(1000);
+
+        // Press the word bank/category Button
+        UiObject2 categoryButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnWB"));
+        assertTrue(categoryButton.isEnabled());
+        assertTrue(categoryButton.isClickable());
+        assertEquals(categoryButton.getText(), "CATEGORIES");
+        categoryButton.click();
+
+        Thread.sleep(1000);
+
+        //Check back button
+        UiObject2 backBtnCtg = mDevice.findObject(By.res("com.example.sudokuapp:id/btnback"));
+        assertTrue(backBtnCtg.isEnabled());
+        assertTrue(backBtnCtg.isClickable());
+        assertEquals(backBtnCtg.getText(), "BACK");
+
+        //Check all category buttons exist and are clickable
+        UiObject2 numbersButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnNumbers"));
+        assertTrue(numbersButton.isClickable());
+        assertTrue(numbersButton.isEnabled());
+
+        UiObject2 familyButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnfamily"));
+        assertTrue(familyButton.isEnabled());
+        assertTrue(familyButton.isClickable());
+
+        UiObject2 greetingsButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnGreeting"));
+        assertTrue(greetingsButton.isEnabled());
+        assertTrue(greetingsButton.isClickable());
+
+        UiObject2 foodButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnFood"));
+        assertTrue(foodButton.isEnabled());
+        assertTrue(foodButton.isClickable());
+
+        UiObject2 directionButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnDirection"));
+        assertTrue(directionButton.isEnabled());
+        assertTrue(directionButton.isClickable());
+
+        //Return to Game Settings
+        backBtnCtg.click();
+
+        //Wait for app to catch up
+        Thread.sleep(1000);
+
+        //Check Game Settings View Objects
+        UiObject2 difficultyText = mDevice.findObject(By.res("com.example.sudokuapp:id/textView2"));
+        assertTrue(difficultyText.isEnabled());
+        System.out.println(difficultyText.getText());
+        assertEquals(difficultyText.getText(), "Choose a Difficulty:");
+
+        //Check difficulty toggle buttons
+        UiObject2 easyTglBtn = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnEasy"));
+        assertTrue(easyTglBtn.isEnabled());
+        assertTrue(easyTglBtn.isClickable());
+
+        UiObject2 mediumTglBtn = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnMedium"));
+        assertTrue(mediumTglBtn.isClickable());
+        assertTrue(mediumTglBtn.isEnabled());
+
+        UiObject2 hardTglBtn = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnHard"));
+        assertTrue(hardTglBtn.isClickable());
+        assertTrue(hardTglBtn.isEnabled());
+
+        //Check language text view
+        UiObject2 learningMethodText= mDevice.findObject(By.res("com.example.sudokuapp:id/textView3"));
+        assertTrue(learningMethodText.isEnabled());
+        assertEquals(learningMethodText.getText(),"Choose a Learning Method:");
+
+        //Language toggle 1
+        UiObject2 engToSpanTgl = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnEngToSpan"));
+        assertTrue(engToSpanTgl.isClickable());
+        assertTrue(engToSpanTgl.isEnabled());
+        assertEquals(engToSpanTgl.getText(), "ENGLISH TO SPANISH TRANSLATION");
+
+        //Language toggle 2
+        UiObject2 spanToEngTgl = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnSpanToEng"));
+        assertTrue(spanToEngTgl.isClickable());
+        assertTrue(spanToEngTgl.isEnabled());
+        assertEquals(spanToEngTgl.getText(), "SPANISH TO ENGLISH TRANSLATION");
+
+        //Check Grid Size toggle buttons
+        UiObject2 tglBtn4 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn4"));
+        assertTrue(tglBtn4.isClickable());
+        assertTrue(tglBtn4.isEnabled());
+        assertTrue(tglBtn4.isCheckable());
+
+        UiObject2 tglBtn6 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn6"));
+        assertTrue(tglBtn6.isClickable());
+        assertTrue(tglBtn6.isCheckable());
+        assertTrue(tglBtn6.isEnabled());
+
+        UiObject2 tglBtn9 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn9"));
+        assertTrue(tglBtn9.isClickable());
+        assertTrue(tglBtn9.isCheckable());
+        assertTrue(tglBtn9.isEnabled());
+        assertTrue(tglBtn9.isChecked());
+
+        UiObject2 tglBtn12 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn12"));
+        assertTrue(tglBtn12.isClickable());
+        assertTrue(tglBtn12.isEnabled());
+        assertTrue(tglBtn12.isCheckable());
+
+        /*
+        UiObject2 tglBtn16 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn16"));
+        assertTrue(tglBtn16.isClickable());
+        assertTrue(tglBtn16.isEnabled());
+        assertTrue(tglBtn16.isCheckable());*/
+
+        UiObject2 manualAndAssistToggle = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
+        assertTrue(manualAndAssistToggle.isClickable());
+        assertTrue(manualAndAssistToggle.isEnabled());
+
+        UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
+        assertTrue(confirm.isEnabled());
+        assertTrue(confirm.isClickable());
+
+    }
+
+
+
+    /*
+     * Ignore this function but don't delete it
+     * From BasicSample linked in https://developer.android.com/training/testing/other-components/ui-automator
+     * BasicSample: https://github.com/android/testing-samples/tree/main/ui/uiautomator/BasicSample
+     * Uses package manager to find the package name of the Device launcher. Usually this package
+     * is "com.android.launcher" but can be different at times. This is a generic solution which
+     * works on all platforms.`
+     */
+    private String getLauncherPackageName() {
+        // Create launcher Intent
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+
+        // Use PackageManager to get the launcher package name
+        PackageManager pm = getApplicationContext().getPackageManager();
+        ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return resolveInfo.activityInfo.packageName;
     }
 }
