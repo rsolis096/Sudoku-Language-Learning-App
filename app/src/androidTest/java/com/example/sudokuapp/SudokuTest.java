@@ -46,4 +46,17 @@ public class SudokuTest {
         Sudoku.setWordBank(2);
         assertEquals(2, Sudoku.getWordBank());
     }
+    @Test
+    public void setRemainingCells() {
+        Sudoku.setRemainingCells(5);
+        assertEquals(5, Sudoku.getRemainingCells());
+        Sudoku.decreaseRemainingCells();
+        assertEquals(4, Sudoku.getRemainingCells());
+        Sudoku.increaseRemainingCells();
+        assertEquals(5, Sudoku.getRemainingCells());
+    }
+    @Test
+    public void setGRID_SIZE() {
+
+    }
 }
