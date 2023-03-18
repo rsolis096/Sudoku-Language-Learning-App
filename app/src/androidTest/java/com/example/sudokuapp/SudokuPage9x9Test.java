@@ -7,6 +7,8 @@ import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -312,6 +314,104 @@ public class SudokuPage9x9Test {
         Thread.sleep(1000);
     }
 
+    @Test
+    public void combinationCheck() throws InterruptedException {
+        // Press the start button
+        UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
+        start.click();
+
+        //Make sure 9x9 toggle button exists
+        UiObject2 toggleButton9x9 = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/tgBtn9")),3000);
+        toggleButton9x9.click();
+        assertTrue("4x4 button is not checked", toggleButton9x9.isChecked());
+
+        //assist mode to check if the correct category of words was used
+        UiObject2 manualSwitch = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
+        assertFalse("manual switch is not checked", manualSwitch.isChecked());
+
+        //change difficulty
+        UiObject2 hardTglBtn = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtnHard"));
+        hardTglBtn.click();
+
+        //Change category to Food
+        UiObject2 categoryButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnWB"));
+        categoryButton.click();
+        UiObject2 backBtnCtg = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnback")),3000);
+        UiObject2 foodButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnFood"));
+        foodButton.click();
+        Thread.sleep(500);
+        backBtnCtg.click();
+
+        // Press the confirm button
+        UiObject2 confirm = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnConfirm")),3000);
+        confirm.click();
+
+        //Check single empty cell for functionality of assisted mode
+        UiObject2 emptyCell = mDevice.wait(Until.findObject(By.desc("emptyCell")),3000);
+        assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
+        emptyCell.click();
+
+        //Check all the table rows that pop up in assist mode
+        UiObject2 tableLayout = mDevice.wait(Until.findObject(By.desc("assistDialogLayout")),3000);
+        UiObject2 assistButtonToSelect = null;
+        for(UiObject2 individualButton : tableLayout.getChildren())
+        {
+            for(UiObject2 singleButton : individualButton.getChildren())
+            {
+                assertTrue("Button is not clickable", singleButton.isClickable());
+                assertTrue("Button is not enabled", singleButton.isEnabled());
+                assistButtonToSelect = singleButton;
+            }
+        }
+
+        //Select an assistedButton
+        assert assistButtonToSelect != null;
+        String assistButtonSelectedText = assistButtonToSelect.getText();
+        assistButtonToSelect.click();
+
+        Thread.sleep(500);
+
+        //Make sure the emptyCell was updated
+        //Comparing with a string variable because assistButtonToSelect is off screen
+        Assert.assertEquals(emptyCell.getText(),assistButtonSelectedText);
+
+        //solve and check categories are reset
+        UiObject2 resources = mDevice.findObject(By.res("com.example.sudokuapp:id/solveButton"));
+        resources.click();
+        //check pop up for game completion
+        UiObject2 textV = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
+        assertEquals("Game finished should be displayed.", "Game Finished!", textV.getText());
+        resources = mDevice.findObject(By.res("android:id/button1"));
+        resources.click();
+
+        //check result screen
+        textV = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/textView4")),3000);
+        assertEquals("Game finished should be displayed.", "Congratulations, you completed the puzzle!", textV.getText());
+        resources = mDevice.findObject(By.res("com.example.sudokuapp:id/btnEndGameReturn"));
+        resources.click();
+
+        // check category button states are restored
+        categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),3000);
+        categoryButton.click();
+
+        UiObject2 numbersButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnNumbers")),3000);
+        assertTrue(numbersButton.isChecked());
+
+        UiObject2 familyButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnfamily"));
+        assertFalse(familyButton.isChecked());
+
+        UiObject2 greetingsButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnGreeting"));
+        assertFalse(greetingsButton.isChecked());
+
+        foodButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnFood"));
+        assertFalse(foodButton.isChecked());
+
+        UiObject2 directionButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnDirection"));
+        assertFalse(directionButton.isChecked());
+
+        // Hold to ensure app is where its expected to be
+        Thread.sleep(1000);
+    }
 
     /*
      * Ignore this function but don't delete it
