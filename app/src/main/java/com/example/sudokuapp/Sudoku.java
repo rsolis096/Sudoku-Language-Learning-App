@@ -96,9 +96,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     Sudoku(Context THIS, Chronometer t){
         //Default GRID_SIZE
+        setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
         {
             GRID_SIZE = 9;
+            setGRID_SIZE(9);
         }
         userInputButtons = new LinkedList<>();
         context = THIS;

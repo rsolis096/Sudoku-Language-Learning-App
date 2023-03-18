@@ -62,7 +62,7 @@ public class SudokuPage9x9Test {
     }
 
     @Test
-    public void assistModeCheck() throws UiObjectNotFoundException {
+    public void assistModeCheck() throws UiObjectNotFoundException, InterruptedException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
@@ -102,11 +102,8 @@ public class SudokuPage9x9Test {
         String timerText = cTimer.getText();
 
         //Wait one second for the game to load before continuing with further actions
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(3000);
+
 
         //Check the table rows in the main game board
         for(int i =0; i < 9; i++)
@@ -126,11 +123,7 @@ public class SudokuPage9x9Test {
         //Scroll to test other buttons not currently visible
         scrollView.scrollForward(2);
         //Slow down next code to give time to scroll
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(3000);
 
         //Check the remaining buttons
         checkElementButtons(tableLayout);
@@ -142,22 +135,13 @@ public class SudokuPage9x9Test {
         //Scroll left to test empty ElementButton functionality
         scrollView.scrollBackward(2);
         //Slow down next code to give time to scroll
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(3000);
 
         //Check single empty cell for functionality of assisted mode
         UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
-
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(200);
 
         //Check all the table rows that pop up in assist mode
         tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
@@ -178,22 +162,14 @@ public class SudokuPage9x9Test {
         assistButtonToSelect.click();
 
         //Wait so the app can catch up
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(200);
 
         //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
         assertEquals(emptyCell.getText(),assistButtonSelectedText);
 
         // Hold to ensure app is where its expected to be
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(5000);
     }
 
     @Test
