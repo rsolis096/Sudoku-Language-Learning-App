@@ -189,7 +189,7 @@ public class SudokuPage4x4Test {
         start.click();
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
