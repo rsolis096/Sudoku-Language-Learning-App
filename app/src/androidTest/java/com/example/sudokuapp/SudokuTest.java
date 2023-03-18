@@ -1,6 +1,12 @@
 package com.example.sudokuapp;
 
 import static org.junit.Assert.*;
+
+import android.content.Context;
+import android.util.Pair;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import org.junit.Test;
 
 
@@ -57,6 +63,14 @@ public class SudokuTest {
     }
     @Test
     public void setGRID_SIZE() {
-
+        Sudoku.setGRID_SIZE(9);
+        assertEquals(9, Sudoku.getGridSize());
+        assertEquals(new Pair<>(3,3), Sudoku.getBoxSize());
+        Sudoku.setGRID_SIZE(12);
+        assertEquals(12, Sudoku.getGridSize());
+        assertEquals(new Pair<>(3,4), Sudoku.getBoxSize());
+        Sudoku.setGRID_SIZE(6);
+        assertEquals(6, Sudoku.getGridSize());
+        assertEquals(new Pair<>(2,3), Sudoku.getBoxSize());
     }
 }
