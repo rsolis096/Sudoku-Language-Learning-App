@@ -52,6 +52,7 @@ public class GameSetting extends AppCompatActivity {
     //set up for the input mode switch
     private void setUpModeSwitch() {
         SwitchCompat switchInputMode = findViewById(R.id.switchInputMode);
+        switchInputMode.setChecked(false);
         switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
             Sudoku.setInputMode(!Sudoku.getInputMode());
