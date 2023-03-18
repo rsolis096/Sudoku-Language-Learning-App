@@ -13,7 +13,7 @@ public class SudokuFunctionality {
 
         //Cannot place value where a given is
         if(Sudoku.getElement(row,col).isClickable())
-            {
+        {
             //Check rows and cols
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
                 if (Sudoku.getElement(row, i).getValue() == num || Sudoku.getElement(i, col).getValue() == num) {
@@ -99,6 +99,5 @@ public class SudokuFunctionality {
             }
         }
         SudokuFunctionality.updateGame();
-
     }
 }
