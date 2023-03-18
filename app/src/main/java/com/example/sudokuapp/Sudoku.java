@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.EditText;
@@ -25,8 +26,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 {
     private static int GRID_SIZE;
     private static ElementButton[][] mSudokuBoard;
-    private static int boxSizeX = 3;
-    private static int boxSizeY = 3;
+    private static Pair<Integer, Integer> boxSize;
     private final ElementButton[][] mSudokuAnswerBoard;
     private final Context context;
     private transient final Chronometer mTimer;
@@ -45,43 +45,46 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
-    public void decreaseRemainingCells() {--mRemainingCells;}
-    public void increaseRemainingCells() {++mRemainingCells;}
+    public static void decreaseRemainingCells() {--mRemainingCells;}
+    public static void increaseRemainingCells() {++mRemainingCells;}
     public static void setGRID_SIZE(int size) {
         GRID_SIZE = size;
-        if(Math.sqrt(size) % 1 == 0) {
-            boxSizeX = boxSizeY = (int) Math.sqrt(size);
-        }
-        else if(size == 12) {
-            boxSizeX = 3;
-            boxSizeY = 4;
-        }
-        else if(size == 6) {
-            boxSizeX = 2;
-            boxSizeY = 3;
-        }
 
+        Pair<Integer, Integer> temp = new Pair<>(9, 9);
+        if (Math.sqrt(size) % 1 == 0) {
+            temp = new Pair<>((int) Math.sqrt(size), (int) Math.sqrt(size));
+        } else if (size == 12) {
+            temp = new Pair<>(3,4);
+        } else if (size == 6) {
+            temp = new Pair<>(2,3);
+        }
+        boxSize = temp;
     }
     public static void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
 
-    public static int getBoxSizeX() {return boxSizeX;}
-    public static int getBoxSizeY() {return boxSizeY;}
-
-    //getters for game settings
+    public static Pair<Integer, Integer> getBoxSize() {return boxSize;}
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
     public static int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
-    //returns time in MM:SS format
+    //returns time in H:MM:SS or MM:SS format
     public static String getElapsedTime() {
         String sec;
+        int hours = 0;
+        if(minutes >= 60) {
+            hours = (int) Math.floor(minutes / 60.0);
+            minutes -= (hours * 60L);
+        }
+        //if seconds less than 10, add a 0 before for proper display
         if(seconds < 10) {sec = "0" + seconds;}
+        //otherwise just convert to string
         else {sec = seconds+""; }
-
-        return minutes + ":" + sec;
+        //check if an hour has passed, otherwise don't display hours
+        if(minutes < 60) {return minutes + ":" + sec;}
+        else {return hours + ":" + minutes + ":" + sec;}
     }
-    public int getRemainingCells() {
+    public static int getRemainingCells() {
         return mRemainingCells;
     }
     public static int getGridSize() {
@@ -93,9 +96,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     Sudoku(Context THIS, Chronometer t){
         //Default GRID_SIZE
+        setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
         {
             GRID_SIZE = 9;
+            setGRID_SIZE(9);
         }
         userInputButtons = new LinkedList<>();
         context = THIS;
@@ -227,22 +232,22 @@ public class Sudoku extends AppCompatActivity implements Serializable
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
 
-        if((colCoordinate + 1) % boxSizeX == 0) {
-            if ((rowCoordinate + 1) % boxSizeY == 0) {
+        if((colCoordinate + 1) % boxSize.first == 0) {
+            if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
             }
-            else if((rowCoordinate) % boxSizeY == 0) {
+            else if((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
             }
             else {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
             }
         }
-        else if((colCoordinate) % boxSizeX == 0) {
-            if ((rowCoordinate + 1) % boxSizeY == 0) {
+        else if((colCoordinate) % boxSize.first == 0) {
+            if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
             }
-            else if((rowCoordinate) % boxSizeY == 0) {
+            else if((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
             }
             else {
@@ -250,10 +255,10 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
         }
         else {
-            if ((rowCoordinate + 1) % boxSizeY == 0) {
+            if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
             }
-            else if((rowCoordinate) % boxSizeY == 0) {
+            else if((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
             }
             else {
@@ -409,13 +414,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                     //Set tag counter for assistButtons
                     int assistButtonTagCounter = 0;
-                    for (int rows = 0; rows < boxSizeY; rows++)
+                    for (int rows = 0; rows < boxSize.second; rows++)
                     {
                         TableRow tableRow = new TableRow(dialogContext);
                         //Set tag for each table row to be used in testing
                         tableRow.setTag("assistTableRowTag" + (rows));
 
-                        for (int cols = 0; cols < boxSizeX; cols++)
+                        for (int cols = 0; cols < boxSize.first; cols++)
                         {
                             //These buttons represents the 1 of 9 buttons user can choose words from
                             AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
@@ -425,12 +430,12 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows* boxSizeX) + cols]);
+                                wordButton.setText(spanish[(rows* boxSize.first) + cols]);
                             else
-                                wordButton.setText(english[(rows* boxSizeX) + cols]);
+                                wordButton.setText(english[(rows* boxSize.first) + cols]);
 
                             //Button holds its index of where it is in subgrid
-                            wordButton.setIndex(rows*boxSizeX + cols);
+                            wordButton.setIndex(rows*boxSize.first + cols);
                             //Button stores a reference to the AlertDialog so it can close it in onclicklistener
                             wordButton.setAssociatedAlertDialog(alert);
                             //Stores a reference to the ElementButton that called it when it was pressed

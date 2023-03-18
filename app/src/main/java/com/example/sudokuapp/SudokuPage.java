@@ -117,6 +117,12 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Are you sure you want to quit?");
         builder.setPositiveButton("Yes", (dialog, which) -> {
+            //reset all options
+            Sudoku.setDifficulty(0);
+            Sudoku.setWordBank(0);
+            Sudoku.setInputMode(false);
+            Sudoku.setTranslationDirection(true);
+            Sudoku.setGRID_SIZE(9);
             Intent intent = new Intent(context, MainMenu.class);
             context.startActivity(intent);
         });

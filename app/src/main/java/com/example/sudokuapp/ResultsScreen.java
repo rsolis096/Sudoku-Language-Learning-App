@@ -26,6 +26,13 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
         TextView txt = findViewById(R.id.resultTime);
         txt.setText(Sudoku.getElapsedTime());
         setupBackToMain();
+
+        //reset all options
+        Sudoku.setDifficulty(0);
+        Sudoku.setWordBank(0);
+        Sudoku.setInputMode(false);
+        Sudoku.setTranslationDirection(true);
+        Sudoku.setGRID_SIZE(9);
     }
     @Override
     public void onBackPressed() {
