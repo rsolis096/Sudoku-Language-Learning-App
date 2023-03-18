@@ -159,7 +159,7 @@ public class SudokuPage4x4Test {
         assertTrue("Toggle button is not enabled", toggleButton4x4.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton4x4.isCheckable());
         toggleButton4x4.click();
-        assertTrue("Toggle button is not checkable", toggleButton4x4.isChecked());
+        assertTrue("Toggle button is not checked", toggleButton4x4.isChecked());
 
         UiObject2 manualSwitch = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
         assertTrue("manual switch is not enabled", manualSwitch.isEnabled());
