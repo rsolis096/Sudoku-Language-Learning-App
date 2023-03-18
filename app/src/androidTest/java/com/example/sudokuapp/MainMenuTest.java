@@ -60,7 +60,7 @@ public class MainMenuTest {
     }
 
     @Test
-    public void mainMenuTest() {
+    public void mainMenuTest() throws InterruptedException{
 
         //Test startButton
         UiObject2 startButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
@@ -90,20 +90,12 @@ public class MainMenuTest {
         backButton.click();
 
         //Give App time to catchup
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(500);
 
         //Check options page
         optionsButton.click();
         //Give App time to catchup
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(500);
         backButton = mDevice.findObject(By.res("com.example.sudokuapp:id/optionsBackToMenu"));
         backButton.isEnabled();
         backButton.isClickable();

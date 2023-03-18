@@ -181,15 +181,12 @@ public class SudokuPage12x12Test {
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
 
-        Thread.sleep(3000);
-
-
         //Make sure 12x12 toggle button exists
-        UiObject2 toggleButton12x12 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn12"));
+        UiObject2 toggleButton12x12 = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/tgBtn12")),3000);
         assertTrue("Toggle button is not enabled", toggleButton12x12.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton12x12.isCheckable());
         toggleButton12x12.click();
-        assertTrue("4x4 button is not checked", toggleButton12x12.isChecked());
+        assertTrue("12x12 button is not checked", toggleButton12x12.isChecked());
 
         UiObject2 manualSwitch = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
         assertTrue("manual switch is not enabled", manualSwitch.isEnabled());
@@ -208,7 +205,7 @@ public class SudokuPage12x12Test {
         confirm.click();
 
         //Check Timer (wait for it to appear on screen, going to fast will cause fail)
-        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),500);
+        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),3000);
         assertTrue("Timer is not enabled", cTimer.isEnabled());
         //Get text to compare for later to make sure it is counting up
         String timerText = cTimer.getText();
@@ -239,10 +236,8 @@ public class SudokuPage12x12Test {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        Thread.sleep(500);
-
         //Check all resources in manual input pop up
-        UiObject2 resources = mDevice.findObject(By.res("android:id/alertTitle"));
+        UiObject2 resources = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
         assertEquals("Enter Word should be shown.", "Enter Word:", resources.getText());
         resources = mDevice.findObject(By.res("android:id/button3"));
         assertTrue("clear answer is not enabled", resources.isEnabled());
@@ -257,7 +252,6 @@ public class SudokuPage12x12Test {
         //Check text edit function
         UiObject2 editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         assertTrue("edit text field should be clickable.", editText.isClickable());
-        editText.click();
         editText.setText("once");
         resources.click();
         Thread.sleep(500);
@@ -265,11 +259,23 @@ public class SudokuPage12x12Test {
         String prevAnswer = emptyCell.getText();
         assertEquals("previously empty cell should be displaying the answer.", "ONCE", prevAnswer);
 
+        //Check new valid input replace old input
+        emptyCell.click();
+        Thread.sleep(500);
+        editText = mDevice.findObject(By.clazz("android.widget.EditText"));
+        assertTrue("edit text field should be clickable.", editText.isClickable());
+        editText.setText("dos");
+        resources = mDevice.findObject(By.res("android:id/button1"));
+        resources.click();
+        Thread.sleep(500);
+        //confirm the change
+        prevAnswer = emptyCell.getText();
+        assertEquals("cell should display new valid input.", "DOS", prevAnswer);
+
         //try invalid input, result should be the same as before the input.
         emptyCell.click();
         editText = mDevice.findObject(By.clazz("android.widget.EditText"));
-        editText.click();
-        editText.setText(" dos");
+        editText.setText(" dos ");
         resources = mDevice.findObject(By.res("android:id/button1"));
         resources.click();
         Thread.sleep(500);
@@ -297,18 +303,16 @@ public class SudokuPage12x12Test {
         assertTrue("solve button is not enabled", resources.isEnabled());
         assertTrue("solve button is not clickable", resources.isClickable());
         resources.click();
-        Thread.sleep(500);
         //check pop up for game completion
-        UiObject2 textV = mDevice.findObject(By.res("android:id/alertTitle"));
+        UiObject2 textV = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
         assertEquals("Game finished should be displayed.", "Game Finished!", textV.getText());
         resources = mDevice.findObject(By.res("android:id/button1"));
         assertTrue("continue button is not enabled", resources.isEnabled());
         assertTrue("continue button is not clickable", resources.isClickable());
         resources.click();
-        Thread.sleep(500);
 
         //check result screen
-        textV = mDevice.findObject(By.res("com.example.sudokuapp:id/textView4"));
+        textV = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/textView4")),3000);
         assertEquals("Game finished should be displayed.", "Congratulations, you completed the puzzle!", textV.getText());
         textV = mDevice.findObject(By.res("com.example.sudokuapp:id/resultTime"));
         assertTrue("result time should be shown.", textV.isEnabled());
