@@ -60,13 +60,15 @@ public class SudokuPage16x16Test {
 
     @Test
     public void assistModeCheck() {
+
+
         /*
         This 16x16 was made for 16x16 functionality but was disabled due to inconsistent behaviour.
-
-
+        
         // Press the start button
-        UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
-        start.click();
+        //UiObject2 start = mDevice.findObject(By.clazz("com.example.sudokuapp:id/btnStart"));
+        //start.click();
+
 
         try {
             Thread.sleep(2000);
