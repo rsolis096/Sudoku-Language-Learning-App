@@ -135,9 +135,31 @@ public class SudokuPage4x4Test {
 
         Thread.sleep(500);
 
-        //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
         assertEquals(emptyCell.getText(),assistButtonSelectedText);
+
+        //move to a test that changes category
+        /*//quit and check the button states are reset
+        mDevice.pressBack();
+        UiObject2 textV = mDevice.wait(Until.findObject(By.res("android:id/alertTitle"));
+        UiObject2 noB = mDevice.findObject(By.res("android:id/button2"));
+        UiObject2 yesB = mDevice.findObject(By.res("android:id/button1"));
+        assertEquals("Are you sure you want to quit?", textV.getText());
+        assertTrue(noB.isEnabled());
+        assertTrue(noB.isClickable());
+        assertTrue(yesB.isEnabled());
+        assertTrue(yesB.isClickable());
+        yesB.click();
+
+        start = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnStart")),3000);
+        start.click();
+
+        // Press the word bank/category Button
+        UiObject2 categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),3000);
+        assertTrue(categoryButton.isEnabled());
+        assertTrue(categoryButton.isClickable());
+        assertEquals(categoryButton.getText(), "CATEGORIES");
+        categoryButton.click();*/
 
         // Hold to ensure app is where its expected to be
         Thread.sleep(1000);
@@ -292,6 +314,8 @@ public class SudokuPage4x4Test {
         assertTrue("home button is not enabled", resources.isEnabled());
         assertTrue("home button is not clickable", resources.isClickable());
         resources.click();
+
+
 
         // Hold to ensure app is where its expected to be
         Thread.sleep(1000);

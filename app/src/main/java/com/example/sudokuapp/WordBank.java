@@ -21,12 +21,6 @@ public class WordBank extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_bank);
-        toggleButtons = new ToggleButton[5];
-        toggleButtons[0] = findViewById(R.id.btnNumbers);
-        toggleButtons[1] = findViewById(R.id.btnfamily);
-        toggleButtons[2] = findViewById(R.id.btnGreeting);
-        toggleButtons[3] = findViewById(R.id.btnFood);
-        toggleButtons[4] = findViewById(R.id.btnDirection);
         setupWordBank();
         // back button close activity
         setupClose();
@@ -38,17 +32,17 @@ public class WordBank extends AppCompatActivity {
     }
 
     public static void resetWordBank() {
-        toggleButtons[0].setChecked(true);
-        toggleButtons[1].setChecked(false);
-        toggleButtons[2].setChecked(false);
-        toggleButtons[3].setChecked(false);
-        toggleButtons[4].setChecked(false);
         checkedIndex = 0;
     }
 
     private void setupWordBank() {
 
-
+        toggleButtons = new ToggleButton[5];
+        toggleButtons[0] = findViewById(R.id.btnNumbers);
+        toggleButtons[1] = findViewById(R.id.btnfamily);
+        toggleButtons[2] = findViewById(R.id.btnGreeting);
+        toggleButtons[3] = findViewById(R.id.btnFood);
+        toggleButtons[4] = findViewById(R.id.btnDirection);
 
         toggleButtons[checkedIndex].setChecked(true);
 
