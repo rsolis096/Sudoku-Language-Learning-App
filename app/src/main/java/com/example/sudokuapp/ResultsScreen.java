@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.Serializable;
 
@@ -33,6 +34,7 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
         Sudoku.setInputMode(false);
         Sudoku.setTranslationDirection(true);
         Sudoku.setGRID_SIZE(9);
+        WordBank.resetWordBank();
     }
     @Override
     public void onBackPressed() {
