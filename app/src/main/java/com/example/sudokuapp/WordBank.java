@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class WordBank extends AppCompatActivity {
 
     public static int checkedIndex = 0;
-    public ToggleButton[] toggleButtons;
+    public static ToggleButton[] toggleButtons;
 
 
     public static Intent makeIntent(Context gameSetting) {
@@ -29,6 +29,10 @@ public class WordBank extends AppCompatActivity {
     private void setupClose() {
         Button btnback = findViewById(R.id.btnback);
         btnback.setOnClickListener(view -> finish());
+    }
+
+    public static void resetWordBank() {
+        checkedIndex = 0;
     }
 
     private void setupWordBank() {
