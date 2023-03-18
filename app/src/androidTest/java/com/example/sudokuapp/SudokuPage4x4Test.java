@@ -61,7 +61,7 @@ public class SudokuPage4x4Test {
     }
 
     @Test
-    public void assistModeCheck() {
+    public void assistModeCheck() throws InterruptedException{
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
@@ -81,7 +81,7 @@ public class SudokuPage4x4Test {
         assertTrue("4x4 button is not checked", toggleButton4x4.isChecked());
 
         // Timers to slow down test, fails otherwise.
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         // Press the confirm button
         UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
@@ -96,7 +96,7 @@ public class SudokuPage4x4Test {
         String timerText = cTimer.getText();
 
         //Wait one second for the game to load before continuing with further actions
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         //Check the table rows in the main game board
         for(int i =0; i < 4; i++)
@@ -111,7 +111,7 @@ public class SudokuPage4x4Test {
         checkElementButtons(tableLayout);
 
         //Slow down next code to give time to scroll
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         //Verify timer is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
@@ -122,7 +122,7 @@ public class SudokuPage4x4Test {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        waitForApp();
+        Thread.sleep(500);
 
         //Check all the table rows that pop up in assist mode
         tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
@@ -142,7 +142,7 @@ public class SudokuPage4x4Test {
         String assistButtonSelectedText = assistButtonToSelect.getText();
         assistButtonToSelect.click();
 
-        waitForApp();
+        Thread.sleep(500);
 
         //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
@@ -157,7 +157,7 @@ public class SudokuPage4x4Test {
     }
 
     @Test
-    public void manualModeCheck() {
+    public void manualModeCheck() throws InterruptedException {
 
         //**************************************//
         //          MANUAL INPUT                //
@@ -187,7 +187,7 @@ public class SudokuPage4x4Test {
         assertTrue("manual switch is not checked", manualSwitch.isChecked());
 
         // Timers to slow down test, fails otherwise.
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         // Press the confirm button
         UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
@@ -202,7 +202,7 @@ public class SudokuPage4x4Test {
         String timerText = cTimer.getText();
 
         //Wait one second for the game to load before continuing with further actions
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         //Check the table rows in the main game board
         for(int i =0; i < 4; i++)
@@ -216,7 +216,7 @@ public class SudokuPage4x4Test {
         UiObject2 tableLayout = mDevice.findObject(By.res("com.example.sudokuapp:id/sudoku_table"));
         checkElementButtons(tableLayout);
 
-        waitForApp();waitForApp();
+        Thread.sleep(1000);
 
         //Verify timer is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
@@ -227,7 +227,7 @@ public class SudokuPage4x4Test {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        waitForApp();
+        Thread.sleep(500);
 
         //Check all resources in manual input pop up
         UiObject2 resources = mDevice.findObject(By.res("android:id/alertTitle"));
@@ -248,7 +248,7 @@ public class SudokuPage4x4Test {
         editText.click();
         editText.setText("Uno");
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
         //confirm the change
         String prevAnswer = emptyCell.getText();
         assertEquals("previously empty cell should be displaying the answer.", "UNO", prevAnswer);
@@ -260,7 +260,7 @@ public class SudokuPage4x4Test {
         editText.setText("Un");
         resources = mDevice.findObject(By.res("android:id/button1"));
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
         //confirm no change
         assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
 
@@ -268,7 +268,7 @@ public class SudokuPage4x4Test {
         emptyCell.click();
         resources = mDevice.findObject(By.res("android:id/button2"));
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
         //confirm no change
         assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
 
@@ -276,7 +276,7 @@ public class SudokuPage4x4Test {
         emptyCell.click();
         resources = mDevice.findObject(By.res("android:id/button3"));
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
         //is cell null after clearing?
         assertNull("cell should be empty.", emptyCell.getText());
 
@@ -285,7 +285,7 @@ public class SudokuPage4x4Test {
         assertTrue("solve button is not enabled", resources.isEnabled());
         assertTrue("solve button is not clickable", resources.isClickable());
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
         //check pop up for game completion
         UiObject2 textV = mDevice.findObject(By.res("android:id/alertTitle"));
         assertEquals("Game finished should be displayed.", "Game Finished!", textV.getText());
@@ -293,7 +293,7 @@ public class SudokuPage4x4Test {
         assertTrue("continue button is not enabled", resources.isEnabled());
         assertTrue("continue button is not clickable", resources.isClickable());
         resources.click();
-        waitForApp();
+        Thread.sleep(500);
 
         //check result screen
         textV = mDevice.findObject(By.res("com.example.sudokuapp:id/textView4"));
@@ -313,14 +313,6 @@ public class SudokuPage4x4Test {
         }
     }
 
-    private void waitForApp() {
-        //wait so the app can catch up
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     /*

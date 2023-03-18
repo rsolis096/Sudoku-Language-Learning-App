@@ -80,14 +80,8 @@ public class MainMenuTest {
         //Check tutorial page
         tutorialButton.click();
 
-        //Give App time to catchup
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        UiObject2 textView = mDevice.findObject(By.res("com.example.sudokuapp:id/textView5"));
+        UiObject2 textView = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/textView5")), 3000);
         textView.isEnabled();
         mDevice.findObject(By.res("com.example.sudokuapp:id/imageView")).isEnabled();
         UiObject2 backButton = mDevice.findObject(By.res("com.example.sudokuapp:id/backToMenu"));

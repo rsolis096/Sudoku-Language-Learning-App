@@ -2,9 +2,11 @@ package com.example.sudokuapp;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -18,6 +20,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.Until;
 
 import org.junit.Assert;
@@ -74,7 +77,7 @@ public class SudokuPage6x6Test {
 
         Thread.sleep(2000);
 
-        //Make sure 9x9 toggle button exists
+        //Make sure 6x6 toggle button exists
         UiObject2 toggleButton6x6 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn6"));
         assertTrue("Toggle button is not enabled", toggleButton6x6.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton6x6.isCheckable());
@@ -148,9 +151,7 @@ public class SudokuPage6x6Test {
         String assistButtonSelectedText = assistButtonToSelect.getText();
         assistButtonToSelect.click();
 
-        //Wait so the app can catch up
-        Thread.sleep(200);
-
+        Thread.sleep(500);
 
         //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
@@ -162,291 +163,158 @@ public class SudokuPage6x6Test {
     }
 
     @Test
-    public void manualModeCheck() {
+    public void manualModeCheck() throws InterruptedException{
 
         //**************************************//
         //          MANUAL INPUT                //
         //**************************************//
-        /*
-        ViewInteraction materialButton1 = onView(
-                allOf(withId(R.id.btnStart), withText("Start"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialButton1.perform(click());
 
-        ViewInteraction appCompatToggleButton = onView(
-                allOf(withId(R.id.tgBtn4), withText("4x4"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                13),
-                        isDisplayed()));
-        appCompatToggleButton.perform(click());
+        // Press the start button
+        UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
+        start.click();
 
-        ViewInteraction switchCompat = onView(
-                allOf(withId(R.id.switchInputMode), withText("Manual Input"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                6),
-                        isDisplayed()));
-        switchCompat.perform(click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.btnConfirm), withText("Confirm"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialButton3.perform(click());
 
-        ViewInteraction horizontalScrollView1 = onView(
-                allOf(withId(R.id.horizontalScrollView),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        horizontalScrollView1.check(matches(isDisplayed()));
+        //Make sure 6x6 toggle button exists
+        UiObject2 toggleButton6x6 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn6"));
+        assertTrue("Toggle button is not enabled", toggleButton6x6.isEnabled());
+        assertTrue("Toggle button is not checkable", toggleButton6x6.isCheckable());
+        toggleButton6x6.click();
+        assertTrue("Toggle button is not checked", toggleButton6x6.isChecked());
 
-        ViewInteraction scrollView1 = onView(
-                allOf(withId(R.id.ScrollView),
-                        withParent(allOf(withId(R.id.horizontalScrollView),
-                                withParent(IsInstanceOf.instanceOf(android.view.ViewGroup.class)))),
-                        isDisplayed()));
-        scrollView1.check(matches(isDisplayed()));
+        UiObject2 manualSwitch = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
+        assertTrue("manual switch is not enabled", manualSwitch.isEnabled());
+        assertTrue("manual switch is not checkable", manualSwitch.isCheckable());
+        manualSwitch.click();
+        assertTrue("manual switch is not checked", manualSwitch.isChecked());
 
-        ViewInteraction tableLayout1 = onView(
-                allOf(withId(R.id.sudoku_table),
-                        withParent(allOf(withId(R.id.ScrollView),
-                                withParent(withId(R.id.horizontalScrollView)))),
-                        isDisplayed()));
-        tableLayout1.check(matches(isDisplayed()));
+        // Timers to slow down test, fails otherwise.
+        Thread.sleep(1000);
+
+        // Press the confirm button
+        UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
+        assertTrue("Confirm button is not enabled", confirm.isEnabled());
+        assertTrue("Confirm button is not clickable", confirm.isClickable());
+        confirm.click();
+
+        //Check Timer (wait for it to appear on screen, going to fast will cause fail)
+        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),500);
+        assertTrue("Timer is not enabled", cTimer.isEnabled());
+        //Get text to compare for later to make sure it is counting up
+        String timerText = cTimer.getText();
+
+        //Wait one second for the game to load before continuing with further actions
+        Thread.sleep(1000);
 
         //Check the table rows in the main game board
-        for(int i =0; i < 4; i++)
+        for(int i =0; i < 6; i++)
         {
-            ViewInteraction tableRow1 = onView(withTagValue(CoreMatchers.is("tableRowTag" + i )));
-            tableRow1.check(matches(isDisplayed()));
+            UiObject2 tableRows = mDevice.findObject(By.desc("tableRowTag" + i));
+            assertTrue("Table Row " + i + " is not enabled", tableRows.isEnabled());
         }
 
-        //Check all of the buttons and rows
-        for (int i = 0; i < 15; i++)
-        {
-            //Checking if it exists
-            ViewInteraction button = onView(withTagValue(CoreMatchers.is("elementButtonTag" + i)));
-            button.check(matches(isDisplayed()));
-        }
+        //** Test the ElementButtons in the table **//
+        // Get a reference to the sudokutable (TableLayout)
+        UiObject2 tableLayout = mDevice.findObject(By.res("com.example.sudokuapp:id/sudoku_table"));
+        checkElementButtons(tableLayout);
 
-        //Verify timer exists
-        ViewInteraction chronometer1 = onView(
-                allOf(withId(R.id.gameTimerText),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        chronometer1.check(matches(isDisplayed()));
+        Thread.sleep(1000);
 
-        ViewInteraction button = onView(
-                allOf(withId(R.id.solveButton), withText("SOLVE"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
+        //Verify timer is counting up
+        assertTrue("Timer is not enabled", cTimer.isEnabled());
+        assertNotEquals(cTimer.getText(), timerText);
 
-        ViewInteraction textView1 = onView(
-                allOf(withId(R.id.textView), withText("Use mouse or finger to scroll side to side"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView1.check(matches(withText("Use mouse or finger to scroll side to side")));
+        //Check single empty cell for functionality of manual input
+        UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
+        assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
+        emptyCell.click();
 
-        //Check single empty cell for functionality of manual input assist
-        ViewInteraction elementButton1 = onView(withTagValue(CoreMatchers.is("emptyCell")));
-        elementButton1.perform(scrollTo(), click());
+        Thread.sleep(500);
 
-        ViewInteraction frameLayout1 = onView(
-                allOf(withId(android.R.id.content),
-                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.FrameLayout.class))),
-                        isDisplayed()));
-        frameLayout1.check(matches(isDisplayed()));
+        //Check all resources in manual input pop up
+        UiObject2 resources = mDevice.findObject(By.res("android:id/alertTitle"));
+        assertEquals("Enter Word should be shown.", "Enter Word:", resources.getText());
+        resources = mDevice.findObject(By.res("android:id/button3"));
+        assertTrue("clear answer is not enabled", resources.isEnabled());
+        assertTrue("clear answer is not clickable", resources.isClickable());
+        resources = mDevice.findObject(By.res("android:id/button2"));
+        assertTrue("cancel button is not enabled", resources.isEnabled());
+        assertTrue("cancel button is not clickable", resources.isClickable());
+        resources = mDevice.findObject(By.res("android:id/button1"));
+        assertTrue("ok button is not enabled", resources.isEnabled());
+        assertTrue("ok button is not clickable", resources.isClickable());
 
-        ViewInteraction textView2 = onView(
-                allOf(IsInstanceOf.instanceOf(android.widget.TextView.class), withText("Enter Word:"),
-                        withParent(allOf(IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        textView2.check(matches(withText("Enter Word:")));
+        //Check text edit function
+        UiObject2 editText = mDevice.findObject(By.clazz("android.widget.EditText"));
+        assertTrue("edit text field should be clickable.", editText.isClickable());
+        editText.click();
+        editText.setText("dos");
+        resources.click();
+        Thread.sleep(500);
+        //confirm the change
+        String prevAnswer = emptyCell.getText();
+        assertEquals("previously empty cell should be displaying the answer.", "DOS", prevAnswer);
 
-        ViewInteraction editText = onView(
-                allOf(withParent(allOf(withId(android.R.id.custom),
-                                withParent(IsInstanceOf.instanceOf(android.widget.FrameLayout.class)))),
-                        isDisplayed()));
-        editText.check(matches(isDisplayed()));
+        //try invalid input, result should be the same as before the input.
+        emptyCell.click();
+        editText = mDevice.findObject(By.clazz("android.widget.EditText"));
+        editText.click();
+        editText.setText(" ");
+        resources = mDevice.findObject(By.res("android:id/button1"));
+        resources.click();
+        Thread.sleep(500);
+        //confirm no change
+        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
 
-        ViewInteraction button2 = onView(
-                allOf(withId(android.R.id.button3), withText("CLEAR ANSWER"),
-                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
+        //try cancel button
+        emptyCell.click();
+        resources = mDevice.findObject(By.res("android:id/button2"));
+        resources.click();
+        Thread.sleep(500);
+        //confirm no change
+        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
 
-        ViewInteraction button3 = onView(
-                allOf(withId(android.R.id.button2), withText("CANCEL"),
-                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button3.check(matches(isDisplayed()));
+        //try clear answer
+        emptyCell.click();
+        resources = mDevice.findObject(By.res("android:id/button3"));
+        resources.click();
+        Thread.sleep(500);
+        //is cell null after clearing?
+        assertNull("cell should be empty.", emptyCell.getText());
 
-        ViewInteraction button4 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button4.check(matches(isDisplayed()));
+        //check solve button
+        resources = mDevice.findObject(By.res("com.example.sudokuapp:id/solveButton"));
+        assertTrue("solve button is not enabled", resources.isEnabled());
+        assertTrue("solve button is not clickable", resources.isClickable());
+        resources.click();
+        Thread.sleep(500);
+        //check pop up for game completion
+        UiObject2 textV = mDevice.findObject(By.res("android:id/alertTitle"));
+        assertEquals("Game finished should be displayed.", "Game Finished!", textV.getText());
+        resources = mDevice.findObject(By.res("android:id/button1"));
+        assertTrue("continue button is not enabled", resources.isEnabled());
+        assertTrue("continue button is not clickable", resources.isClickable());
+        resources.click();
+        Thread.sleep(500);
 
-        //Enter invalid input
-        ViewInteraction editText2 = onView(
-                allOf(childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(Matchers.is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        editText2.perform(replaceText("cu"), closeSoftKeyboard());
+        //check result screen
+        textV = mDevice.findObject(By.res("com.example.sudokuapp:id/textView4"));
+        assertEquals("Game finished should be displayed.", "Congratulations, you completed the puzzle!", textV.getText());
+        textV = mDevice.findObject(By.res("com.example.sudokuapp:id/resultTime"));
+        assertTrue("result time should be shown.", textV.isEnabled());
+        resources = mDevice.findObject(By.res("com.example.sudokuapp:id/btnEndGameReturn"));
+        assertTrue("home button is not enabled", resources.isEnabled());
+        assertTrue("home button is not clickable", resources.isClickable());
+        resources.click();
 
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(Matchers.is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        materialButton4.perform(scrollTo(), click());
-
-        //Cell should still be empty
-        onView(withTagValue(CoreMatchers.is("emptyCell"))).check(matches(withText(" ")));
-
-        //Check single empty cell for functionality of manual input assist
-        ViewInteraction elementButton2 = onView(withTagValue(CoreMatchers.is("emptyCell")));
-        elementButton2.perform(scrollTo(), click());
-
-        //Enter valid input
-        ViewInteraction editText3 = onView(
-                allOf(childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(Matchers.is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        editText3.perform(replaceText("uno"), closeSoftKeyboard());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(Matchers.is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        materialButton5.perform(scrollTo(), click());
-
-        //Cell should still be updated
-        onView(withTagValue(CoreMatchers.is("emptyCell"))).check(matches(withText("UNO")));
-
-
-        //Solve the board and return to home
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.solveButton), withText("Solve"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton6.perform(click());
-
-        ViewInteraction linearLayout = onView(
-                allOf(IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
-                        withParent(allOf(withId(android.R.id.content),
-                                withParent(IsInstanceOf.instanceOf(android.widget.FrameLayout.class)))),
-                        isDisplayed()));
-        linearLayout.check(matches(isDisplayed()));
-
-        ViewInteraction textView3 = onView(
-                allOf(IsInstanceOf.instanceOf(android.widget.TextView.class), withText("Game Finished!"),
-                        withParent(allOf(IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
-                                withParent(IsInstanceOf.instanceOf(android.widget.LinearLayout.class)))),
-                        isDisplayed()));
-        textView3.check(matches(withText("Game Finished!")));
-
-        ViewInteraction button8 = onView(
-                allOf(withId(android.R.id.button1), withText("CONTINUE"),
-                        withParent(withParent(IsInstanceOf.instanceOf(android.widget.ScrollView.class))),
-                        isDisplayed()));
-        button8.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton7 = onView(
-                allOf(withId(android.R.id.button1), withText("Continue"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(Matchers.is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        materialButton7.perform(scrollTo(), click());
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.textView4), withText("Congratulations, you completed the puzzle!"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView4.check(matches(withText("Congratulations, you completed the puzzle!")));
-
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.textView7), withText("Here is your time:"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView5.check(matches(withText("Here is your time:")));
-
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.resultTime),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView6.check(matches(isDisplayed()));
-
-        ViewInteraction button9 = onView(
-                allOf(withId(R.id.btnEndGameReturn), withText("HOME"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button9.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.btnEndGameReturn), withText("Home"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialButton8.perform(click());
-
-        ViewInteraction button10 = onView(
-                allOf(withId(R.id.btnStart), withText("START"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button10.check(matches(isDisplayed()));
-
-        ViewInteraction button11 = onView(
-                allOf(withId(R.id.btnOptions), withText("OPTIONS"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button11.check(matches(isDisplayed()));
-
-        ViewInteraction button12 = onView(
-                allOf(withId(R.id.btnTut), withText("TUTORIAL"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button12.check(matches(isDisplayed()));*/
+        // Hold to ensure app is where its expected to be
+        Thread.sleep(1000);
     }
-
 
 
     /*
