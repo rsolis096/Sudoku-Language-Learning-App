@@ -31,7 +31,6 @@ public class GameSetting extends AppCompatActivity {
     }
 
     private void setupLanguageMode() {
-        Sudoku.setTranslationDirection(true);
         ToggleButton btnEngToSpan = findViewById(R.id.tgBtnEngToSpan);
         ToggleButton btnSpanToEng = findViewById(R.id.tgBtnSpanToEng);
         //sets which direction the sudoku translates
@@ -53,6 +52,7 @@ public class GameSetting extends AppCompatActivity {
     //set up for the input mode switch
     private void setUpModeSwitch() {
         SwitchCompat switchInputMode = findViewById(R.id.switchInputMode);
+        switchInputMode.setChecked(false);
         switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
             Sudoku.setInputMode(!Sudoku.getInputMode());
@@ -91,7 +91,6 @@ public class GameSetting extends AppCompatActivity {
     private void setupGridSize() {
         Sudoku.setGRID_SIZE(9);
         ToggleButton nineXNine = findViewById(R.id.tgBtn9);
-        //ToggleButton sixteenXSixteen = findViewById(R.id.tgBtn16);
         ToggleButton fourXFour = findViewById(R.id.tgBtn4);
         ToggleButton twelveXTwelve = findViewById(R.id.tgBtn12);
         ToggleButton sixXSix = findViewById(R.id.tgBtn6);
@@ -105,18 +104,6 @@ public class GameSetting extends AppCompatActivity {
             sixXSix.setChecked(false);
             twelveXTwelve.setChecked(false);
         });
-        //sets difficulty to 'medium' and unchecks the other buttons
-        /*
-        sixteenXSixteen.setOnClickListener(view -> {
-            Sudoku.setGRID_SIZE(16);
-            nineXNine.setChecked(false);
-            //sixteenXSixteen.setChecked(true);
-            fourXFour.setChecked(false);
-            sixXSix.setChecked(false);
-            twelveXTwelve.setChecked(false);
-        });
-        */
-
         //sets difficulty to 'hard' and unchecks the other buttons
         fourXFour.setOnClickListener(view -> {
             Sudoku.setGRID_SIZE(4);

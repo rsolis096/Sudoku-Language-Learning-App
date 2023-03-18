@@ -225,6 +225,7 @@ public class SudokuPage9x9Test {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
+        Thread.sleep(500);
         //Check all resources in manual input pop up
         UiObject2 resources = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
         assertEquals("Enter Word should be shown.", "Enter Word:", resources.getText());
@@ -263,6 +264,7 @@ public class SudokuPage9x9Test {
 
         //try invalid input, result should be the same as before the input.
         emptyCell.click();
+        Thread.sleep(500);
         editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         editText.setText("hi ");
         resources = mDevice.findObject(By.res("android:id/button1"));
@@ -273,6 +275,7 @@ public class SudokuPage9x9Test {
 
         //try cancel button
         emptyCell.click();
+        Thread.sleep(500);
         resources = mDevice.findObject(By.res("android:id/button2"));
         resources.click();
         Thread.sleep(500);
@@ -281,6 +284,7 @@ public class SudokuPage9x9Test {
 
         //try clear answer
         emptyCell.click();
+        Thread.sleep(500);
         resources = mDevice.findObject(By.res("android:id/button3"));
         resources.click();
         Thread.sleep(500);
