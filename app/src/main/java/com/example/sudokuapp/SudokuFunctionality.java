@@ -90,11 +90,14 @@ public class SudokuFunctionality {
                 {
                     Sudoku.getElement(i,j).setEnglish(Sudoku.english[GenerateBoard.mAnswerBoard[i][j]-1]);
                     Sudoku.getElement(i,j).setTranslation(Sudoku.spanish[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    System.out.println("English to spanish");
                 }
                 else
                 {
                     Sudoku.getElement(i,j).setEnglish(Sudoku.spanish[GenerateBoard.mAnswerBoard[i][j]-1]);
                     Sudoku.getElement(i,j).setTranslation(Sudoku.english[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    System.out.println("Spanish to english");
+                    System.out.println(Sudoku.getElement(i,j).getEnglish() +", "+Sudoku.getElement(i,j).getTranslation(Sudoku.getTranslationDirection()));
                 }
             }
         }

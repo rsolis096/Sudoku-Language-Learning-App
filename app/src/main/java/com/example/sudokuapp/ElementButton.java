@@ -49,7 +49,13 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = english;
     }
     public void setTranslation(String translation) {
-        mTranslation = translation;
+        if(Sudoku.getTranslationDirection())
+        {
+            mTranslation = translation;
+        }
+        else {
+            mEnglish = translation;
+        }
     }
     public void setIndex(int i, int j)
     {
