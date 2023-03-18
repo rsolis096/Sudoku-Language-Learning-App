@@ -78,6 +78,7 @@ public class SudokuPage4x4Test {
         assertTrue("Toggle button is not enabled", toggleButton4x4.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton4x4.isCheckable());
         toggleButton4x4.click();
+        assertTrue("4x4 button is not checked", toggleButton4x4.isChecked());
 
         // Timers to slow down test, fails otherwise.
         try {

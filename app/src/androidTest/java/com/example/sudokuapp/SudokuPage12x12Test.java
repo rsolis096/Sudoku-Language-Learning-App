@@ -70,6 +70,8 @@ public class SudokuPage12x12Test {
         assertTrue("Toggle button is not enabled", toggleButton12x12.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton12x12.isCheckable());
         toggleButton12x12.click();
+        assertTrue("4x4 button is not checked", toggleButton12x12.isChecked());
+
 
         // Timers to slow down test, fails otherwise.
         Thread.sleep(1000);

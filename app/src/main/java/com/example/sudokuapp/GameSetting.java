@@ -122,7 +122,7 @@ public class GameSetting extends AppCompatActivity {
             Sudoku.setGRID_SIZE(4);
             nineXNine.setChecked(false);
             //sixteenXSixteen.setChecked(false);
-            fourXFour.setChecked(false);
+            fourXFour.setChecked(true);
             sixXSix.setChecked(false);
             twelveXTwelve.setChecked(false);
         });
