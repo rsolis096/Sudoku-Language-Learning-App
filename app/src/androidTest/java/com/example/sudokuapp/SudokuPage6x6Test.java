@@ -67,17 +67,12 @@ public class SudokuPage6x6Test {
     }
 
     @Test
-    public void assistModeCheck() {
+    public void assistModeCheck() throws InterruptedException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        Thread.sleep(2000);
 
         //Make sure 9x9 toggle button exists
         UiObject2 toggleButton6x6 = mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn6"));
@@ -87,11 +82,8 @@ public class SudokuPage6x6Test {
         assertTrue("Toggle button is not checked", toggleButton6x6.isChecked());
 
         // Timers to slow down test, fails otherwise.
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(1000);
+
 
         // Press the confirm button
         UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
@@ -106,11 +98,8 @@ public class SudokuPage6x6Test {
         String timerText = cTimer.getText();
 
         //Wait one second for the game to load before continuing with further actions
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(2000);
+
 
         //Check the table rows in the main game board
         for(int i =0; i < 6; i++)
@@ -125,11 +114,8 @@ public class SudokuPage6x6Test {
         checkElementButtons(tableLayout);
 
         //Slow down next code to give time to scroll
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(2000);
+
 
         //Verify timer is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
@@ -141,11 +127,8 @@ public class SudokuPage6x6Test {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(500);
+
 
         //Check all the table rows that pop up in assist mode
         tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
@@ -166,22 +149,16 @@ public class SudokuPage6x6Test {
         assistButtonToSelect.click();
 
         //Wait so the app can catch up
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(200);
+
 
         //Make sure the emptyCell was updated
         //Comparing with a string variable because assistButtonToSelect is off screen
         Assert.assertEquals(emptyCell.getText(),assistButtonSelectedText);
 
         // Hold to ensure app is where its expected to be
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(5000);
+
     }
 
     @Test
