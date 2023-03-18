@@ -1,20 +1,13 @@
 package com.example.sudokuapp;
 
-import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.junit.Assert.*;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.util.Log;
 import android.widget.Chronometer;
 
 
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
-
-import java.util.Objects;
-import java.util.Random;
 import org.junit.Before;
 public class SudokuFunctionalityTest {
 
@@ -24,11 +17,9 @@ public class SudokuFunctionalityTest {
     @Before
     public void setupTest() throws Throwable {
 
-        runOnUiThread(new Runnable() {
-            public void run() {
-                t = new Chronometer(InstrumentationRegistry.getInstrumentation().getTargetContext());
-                testBoard = new Sudoku(InstrumentationRegistry.getInstrumentation().getTargetContext(), t);
-            }
+        UiThreadStatement.runOnUiThread(() -> {
+            t = new Chronometer(InstrumentationRegistry.getInstrumentation().getTargetContext());
+            testBoard = new Sudoku(InstrumentationRegistry.getInstrumentation().getTargetContext(), t);
         });
     }
 
@@ -68,6 +59,7 @@ public class SudokuFunctionalityTest {
         assertNotNull(testBoard);
 
         ElementButton testButton = null;
+        boolean stopLoop = false;
         for(int i = 0; i < Sudoku.getGridSize(); i++)
         {
             for(int j = 0; j < Sudoku.getGridSize(); j++)
@@ -75,11 +67,16 @@ public class SudokuFunctionalityTest {
                 if(Sudoku.getElement(i,j).getValue() == 1)
                 {
                     testButton = Sudoku.getElement(i,j);
+                    stopLoop = true;
                     break;
                 }
             }
+            //Break not working as expected. Ensures loop ends
+            if(stopLoop)
+                break;
         }
-        //Should be false, cannot place a zero on the board
+        //Should be false, cannot place a zero on the board, apple not a valid word
+        assert testButton != null;
         assertFalse(SudokuFunctionality.validSpot(testButton, "apple"));
     }
 
