@@ -123,6 +123,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             Sudoku.setInputMode(false);
             Sudoku.setTranslationDirection(true);
             Sudoku.setGRID_SIZE(9);
+            WordBank.resetWordBank();
             Intent intent = new Intent(context, MainMenu.class);
             context.startActivity(intent);
         });
