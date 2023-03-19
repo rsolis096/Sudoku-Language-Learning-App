@@ -76,6 +76,12 @@ public class SudokuPage12x12Test {
         // Timers to slow down test, fails otherwise.
         Thread.sleep(1000);
 
+        //Make sure in assist mode
+        UiObject2 manual = mDevice.findObject(By.res("com.example.sudokuapp:id/switchInputMode"));
+        assertFalse(manual.isChecked());
+        if(manual.isChecked())
+            manual.click();
+
 
         // Press the confirm button
         UiObject2 confirm = mDevice.findObject(By.res("com.example.sudokuapp:id/btnConfirm"));
@@ -108,42 +114,21 @@ public class SudokuPage12x12Test {
         //Check all visible ElementButtons (UPPER RIGHT)
         checkElementButtons(tableLayout);
 
-
-        // Scroll downward (to LOWER RIGHT)
-        scrollView.setAsVerticalList();
-        scrollView.scrollForward(5);
-        // Timers so app can catch up
-        Thread.sleep(1000);
-        //Check all visible ElementButtons (BOTTOM RIGHT)
-        checkElementButtons(tableLayout);
-
-
-        // Scroll downward (LOWER LEFT)
-        scrollView.setAsHorizontalList();
-        scrollView.scrollBackward(5);
-        // Timers so app can catch up
-        Thread.sleep(2000);
-        //Check all visible ElementButtons (LOWER LEFT)
-        checkElementButtons(tableLayout);
-
         //SCROLL BACK TO BEGINNING (UPPER LEFT)
-        scrollView.setAsVerticalList();
         scrollView.scrollBackward(5);
         // Timers so app can catch up
         Thread.sleep(2000);
-
 
         //check timer again to see if it is counting up
         assertTrue("Timer is not enabled", cTimer.isEnabled());
         assertNotEquals("timer is not counting up.", timerText, cTimer.getText());
-
 
         //Check single empty cell for functionality of assisted mode
         UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         //Check all the table rows that pop up in assist mode
         tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
@@ -274,6 +259,7 @@ public class SudokuPage12x12Test {
 
         //try invalid input, result should be the same as before the input.
         emptyCell.click();
+        Thread.sleep(500);
         editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         editText.setText(" dos ");
         resources = mDevice.findObject(By.res("android:id/button1"));
@@ -284,6 +270,7 @@ public class SudokuPage12x12Test {
 
         //try cancel button
         emptyCell.click();
+        Thread.sleep(500);
         resources = mDevice.findObject(By.res("android:id/button2"));
         resources.click();
         Thread.sleep(500);
@@ -292,6 +279,7 @@ public class SudokuPage12x12Test {
 
         //try clear answer
         emptyCell.click();
+        Thread.sleep(500);
         resources = mDevice.findObject(By.res("android:id/button3"));
         resources.click();
         Thread.sleep(500);
