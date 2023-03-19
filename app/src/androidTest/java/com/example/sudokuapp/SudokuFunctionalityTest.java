@@ -2,8 +2,6 @@ package com.example.sudokuapp;
 
 import static org.junit.Assert.*;
 import android.widget.Chronometer;
-
-
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import androidx.test.platform.app.InstrumentationRegistry;
 

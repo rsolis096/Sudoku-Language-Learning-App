@@ -1,6 +1,5 @@
 package com.example.sudokuapp;
 
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -8,9 +7,13 @@ import java.util.Random;
 public class GenerateBoard implements Serializable  {
     public static int[][] mGeneratedBoard;
     public static int[][] mAnswerBoard;
-    public int rows, cols;
-    public int dif, remainingCells;
+    public int rows, cols, GRID_SIZE;
+    public int dif;
+    public int remainingCells;
 
+    public void setRemainingCells(int remainingCells) {
+        this.remainingCells = remainingCells;
+    }
     public int getEmptyCells() {
         return remainingCells;
     }
@@ -18,99 +21,97 @@ public class GenerateBoard implements Serializable  {
     GenerateBoard(int r, int c, int d) {
         rows = r;
         cols = c;
+        GRID_SIZE = (int) (rows * cols);
         dif = d;
         mGeneratedBoard = null;
+        remainingCells = 0;
     }
 
     public void createBoard() {
 
-        mGeneratedBoard = new int[rows][cols];
+        mGeneratedBoard = new int[GRID_SIZE][GRID_SIZE];
+
         Random random = new Random();
         int min = 0;
-        int max = Sudoku.getGridSize() - 1;
-        Log.i("Grid Size: ", String.valueOf(Sudoku.getGridSize()));
-        Log.i("Grid Size: ", String.valueOf(Sudoku.getGridSize()));
+        int max = GRID_SIZE - 1;
         int row = random.nextInt((max - min) + 1) + min;
         int col = random.nextInt((max - min) + 1) + min;
         int num = random.nextInt((max - min) + 1) + min;
         //Place a random number anywhere on the table, this acts as a seed.
         mGeneratedBoard[row][col] = num + 1;
-        //Solve the grid based off that seed.
+        //Solve the grid based off that seed. (follow sudoku rules)
         solveBoard(0, 0, mGeneratedBoard);
-        //solveBoard failed for some reason. Not sure why, re do it
+        //Sometimes recursion fails, repeat until it doesn't
         while (mGeneratedBoard[0][0] == 0 || mGeneratedBoard[0][1] == 0) {
-            Log.i("Status", "Recursion Failed, attempting again...");
             solveBoard(0, 0, mGeneratedBoard);
         }
-        //mGeneratedBoard is now a complete board, copy it to another member array
-        for (int i = 0; i < Sudoku.getGridSize(); i++) {
-            for (int j = 0; j < Sudoku.getGridSize(); j++) {
-                System.out.print(mGeneratedBoard[i][j] + " ");
 
+        //mGeneratedBoard is now a complete board, copy it to another member array
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                System.out.print(mGeneratedBoard[i][j] + " ");
             }
             System.out.print("\n");
-            //System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, Sudoku.getGridSize());
         }
-        mAnswerBoard = new int[rows][cols];
-        for (int i = 0; i < Sudoku.getGridSize(); i++) {
-            System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, Sudoku.getGridSize());
+        mAnswerBoard = new int[GRID_SIZE][GRID_SIZE];
+        for (int i = 0; i < GRID_SIZE; i++) {
+            System.arraycopy(mGeneratedBoard[i], 0, mAnswerBoard[i], 0, GRID_SIZE);
         }
-        int hiddenCounter = 0;
+
+
         //Adjusting hiddenMax can be used to set a difficulty
         //If hiddenMax = 70, there are 70 hidden cells, and 11 given cells.
         //dif multiplier alters number of hidden cells by 10, easy = 40 given, medium = 30 given, hard = 20 given
-        //TODO: add random variance to hidden cell generation (hard:19-26, med:27-36, easy:37-40)
-        Log.i("Get Difficulty:", String.valueOf(Sudoku.getDifficulty()));
-        int hiddenMax = (int) ((Sudoku.getGridSize() * Sudoku.getGridSize()) * 0.6);
-
-        remainingCells = hiddenMax;
+        int hiddenMax = (int) ((GRID_SIZE * GRID_SIZE) * 0.6);
+        int hiddenCounter = 0;
+        setRemainingCells(hiddenMax);
         while (hiddenCounter < hiddenMax) {
             row = random.nextInt((max - min) + 1) + min;
             col = random.nextInt((max - min) + 1) + min;
-            //Log.i("Setting Zero: ",String.valueOf(row) +", " + String.valueOf(col) + "Value of corresponding element in board: " + String.valueOf(mGeneratedBoard[row][col]));
             if (mGeneratedBoard[row][col] != 0) {
                 mGeneratedBoard[row][col] = 0;
                 hiddenCounter++;
-                //Log.i("Status:", "In Loop");
             }
         }
-        Log.i("Status:", "Given Cells placed");
+
     }
 
-
     //Return true if num is in the correct position given row and col coordinates
+    //Different than SudokuFunctionality because this is called before ElementButtons are made
     public boolean validSpot(int row, int col, int num, int[][] board) {
-        //Check rows and cols
-        for (int i = 0; i < Sudoku.getGridSize(); i++) {
-            if (board[row][i] == num || board[i][col] == num) {
-                return false;
-            }
-        }
-
-        //Check box
-        int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
-        int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
-        for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
-            for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
-                if (board[i + box_start_row][j + box_start_col] == num) {
+        if(board[row][col] == 0) {
+            //Check rows and cols
+            for (int i = 0; i < GRID_SIZE; i++) {
+                if (board[row][i] == num || board[i][col] == num) {
                     return false;
                 }
             }
+
+            //Check box
+            int box_start_row = ((int) (row / rows) * rows);
+            int box_start_col = ((int) (col / cols) * cols);
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < cols; j++) {
+                    if (board[i + box_start_row][j + box_start_col] == num) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean solveBoard(int row, int col, int[][] board) {
-        //Log.i("SolveBoard:", "In recursion");
         //Stops recursion if all rows are filled
-        if (row == Sudoku.getGridSize()) {
+        if (row == GRID_SIZE) {
             return true;
         }
 
         //If the value at the specified row and col coordinate is not zero, continue with this if statement to move onto the next cell
         if (board[row][col] != 0) {
             //If at the last column, move to the next row and start column at 0 again
-            if (col == Sudoku.getGridSize() - 1) {
+            if (col == GRID_SIZE - 1) {
                 return solveBoard(row + 1, 0, board);
             }
             //Otherwise, continue in same row, but move onto next column
@@ -122,13 +123,13 @@ public class GenerateBoard implements Serializable  {
         //Random number prevents first row and box from containing values 1 through 9 in that order
         Random random = new Random();
         int min = 1;
-        int max = Sudoku.getGridSize();
+        int max = GRID_SIZE;
         int checkNum = random.nextInt((max - min) + 1) + min;
         int counter = 0;
         //If at a zero position, attempt to fill it with numbers [1,9]
 
         //Must iterate enough times for row + 1 and col+1 to reach 8
-        while (counter < Sudoku.getGridSize()) {
+        while (counter < GRID_SIZE) {
             //Check the passed parameters coordinates if they are valid
             if (validSpot(row, col, checkNum, board)) {
                 //If so, set to checkNum
@@ -136,7 +137,7 @@ public class GenerateBoard implements Serializable  {
                 //System.out.println("Value placed into 2d array: " + mGeneratedBoard[row][col]);
 
                 //If you are at column 8 (last column), move onto the next row
-                if (col == Sudoku.getGridSize() - 1) {
+                if (col == GRID_SIZE - 1) {
                     //Calling this function will test numbers at the next index
                     //If the numbers are suitable, and passes validSpot() then it will continue until row =9
                     //Otherwise, it will return false therefore this if statement will not return true and the original row and col will have
