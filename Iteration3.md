@@ -21,16 +21,19 @@ User story: As a vocabulary learner who wants an extra challenging mode, I want 
 Tdd: This opportunity is presented in the Game Menu options where the user can select the dimensions of the Sudoku board for generating the puzzle. Traditionally, the 9x9 grid option will be selected as default to generate a basic sudoku puzzle, but additionally, users may select a 12x12 tablet grid, for a challenging version of play. On choosing the options and starting the menu, the sudoku puzzle will be generated in accordance with user choices.  The 12x12 is a rectangular board which has a difficult mode, due to more boxes to fill and more words are added with the 12 cells to deepen language comprehension. 
 
 On a tablet.
-  
+![Screenshot_2023-03-18_at_1.02.06_PM](/uploads/eb225ea1c4950085980c507661d681a5/Screenshot_2023-03-18_at_1.02.06_PM.png)
+
+![Screenshot_2023-03-18_at_7.30.51_PM](/uploads/4bcad9ddf418d9d8b7165b79c20e3089/Screenshot_2023-03-18_at_7.30.51_PM.png)
 
  On a phone.
-
+![Screenshot_2023-03-18_at_7.29.45_PM](/uploads/b48acfb49db4adfcd1833a5516fc6677/Screenshot_2023-03-18_at_7.29.45_PM.png)
 Implementation #3 : 
 User story: To make the vocabulary learning easy and accessible, I wish to have access to the sudoku puzzle app on my different devices like tablet, so that the words will be conveniently displayed in larger, easier to read fonts.
 Tdd: The app is made and configured to fit to screen for different devices. The layout will be relative with respect to the device the app is opened on. For example, on a tablet the menu page will be enlarged with buttons and texts with bigger and enlarged fonts. The sudoku board, as well, will fit the screen relatively. While on a phone view, users may need to scroll from side to side in order to view the whole puzzle at once, the tablet mode shall make it easy to play the game with the whole board visible. 
 
-  ⇒   
-On a phone,                              On a tablet.
+![Screenshot_2023-03-18_at_7.38.24_PM](/uploads/e6d1d215c7da490608ed1b421ebbabc3/Screenshot_2023-03-18_at_7.38.24_PM.png)
+![Screenshot_2023-03-18_at_12.59.44_PM](/uploads/af1e8e78d69837f243c7a417c70fc48c/Screenshot_2023-03-18_at_12.59.44_PM.png)
+On a phone,      ⇒                           On a tablet.
 
 
 
