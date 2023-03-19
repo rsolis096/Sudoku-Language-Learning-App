@@ -4,7 +4,6 @@ import androidx.test.filters.SdkSuppress;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.UiObjectNotFoundException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,17 +12,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.widget.Chronometer;
+
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Until;
 import static org.junit.Assert.*;
-import java.util.Objects;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
-public class WordBankTest {
+public class WordBankAndSettingTest {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.example.sudokuapp";
@@ -61,7 +59,7 @@ public class WordBankTest {
     }
 
     @Test
-    public void wordBankTest() throws InterruptedException {
+    public void wordBankAndSettingTest() throws InterruptedException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         assertTrue(start.isEnabled());
