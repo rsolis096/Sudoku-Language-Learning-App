@@ -13,6 +13,7 @@ User story: As a teacher of elementary and junior high school children, I want s
 Tdd: This opportunity is presented in the Game Menu options where the user can select the dimensions of the Sudoku board for generating the puzzle. Traditionally, the 9x9 grid option will be selected as default to generate a basic sudoku puzzle, but additionally, users may select 4x4 grid or a 6x6 rectangle grid, for easy play. On choosing the options and starting the menu, the sudoku puzzle will be generated in accordance with user choices and more words were added to the word bank to generate the word bank appropriately.
 
 ![Screenshot_2023-03-18_at_12.52.59_PM](/uploads/4662ac0ec13350edb9d0fc1249945ba7/Screenshot_2023-03-18_at_12.52.59_PM.png)
+![Screenshot_2023-03-18_at_12.53.16_PM](/uploads/8f120744a679d2ea368f764a5ce6c4bc/Screenshot_2023-03-18_at_12.53.16_PM.png)![Screenshot_2023-03-18_at_7.20.59_PM](/uploads/c7007a20f5864a46f45e9c5cbcbb222e/Screenshot_2023-03-18_at_7.20.59_PM.png)
       
 
 Implementation #2 :
