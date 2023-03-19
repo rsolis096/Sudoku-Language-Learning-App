@@ -21,10 +21,10 @@ public class SudokuFunctionality {
                 }
             }
             //Check box
-            int box_start_row = (row / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-            int box_start_col = (col / (int) Math.sqrt(Sudoku.getGridSize())) * (int) Math.sqrt(Sudoku.getGridSize());
-            for (int i = 0; i < (int) Math.sqrt(Sudoku.getGridSize()); i++) {
-                for (int j = 0; j < (int) Math.sqrt(Sudoku.getGridSize()); j++) {
+            int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
+            int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
+            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
                     if (Sudoku.getElement(i + box_start_row, j + box_start_col).getValue() == num) {
                         return false;
                     }

@@ -147,7 +147,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         //GenerateBoard class has member 2d arrays:
         //int[][] mGeneratedBoard; This board is the partially filled array of integers
         //int[][] mAnswerBoard;    This board is the completed board used to reference for answer checking
-        GenerateBoard generatedBoard = new GenerateBoard(GRID_SIZE, GRID_SIZE, getDifficulty());
+        GenerateBoard generatedBoard = new GenerateBoard(getBoxSize().first, getBoxSize().second, getDifficulty());
         generatedBoard.createBoard();
         //Initialize number of unfilled cells
         mRemainingCells = generatedBoard.getEmptyCells();
