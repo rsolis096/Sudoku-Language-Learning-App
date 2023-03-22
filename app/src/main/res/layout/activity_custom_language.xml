@@ -7,6 +7,17 @@
     android:translationX="2dp">
 
     <Button
+        android:id="@+id/btnCustomWordsClear"
+        android:layout_width="375dp"
+        android:layout_height="52dp"
+        android:text="Clear Word Bank"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCustomWordsAdd" />
+
+    <Button
         android:id="@+id/btnCustomWordsAdd"
         android:layout_width="372dp"
         android:layout_height="wrap_content"
