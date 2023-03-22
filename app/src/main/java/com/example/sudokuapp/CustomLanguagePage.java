@@ -89,21 +89,44 @@ public class CustomLanguagePage extends AppCompatActivity {
             //Create the content to be placed in the row
             // Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Enter Word:");
-            //Set up the input type (manual text input)
-            EditText input = new EditText(view.getContext());
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            //Display popup
-            builder.setView(input);
+            builder.setTitle("Enter Word Pair:");
+
+            //Set Up Rows to place User input EditTexts
+            TableLayout userInputLayout = new TableLayout(view.getContext());
+            builder.setView(userInputLayout);
+
+            TableRow userInputRowOne = new TableRow(view.getContext());
+            TableRow userInputRowTwo = new TableRow(view.getContext());
+            userInputLayout.addView(userInputRowOne);
+            userInputLayout.addView(userInputRowTwo);
+
+
+            //Set up English EditText
+            EditText englishInput = new EditText(view.getContext());
+            englishInput.setInputType(InputType.TYPE_CLASS_TEXT);
+            englishInput.setWidth(750);
+            englishInput.setHint("English");
+
+            //Set up Spanish EditText
+            EditText spanishInput = new EditText(view.getContext());
+            spanishInput.setInputType(InputType.TYPE_CLASS_TEXT);
+            spanishInput.setHint("Spanish");
+
+            //Place the EditText views in the pop up
+            userInputRowOne.addView(englishInput);
+            userInputRowTwo.addView(spanishInput);
+
             //When the user hits ok
             builder.setPositiveButton("OK", (dialog, which) ->
             {
                 //Get the string currently in the EditText object
-                String userInput = input.getText().toString();
+                String userEnglishInput = englishInput.getText().toString();
+                String userSpanishInput = spanishInput.getText().toString();
 
                 //Create the content to be placed in the row
                 TextView insertTextView = new TextView(this);
-                insertTextView.setText(userInput);
+                String displayString = userEnglishInput +", " + userSpanishInput;
+                insertTextView.setText(displayString);
                 tableRow.addView(insertTextView);
             });
 
