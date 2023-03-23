@@ -30,7 +30,7 @@ public class MainMenu extends AppCompatActivity {
     private void setupOptionsButton() {
         Button btnOptions = findViewById(R.id.btnOptions);
         btnOptions.setOnClickListener(view -> {
-            Intent intent = OptionsPage.makeIntent(MainMenu.this);
+            Intent intent = CustomLanguagePage.makeIntent(MainMenu.this);
             startActivity(intent);
         });
     }
