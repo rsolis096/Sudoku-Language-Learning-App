@@ -6,10 +6,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -21,7 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
+
 
 public class CustomLanguagePage extends AppCompatActivity {
 
@@ -73,8 +74,11 @@ public class CustomLanguagePage extends AppCompatActivity {
             rowCounter++;
             //Get reference to Table Layout
             TableLayout tableLayout = findViewById(R.id.customWordsTable);
-            //Create a new table row object
+
+            //Create a new table row object (this holds the new content the user enters after pressing ok)
             TableRow tableRow = new TableRow(this);
+            tableRow.setPadding(10,10,10,10);
+
             //Sets its Content Description for testing
             tableRow.setContentDescription("customWordsTableRow" + rowCounter);
 
@@ -114,16 +118,47 @@ public class CustomLanguagePage extends AppCompatActivity {
                 String userEnglishInput = englishInput.getText().toString();
                 String userSpanishInput = spanishInput.getText().toString();
 
-                //Create the content to be placed in the row
-                TextView insertTextView = new TextView(this);
-                String displayString = userEnglishInput +", " + userSpanishInput + "\n";
-                insertTextView.setText(displayString);
-                tableRow.addView(insertTextView);
-                try {
-                    writeToFile(displayString);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if(englishInput.length() == 0 || spanishInput.length() == 0)
+                {
+                    //Confirmation message
+                    Toast toast = Toast.makeText(this, "INVALID INPUT",Toast.LENGTH_SHORT);
+                    toast.show();
                 }
+                else
+                {
+                    //Create the content to be placed in the row
+                    TextView tableRowText = new TextView(this);
+                    String displayString = userEnglishInput +", " + userSpanishInput + "\n";
+
+                    //Create the delete button to delete the current row
+                    Button deleteRowButton = new Button(this);
+                    deleteRowButton.setText("X");
+                    deleteRowButton.setOnClickListener(new deleteRowButtonListener());
+
+
+                    // Create a new GradientDrawable with the desired border color and width
+                    GradientDrawable border = new GradientDrawable();
+                    border.setStroke(2, Color.BLACK);
+
+                    //Some styling for the words
+                    tableRowText.setText(displayString);
+                    tableRowText.setTextSize(20);
+                    tableRowText.setTypeface(null, Typeface.BOLD);
+                    tableRowText.setBackground(border);
+                    tableRowText.setPadding(10,10,10,10);
+
+
+                    tableRow.addView(tableRowText);
+                    tableRow.addView(deleteRowButton);
+                    tableLayout.addView(tableRow);
+
+                    try {
+                        writeToFile(displayString);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             });
 
             //Set up popup cancel button
@@ -132,11 +167,31 @@ public class CustomLanguagePage extends AppCompatActivity {
             //Display the popup
             builder.show();
 
-            //This adds the created row into the table
-            tableLayout.addView(tableRow);
         });
     }
 
+    public void clearFile()
+    {
+        //Remove all TableRows from TableLayout
+        TableLayout tableLayout = findViewById(R.id.customWordsTable);
+        tableLayout.removeAllViews();
+
+        //Open file
+        FileOutputStream myFileOut = null;
+        try {
+            myFileOut = openFileOutput("myOtherText.txt", MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Write fileContents to the opened file
+        try {
+            myFileOut.write("".getBytes());
+            myFileOut.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void readFile() throws IOException {
 
@@ -166,20 +221,45 @@ public class CustomLanguagePage extends AppCompatActivity {
         //Get a reference to the Table Layout
         TableLayout tableLayout = findViewById(R.id.customWordsTable);
 
-        for(int i = 0; i < fileContentsLines.length; i++)
-        {
-            //Create a row to add to the table layout
-            TableRow tableRow = new TableRow(this);
-            tableLayout.addView(tableRow);
-            //Create a text view to add to the row
-            TextView fileLine = new TextView(this);
-            fileLine.setText(fileContentsLines[i]);
-            //Add to table row
-            tableRow.addView(fileLine);
-        }
 
+        //fileContentsLines appears to have one element even if fileContents is of length zero. Only update table layout if
+        //fileContents is greater than zero
+        if(fileContents.length() > 0)
+        {
+            for (String fileContentsLine : fileContentsLines) {
+                //Create a row to add to the table layout
+                TableRow tableRow = new TableRow(this);
+                tableRow.setPadding(10, 10, 10, 10);
+                tableLayout.addView(tableRow);
+
+                //Create a text view to add to the row
+                TextView fileLine = new TextView(this);
+
+                //Create the delete button to delete the current row
+                Button deleteRowButton = new Button(this);
+                deleteRowButton.setText("X");
+                //Button Functionality
+                deleteRowButton.setOnClickListener(new deleteRowButtonListener());
+
+                //Create new GradientDrawable for the textview styling
+                GradientDrawable border = new GradientDrawable();
+                border.setStroke(2, Color.BLACK);
+
+                //Some styling for the text view
+                fileLine.setText(fileContentsLine);
+                fileLine.setTextSize(20);
+                fileLine.setTypeface(null, Typeface.BOLD);
+                fileLine.setBackground(border);
+                fileLine.setPadding(10, 10, 10, 10);
+
+                //Add to table row
+                tableRow.addView(fileLine);
+                tableRow.addView(deleteRowButton);
+            }
+
+        }
         //Confirmation message
-        Toast toast = Toast.makeText(this, "CONTENTS WRITTEN ON SCREEN",Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, "CONTENTS WRITTEN ON SCREEN",Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -194,7 +274,7 @@ public class CustomLanguagePage extends AppCompatActivity {
         myFileOut.close();
 
         //Confirmation toast
-        Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -202,10 +282,87 @@ public class CustomLanguagePage extends AppCompatActivity {
     {
         Button btn = findViewById(R.id.btnCustomWordsClear);
         btn.setOnClickListener(view -> {
+
+            clearFile();
+            rowCounter = 0;
+            //Confirmation toast
+            Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_SHORT);
+            toast.show();
+
+        });
+    }
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, CustomLanguagePage.class);
+    }
+
+    //This writes the file contents to console for viewing purposes
+    //Not intended to be part of working code, call to display text file contents
+    public void displayFileContents() throws IOException {
+        String fileName = "myOtherText.txt";
+        File file = new File(getFilesDir(), fileName);
+
+        //create the file if it doesn't exist
+        if(!file.exists()) {
+
+            FileOutputStream outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
+        }
+
+        FileInputStream inputStream = openFileInput(fileName);
+        //Initialize a byte array
+        byte[] buffer = new byte[inputStream.available()];
+
+        //Fill byte array with contents of file (file contents are in byte form)
+        inputStream.read(buffer);
+
+        //Use built in String constructor to convert byte array into string
+        String fileContents = new String(buffer);
+
+        //Close file
+        inputStream.close();
+
+        //Write the string to TextView
+        System.out.println("File Contents" +fileContents);
+
+    }
+
+    public static class deleteRowButtonListener extends AppCompatActivity implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            //Get Reference to TableRow which is the parent of button and textview
+            TableRow tableRow = (TableRow) v.getParent();
+
+            //Get Reference to TableLayout which is the parent of tableRow
+            TableLayout tableLayout = (TableLayout) tableRow.getParent();
+
+            //Delete the textview and button from tableRow
+            tableRow.removeAllViews();
+            //Delete tableRow from tableLayout
+            tableLayout.removeView(tableRow);
+
+            //Re-Write the file
+            clearFile(v.getContext());
+            int numberOfRows = tableLayout.getChildCount();
+            for(int i =0; i < numberOfRows; i++)
+            {
+                //Get access to the children of tableLayout
+                TableRow row = (TableRow) tableLayout.getChildAt(i);
+                TextView rowText = (TextView) row.getChildAt(0);
+                try {
+                    writeToFile(v.getContext(), rowText.getText().toString());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        public static void clearFile(Context context)
+        {
             //Open file
             FileOutputStream myFileOut = null;
             try {
-                myFileOut = openFileOutput("myOtherText.txt", MODE_PRIVATE);
+                myFileOut = context.openFileOutput("myOtherText.txt", MODE_PRIVATE);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -213,25 +370,23 @@ public class CustomLanguagePage extends AppCompatActivity {
             //Write fileContents to the opened file
             try {
                 myFileOut.write("".getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            //Close file
-            try {
                 myFileOut.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
 
-            //Confirmation toast
-            Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_LONG);
-            toast.show();
-        });
-    }
+        private static void writeToFile(Context context, String fileContents) throws IOException {
 
+            //Open file
+            fileContents += "\n";
+            FileOutputStream myFileOut = context.openFileOutput("myOtherText.txt", MODE_PRIVATE | MODE_APPEND);
 
-    public static Intent makeIntent(Context context) {
-        return new Intent(context, CustomLanguagePage.class);
+            //Write fileContents to the opened file
+            myFileOut.write(fileContents.getBytes());
+
+            //Close file
+            myFileOut.close();
+        }
     }
 }
