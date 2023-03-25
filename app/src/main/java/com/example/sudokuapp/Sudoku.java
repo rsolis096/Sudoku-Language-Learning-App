@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Pair;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -35,6 +37,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static String[] spanish;
     private static int wordBank;
     private static boolean manual;
+    private static boolean audioMode;
     private static boolean translationDirection = true;
     private static int mRemainingCells;
     private static long minutes, seconds;
@@ -62,6 +65,13 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
     public static void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
 
+    public static void setAudioMode(boolean audioMode) {
+        Sudoku.audioMode = audioMode;
+    }
+
+    public static boolean getAudioMode() {
+        return audioMode;
+    }
     public static Pair<Integer, Integer> getBoxSize() {return boxSize;}
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
     public static int getWordBank() {return wordBank;}
@@ -95,6 +105,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     }
 
     Sudoku(Context THIS, Chronometer t){
+
         //Default GRID_SIZE
         setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
@@ -105,6 +116,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         userInputButtons = new LinkedList<>();
         context = THIS;
         mTimer = t;
+
         //Temporarily hardcoded, another solution should best be found
         int[] categoryArrays = {
                         R.array.numbers,//0
@@ -124,9 +136,14 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
 
         //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
-        if(getWordBank() == 0)
-            selectedArrayId = categoryArrays[0];
+        int selectedArrayId = categoryArrays[0];
+
+        if(!getAudioMode()) {
+            selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
+            if(getWordBank() == 0)
+                selectedArrayId = categoryArrays[0];
+        }
+
         String[] inputString = context.getResources().getStringArray(selectedArrayId);
 
         //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
@@ -176,6 +193,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 rows,
                                 cols
                             );
+                    mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
                 }
                 //This initializes ElementButtons that correspond to empty Cells
                 else
@@ -267,8 +285,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-
-
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
@@ -276,8 +292,16 @@ public class Sudoku extends AppCompatActivity implements Serializable
             Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
             //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
+
+
+            //Only
+            if(buttonPressed.isLocked && audioMode)
+            {
+                Sound.playSound(buttonPressed.getContext(), buttonPressed.getTranslation(translationDirection));
+            }
+
             //Only allow unlocked cells to be changed (givens cannot be changed)
-            if (buttonPressed.isClickable()) {
+            if (!buttonPressed.isLocked) {
 
                 //**************************************//
                 //          MANUAL INPUT                //

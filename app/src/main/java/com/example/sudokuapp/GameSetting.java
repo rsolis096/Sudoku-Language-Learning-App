@@ -25,7 +25,7 @@ public class GameSetting extends AppCompatActivity {
         // fill in english or spanish
         setupLanguageMode();
         // type in answer or choose answer
-        setUpModeSwitch();
+        setUpSwitch();
         // Set up buttons: back, confirm, word bank
         setupLaunchButton();
     }
@@ -50,13 +50,22 @@ public class GameSetting extends AppCompatActivity {
     }
 
     //set up for the input mode switch
-    private void setUpModeSwitch() {
+    private void setUpSwitch() {
         SwitchCompat switchInputMode = findViewById(R.id.switchInputMode);
         switchInputMode.setChecked(false);
         switchInputMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
             Sudoku.setInputMode(!Sudoku.getInputMode());
         });
+
+        SwitchCompat switchAudioMode = findViewById(R.id.switchAudio);
+        switchAudioMode.setChecked(false);
+        Sudoku.setAudioMode(false);
+        switchAudioMode.setOnClickListener(view -> {
+            //flips the mode when the switch is triggered based on current state
+            Sudoku.setAudioMode(!Sudoku.getAudioMode());
+        });
+
     }
     //set up for the three difficulty buttons
     private void setupDifficulty() {
