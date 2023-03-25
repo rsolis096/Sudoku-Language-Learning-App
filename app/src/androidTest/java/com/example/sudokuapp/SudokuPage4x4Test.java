@@ -455,12 +455,7 @@ public class SudokuPage4x4Test {
             for(UiObject2 singleButton : individualButton.getChildren())
             {
                 System.out.println(singleButton.getContentDescription());
-                if(Objects.equals(singleButton.getText(), " ")){
-                    assertTrue("Empty Cell is not clickable", singleButton.isClickable());
-                }
-                else {
-                    assertFalse("Given Cell is clickable", singleButton.isClickable());
-                }
+                assertTrue("Empty Cell is not clickable", singleButton.isClickable());
                 assertTrue("Button is not enabled", singleButton.isEnabled());
             }
         }

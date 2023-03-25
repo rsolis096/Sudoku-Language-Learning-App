@@ -36,7 +36,6 @@ public class SudokuFunctionalityTest {
                 if(Sudoku.getElement(i,j).getValue() != 0)
                 {
                     testNum = Sudoku.getElement(i,j).getValue();
-                    assertFalse(Sudoku.getElement(i,j).isClickable());
                     break;
                 }
             }

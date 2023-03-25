@@ -42,6 +42,10 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         return index2;
     }
 
+    public boolean getLocked() {
+        return isLocked;
+    }
+
     //Setter methods
     public void setValue(int value) {
         mValue = value;
@@ -62,6 +66,9 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     {
         index1 = i;
         index2 = j;
+    }
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 
     public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {

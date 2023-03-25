@@ -96,7 +96,7 @@ public class MainMenuTest {
         optionsButton.click();
         //Give App time to catchup
         Thread.sleep(500);
-        backButton = mDevice.findObject(By.res("com.example.sudokuapp:id/optionsBackToMenu"));
+        backButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnCustomWordsBack"));
         backButton.isEnabled();
         backButton.isClickable();
         backButton.click();
