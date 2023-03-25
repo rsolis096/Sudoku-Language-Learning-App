@@ -16,6 +16,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     private int  index1;
     private int index2;
     boolean isWrong;
+    boolean isLocked;
 
     //Getter methods
     public int getValue() {
@@ -73,13 +74,14 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = v;
         mEnglish = e;
         mTranslation = t;
-        this.setClickable(!locked);
+        //this.setClickable(!locked);
+        isLocked = locked;
 
         if(mValue == 0)
         {
             this.setText(" ");
         }
-        else
+        else if(!Sudoku.getAudioMode())
         {
             //translationDirection = true -> english to spanish
             if(Sudoku.getTranslationDirection())
@@ -87,6 +89,9 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
             else
                 this.setText(mTranslation);
 
+        }
+        else {
+            this.setText(String.valueOf(this.getValue()));
         }
         this.setTextColor(Color.BLACK);
     }
@@ -97,15 +102,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = 0;
         mEnglish = "";
         mTranslation ="";
-        this.setClickable(false);
-    }
-
-    public ElementButton(Context context, int num)
-    {
-        super(context);
-        mValue = num;
-        mEnglish = "";
-        mTranslation ="";
-        this.setClickable(false);
+        isLocked = true;
+        //this.setClickable(false);
     }
 }
