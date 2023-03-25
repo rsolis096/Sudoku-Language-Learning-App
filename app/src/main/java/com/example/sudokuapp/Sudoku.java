@@ -24,6 +24,8 @@ import java.util.Objects;
 
 public class Sudoku extends AppCompatActivity implements Serializable
 {
+    private static WordBank bank = new WordBank();
+    private static int wordBank;
     private static int GRID_SIZE;
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
@@ -31,9 +33,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private final Context context;
     private transient final Chronometer mTimer;
     private static int difficulty;
-    public static String[] english;
-    public static String[] spanish;
-    private static int wordBank;
+
     private static boolean manual;
     private static boolean translationDirection = true;
     private static int mRemainingCells;
@@ -64,6 +64,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     public static Pair<Integer, Integer> getBoxSize() {return boxSize;}
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
+    public static WordBank getBank() {return bank;}
     public static int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
@@ -105,43 +106,15 @@ public class Sudoku extends AppCompatActivity implements Serializable
         userInputButtons = new LinkedList<>();
         context = THIS;
         mTimer = t;
-        //Temporarily hardcoded, another solution should best be found
-        int[] categoryArrays = {
-                        R.array.numbers,//0
-                        R.array.greetings_easy,//1
-                        R.array.greetings_medium,//2
-                        R.array.greetings_hard,//3
-                        R.array.directions_easy,//4
-                        R.array.directions_medium,//5
-                        R.array.directions_hard,//6
-                        R.array.family_easy,//7
-                        R.array.family_medium,//7
-                        R.array.family_hard,//8
-                        R.array.food_drinks_easy,//10
-                        R.array.food_drinks_medium,//9
-                        R.array.food_drinks_hard//10
-                };
 
-
-        //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
-        if(getWordBank() == 0)
-            selectedArrayId = categoryArrays[0];
-        String[] inputString = context.getResources().getStringArray(selectedArrayId);
-
-        //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
-        english = new String[GRID_SIZE];
-        spanish = new String[GRID_SIZE];
-        //From word pair, words are split by commas. Separate and place in corresponding array. Eg. inputString[0] = "english,spanish"
-        for(int i = 0; i < GRID_SIZE; i++)
-        {
-            String [] wordPair = inputString[i].split(",");
-            english[i] = wordPair[0];
-            spanish[i] = wordPair[1];
-        }
-
-        //english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
-        //spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
+        mTimer.start();
+        mTimer.setOnChronometerTickListener(chronometer -> {
+            //convert base time to readable minutes and seconds
+            minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
+            seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
+        });
+        //creates a word bank object that contains english and spanish arrays of the word bank
+        bank.generateWordBank(GRID_SIZE, difficulty, wordBank, context);
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -169,8 +142,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
                     mSudokuBoard[rows][cols] =
                             new ElementButton(
                                 GenerateBoard.mGeneratedBoard[rows][cols],
-                                english[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
-                                spanish[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
+                                bank.getEnglish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
+                                bank.getSpanish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
@@ -188,8 +161,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 mSudokuAnswerBoard[rows][cols] =
                         new ElementButton(
                                 GenerateBoard.mAnswerBoard[rows][cols],
-                                english[GenerateBoard.mAnswerBoard[rows][cols] - 1],
-                                spanish[GenerateBoard.mAnswerBoard[rows][cols] - 1],
+                                bank.getEnglish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
+                                bank.getSpanish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
@@ -199,15 +172,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
             }
         }
-    }
-
-    public void startTimer(Chronometer t) {
-        t.start();
-        t.setOnChronometerTickListener(chronometer -> {
-            //convert base time to readable minutes and seconds
-            minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
-            seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
-        });
     }
     public void checkIfCompleted(View view) {
 
@@ -227,7 +191,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-    //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
+    //pairs each cell to a proper border drawable to make the board look like sudoku
     public void setCellDesign(ElementButton cell) {
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
@@ -311,7 +275,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 //User input in Spanish
                                 if (translationDirection) {
                                     //Check to see if the userInput is a valid word in play
-                                    if (Objects.equals(spanish[i].toLowerCase(), userInput.toLowerCase())) {
+                                    if (Objects.equals(bank.getSpanish()[i].toLowerCase(), userInput.toLowerCase())) {
                                         index = i;
                                         validUserInput = true;
                                         break;
@@ -319,7 +283,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 }
                                 //User input in English
                                 else {
-                                    if (Objects.equals(english[i].toLowerCase(), userInput.toLowerCase())) {
+                                    if (Objects.equals(bank.getEnglish()[i].toLowerCase(), userInput.toLowerCase())) {
                                         index = i;
                                         validUserInput = true;
                                         break;
@@ -430,9 +394,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows* boxSize.first) + cols]);
+                                wordButton.setText(bank.getSpanish()[(rows* boxSize.first) + cols]);
                             else
-                                wordButton.setText(english[(rows* boxSize.first) + cols]);
+                                wordButton.setText(bank.getEnglish()[(rows* boxSize.first) + cols]);
 
                             //Button holds its index of where it is in subgrid
                             wordButton.setIndex(rows*boxSize.first + cols);

@@ -2,15 +2,10 @@ package com.example.sudokuapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.io.Serializable;
 
@@ -34,7 +29,7 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
         Sudoku.setInputMode(false);
         Sudoku.setTranslationDirection(true);
         Sudoku.setGRID_SIZE(9);
-        WordBank.resetWordBank();
+        WordBankPage.resetWordBank();
     }
     @Override
     public void onBackPressed() {

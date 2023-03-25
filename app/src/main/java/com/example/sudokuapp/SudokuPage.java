@@ -47,7 +47,6 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
             //changed the sudoku constructor to pass the timer so it could be assigned as a member variable, not sure if there's a cleaner way to implement this
             myGame = new Sudoku(this, cmTimer);
-            myGame.startTimer(cmTimer);
         }
 
         int elementButtonCounterForTag = 0;
@@ -123,7 +122,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             Sudoku.setInputMode(false);
             Sudoku.setTranslationDirection(true);
             Sudoku.setGRID_SIZE(9);
-            WordBank.resetWordBank();
+            WordBankPage.resetWordBank();
             Intent intent = new Intent(context, MainMenu.class);
             context.startActivity(intent);
         });
