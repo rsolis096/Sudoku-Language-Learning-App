@@ -9,8 +9,8 @@ import java.util.List;
 public class WordBank {
 
     private String[] english, spanish;
-    private static int value;
-    public void generateWordBank(int size, int dif, int val, Context context) {
+    private static int value = 0;
+    public void generateWordBank(int size, int dif, Context context) {
         int[] categoryArrays = {
                 R.array.numbers,//0
                 R.array.greetings_easy,//1
@@ -31,11 +31,11 @@ public class WordBank {
         int selectedArrayId;
         String[] inputString;
 
-        if(val == 0) {
-            inputString = context.getResources().getStringArray(0);
+        if(value == 0) {
+            inputString = context.getResources().getStringArray(categoryArrays[0]);
         }
         else {
-            selectedArrayId = categoryArrays[val + dif];
+            selectedArrayId = categoryArrays[value + dif];
             //shuffles word bank to give random values at random indices (except for number word bank)
             inputString = context.getResources().getStringArray(selectedArrayId);
             List<String> temp = Arrays.asList(inputString);

@@ -118,7 +118,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         builder.setPositiveButton("Yes", (dialog, which) -> {
             //reset all options
             Sudoku.setDifficulty(0);
-            Sudoku.setWordBank(0);
+            WordBank.setValue(0);
             Sudoku.setInputMode(false);
             Sudoku.setTranslationDirection(true);
             Sudoku.setGRID_SIZE(9);

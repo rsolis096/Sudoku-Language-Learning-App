@@ -26,8 +26,7 @@ import java.util.Objects;
 
 public class Sudoku extends AppCompatActivity implements Serializable
 {
-    private static WordBank bank = new WordBank();
-    private static int wordBank;
+    private static final WordBank bank = new WordBank();
     private static int GRID_SIZE;
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
@@ -45,7 +44,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
-    public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
     public static void decreaseRemainingCells() {--mRemainingCells;}
@@ -75,7 +73,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static Pair<Integer, Integer> getBoxSize() {return boxSize;}
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
     public static WordBank getBank() {return bank;}
-    public static int getWordBank() {return wordBank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
@@ -125,7 +122,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
         });
         //creates a word bank object that contains english and spanish arrays of the word bank
-        bank.generateWordBank(GRID_SIZE, difficulty, wordBank, context);
+        bank.generateWordBank(GRID_SIZE, difficulty, context);
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
