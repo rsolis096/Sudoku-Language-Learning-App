@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".GameSetting">
 
+
+
     <Button
         android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
@@ -97,10 +99,22 @@
         android:text="@string/input_mode"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.207"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.83" />
+        app:layout_constraintVertical_bias="0.831" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchAudio"
+        android:layout_width="141dp"
+        android:layout_height="59dp"
+        android:text="Audio mode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.814"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.831" />
 
     <ToggleButton
         android:id="@+id/tgBtnEngToSpan"
