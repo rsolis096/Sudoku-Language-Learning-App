@@ -53,7 +53,19 @@ public class GameSetting extends AppCompatActivity {
         if(DataModel.getCheckedCategory() == 5)
         {
             System.out.println(DataModel.getCustomWordsLength() + "sdadsadasda");
-            if (DataModel.getCustomWordsLength() <= 4 && DataModel.getCustomWordsLength() >= 0) {
+            if(DataModel.getCustomWordsLength() <= 3)
+            {
+                fourXFour.setChecked(false);
+                nineXNine.setChecked(false);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+                fourXFour.setEnabled(false);
+                nineXNine.setEnabled(false);
+                sixXSix.setEnabled(false);
+                twelveXTwelve.setEnabled(false);
+                findViewById(R.id.btnConfirm).setClickable(false);
+            }
+            else if (DataModel.getCustomWordsLength() <= 4) {
                 fourXFour.setChecked(true);
                 nineXNine.setChecked(false);
                 sixXSix.setChecked(false);
@@ -64,7 +76,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(false);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(4);
-            } else if (DataModel.getCustomWordsLength() <= 6 && DataModel.getCustomWordsLength() >= 5) {
+            } else if (DataModel.getCustomWordsLength() <= 6) {
                 fourXFour.setChecked(false);
                 sixXSix.setChecked(true);
                 nineXNine.setChecked(false);
@@ -75,7 +87,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(true);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(6);
-            } else if (DataModel.getCustomWordsLength() <= 9 && DataModel.getCustomWordsLength() >= 7) {
+            } else if (DataModel.getCustomWordsLength() <= 9) {
                 fourXFour.setChecked(false);
                 nineXNine.setChecked(true);
                 sixXSix.setChecked(false);
@@ -86,7 +98,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(true);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(9);
-            } else if (DataModel.getCustomWordsLength() <= 12 && DataModel.getCustomWordsLength() >= 8) {
+            } else if (DataModel.getCustomWordsLength() <= 12) {
                 fourXFour.setChecked(false);
                 nineXNine.setChecked(true);
                 sixXSix.setChecked(false);

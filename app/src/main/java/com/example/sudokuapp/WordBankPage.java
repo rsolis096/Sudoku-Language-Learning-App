@@ -3,9 +3,12 @@ package com.example.sudokuapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
 
 public class WordBankPage extends AppCompatActivity {
 
@@ -19,6 +22,19 @@ public class WordBankPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_bank);
+
+        //Get number of words in file
+        if(DataModel.getCustomWordsLength() == 0)
+        {
+            try {
+                String fileContents = FileIO.readFile(this);
+                String [] fileContentsLines = fileContents.split("\\n");
+                DataModel.setCustomWordsLength(fileContentsLines.length);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         setupWordBank();
         // back button close activity
         setupClose();
