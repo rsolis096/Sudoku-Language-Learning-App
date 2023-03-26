@@ -2,6 +2,7 @@ package com.example.sudokuapp;
 
 import android.content.Context;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
 public class WordBank {
 
     private String[] english, spanish;
-    private static int value = 0;
-    public void generateWordBank(int size, int dif, Context context) {
+    public void generateWordBank(int size, int dif, Context context) throws IOException {
+
         int[] categoryArrays = {
                 R.array.numbers,//0
                 R.array.greetings_easy,//1
@@ -31,11 +32,24 @@ public class WordBank {
         int selectedArrayId;
         String[] inputString;
 
-        if(value == 0) {
+        //If the user has selected Numbers
+        if(DataModel.getCheckedCategory() == 0) {
             inputString = context.getResources().getStringArray(categoryArrays[0]);
         }
+        //If the user selects custom category
+        else if(DataModel.getCategoryIndex() == 13)
+        {
+            String textFileContents = FileIO.readFile(context);
+            inputString = textFileContents.split("\\n");
+            for(var str : inputString)
+            {
+                //Remove lingering new line characters
+                str = str.replace("\\n", "");
+            }
+        }
+        //The user has selected a category other than numbers or custom
         else {
-            selectedArrayId = categoryArrays[value + dif];
+            selectedArrayId = categoryArrays[DataModel.getCategoryIndex() + dif];
             //shuffles word bank to give random values at random indices (except for number word bank)
             inputString = context.getResources().getStringArray(selectedArrayId);
             List<String> temp = Arrays.asList(inputString);
@@ -53,8 +67,6 @@ public class WordBank {
             spanish[i] = wordPair[1];
         }
     }
-    static void setValue(int val) {value = val;}
-    static int getValue() {return value;}
     String[] getEnglish() {return english;}
     String[] getSpanish() {return spanish;}
 }
