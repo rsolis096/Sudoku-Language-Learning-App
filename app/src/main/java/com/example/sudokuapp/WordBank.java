@@ -54,7 +54,7 @@ public class WordBank {
         }
     }
     static void setValue(int val) {value = val;}
-    int getValue() {return value;}
+    static int getValue() {return value;}
     String[] getEnglish() {return english;}
     String[] getSpanish() {return spanish;}
 }

@@ -43,16 +43,6 @@ public class SudokuTest {
         assertTrue(Sudoku.getTranslationDirection());
     }
     @Test
-    public void setWordBank() {
-        Sudoku.setWordBank(2);
-        assertEquals(2, Sudoku.getWordBank());
-    }
-    @Test
-    public void getWordBank() {
-        Sudoku.setWordBank(2);
-        assertEquals(2, Sudoku.getWordBank());
-    }
-    @Test
     public void setRemainingCells() {
         Sudoku.setRemainingCells(5);
         assertEquals(5, Sudoku.getRemainingCells());
