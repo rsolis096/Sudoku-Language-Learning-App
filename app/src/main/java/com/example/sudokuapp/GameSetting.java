@@ -151,7 +151,7 @@ public class GameSetting extends AppCompatActivity {
         });
         Button btnWB = findViewById(R.id.btnWB);
         btnWB.setOnClickListener(view -> {
-            Intent intent = WordBank.makeIntent(GameSetting.this);
+            Intent intent = WordBankPage.makeIntent(GameSetting.this);
             startActivity(intent);
         });
         //return to main menu

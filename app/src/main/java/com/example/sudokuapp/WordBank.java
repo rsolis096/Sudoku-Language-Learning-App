@@ -1,81 +1,60 @@
 package com.example.sudokuapp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ToggleButton;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class WordBank extends AppCompatActivity {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-    public static int checkedIndex = 0;
-    public static ToggleButton[] toggleButtons;
+public class WordBank {
 
+    private String[] english, spanish;
+    private static int value = 0;
+    public void generateWordBank(int size, int dif, Context context) {
+        int[] categoryArrays = {
+                R.array.numbers,//0
+                R.array.greetings_easy,//1
+                R.array.greetings_medium,//2
+                R.array.greetings_hard,//3
+                R.array.directions_easy,//4
+                R.array.directions_medium,//5
+                R.array.directions_hard,//6
+                R.array.family_easy,//7
+                R.array.family_medium,//8
+                R.array.family_hard,//9
+                R.array.food_drinks_easy,//10
+                R.array.food_drinks_medium,//11
+                R.array.food_drinks_hard//12
+        };
 
-    public static Intent makeIntent(Context gameSetting) {
-        return new Intent(gameSetting, WordBank.class);
+        //Given a category from categoryArrays, generate a puzzle using that category.
+        int selectedArrayId;
+        String[] inputString;
+
+        if(value == 0) {
+            inputString = context.getResources().getStringArray(categoryArrays[0]);
+        }
+        else {
+            selectedArrayId = categoryArrays[value + dif];
+            //shuffles word bank to give random values at random indices (except for number word bank)
+            inputString = context.getResources().getStringArray(selectedArrayId);
+            List<String> temp = Arrays.asList(inputString);
+            Collections.shuffle(temp);
+            temp.toArray(inputString);
+        }
+        //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
+        english = new String[size];
+        spanish = new String[size];
+        //From word pair, words are split by commas. Separate and place in corresponding array. Eg. inputString[0] = "english,spanish"
+        for(int i = 0; i < size; i++)
+        {
+            String [] wordPair = inputString[i].split(",");
+            english[i] = wordPair[0];
+            spanish[i] = wordPair[1];
+        }
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_bank);
-        setupWordBank();
-        // back button close activity
-        setupClose();
-    }
-
-    private void setupClose() {
-        Button btnback = findViewById(R.id.btnback);
-        btnback.setOnClickListener(view -> finish());
-    }
-
-    public static void resetWordBank() {
-        checkedIndex = 0;
-    }
-
-    private void setupWordBank() {
-
-        toggleButtons = new ToggleButton[5];
-        toggleButtons[0] = findViewById(R.id.btnNumbers);
-        toggleButtons[1] = findViewById(R.id.btnfamily);
-        toggleButtons[2] = findViewById(R.id.btnGreeting);
-        toggleButtons[3] = findViewById(R.id.btnFood);
-        toggleButtons[4] = findViewById(R.id.btnDirection);
-
-        toggleButtons[checkedIndex].setChecked(true);
-
-        toggleButtons[0].setOnClickListener(view-> {
-            Sudoku.setWordBank(0);
-            toggleButtons[checkedIndex].setChecked(false);
-            toggleButtons[0].setChecked(true);
-            checkedIndex = 0;
-        });
-        toggleButtons[1].setOnClickListener(view -> {
-            Sudoku.setWordBank(7);
-            toggleButtons[checkedIndex].setChecked(false);
-            toggleButtons[1].setChecked(true);
-            checkedIndex = 1;
-        });
-        toggleButtons[2].setOnClickListener(view -> {
-            Sudoku.setWordBank(1);
-            toggleButtons[checkedIndex].setChecked(false);
-            toggleButtons[2].setChecked(true);
-            checkedIndex = 2;
-        });
-        toggleButtons[3].setOnClickListener(view -> {
-            Sudoku.setWordBank(10);
-            toggleButtons[checkedIndex].setChecked(false);
-            toggleButtons[3].setChecked(true);
-            checkedIndex = 3;
-        });
-        toggleButtons[4].setOnClickListener(view -> {
-            Sudoku.setWordBank(4);
-
-            toggleButtons[checkedIndex].setChecked(false);
-            toggleButtons[4].setChecked(true);
-            checkedIndex = 4;
-        });
-    }
+    static void setValue(int val) {value = val;}
+    static int getValue() {return value;}
+    String[] getEnglish() {return english;}
+    String[] getSpanish() {return spanish;}
 }
