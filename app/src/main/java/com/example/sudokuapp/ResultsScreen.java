@@ -25,7 +25,7 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
 
         //reset all options
         Sudoku.setDifficulty(0);
-        WordBank.setValue(0);
+        DataModel.setCategoryIndex(0);
         Sudoku.setInputMode(false);
         Sudoku.setTranslationDirection(true);
         Sudoku.setGRID_SIZE(9);

@@ -7,6 +7,9 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 import org.junit.Before;
+
+import java.io.IOException;
+
 public class SudokuFunctionalityTest {
 
     Sudoku testBoard;
@@ -17,7 +20,11 @@ public class SudokuFunctionalityTest {
 
         UiThreadStatement.runOnUiThread(() -> {
             t = new Chronometer(InstrumentationRegistry.getInstrumentation().getTargetContext());
-            testBoard = new Sudoku(InstrumentationRegistry.getInstrumentation().getTargetContext(), t);
+            try {
+                testBoard = new Sudoku(InstrumentationRegistry.getInstrumentation().getTargetContext(), t);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 

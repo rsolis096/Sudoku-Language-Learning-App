@@ -235,6 +235,14 @@ public class CustomLanguagePage extends AppCompatActivity {
         return new Intent(context, CustomLanguagePage.class);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        TableLayout tableLayout = findViewById(R.id.customWordsTable);
+        DataModel.setCustomWordsLength(tableLayout.getChildCount());
+        System.out.println(DataModel.getCustomWordsLength());
+    }
+
     //Deletes a row from the TableLayout. Re-Writes the entire text file
     public static class deleteRowButtonListener implements View.OnClickListener {
         @Override
