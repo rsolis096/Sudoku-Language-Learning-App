@@ -2,6 +2,7 @@ package com.example.sudokuapp;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -20,6 +21,8 @@ import androidx.test.uiautomator.Until;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
@@ -72,11 +75,85 @@ public class CustomWordsTest {
         assertTrue("Start Button is not enabled", startButton.isEnabled());
         assertTrue("Start Button is not clickable", startButton.isClickable());
 
-        //Check options page
+        //open options page
         optionsButton.click();
-        //Give App time to catchup
+
+        //check views and buttons
+        UiObject2 text = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/customWordsHeader")),3000);
+        assertEquals(text.getText(),"Your Custom Words");
+        UiObject2 scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsScrollView")));
+        assertTrue(scroll.isEnabled());
+        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
+        assertTrue(scroll.isEnabled());
+        UiObject2 add = mDevice.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsAdd")));
+        assertTrue(add.isEnabled());
+        assertTrue(add.isClickable());
+        UiObject2 clear = mDevice.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsClear")));
+        assertTrue(clear.isEnabled());
+        assertTrue(clear.isClickable());
+        //clear word bank
+        clear.click();
+        Thread.sleep(1000);
+        assertEquals(0,scroll.getChildCount());
+
+
+        //add words
+        add.click();
+
+        //check pop-up views and buttons
+        text = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
+        assertEquals(text.getText(),"Enter Word Pair:");
+        UiObject2 enterEng = mDevice.findObject(By.text("English"));
+        UiObject2 enterSpa = mDevice.findObject(By.text("Spanish"));
+        UiObject2 cancel = mDevice.findObject(By.res("android:id/button2"));
+        UiObject2 ok = mDevice.findObject(By.res("android:id/button1"));
+        assertTrue(enterEng.isEnabled());
+        assertTrue(enterEng.isClickable());
+        assertTrue(enterSpa.isEnabled());
+        assertTrue(enterSpa.isClickable());
+        assertTrue(cancel.isEnabled());
+        assertTrue(cancel.isClickable());
+        assertTrue(ok.isEnabled());
+        assertTrue(ok.isClickable());
+
+        //words to be put in
+        String[] engWord = {"one", "two","three","four"};
+        String[] spaWord = {"uno", "dos","tres","cuatro"};
+        //valid input 1
+        enterEng.setText("one");
+        enterSpa.setText("uno");
+        ok.click();
+
+        //valid input 2-4
+        for(int i = 1;i<4;i++){
+            add = mDevice.wait(Until.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsAdd"))),3000);
+            add.click();
+            Thread.sleep(1000);
+            enterEng = mDevice.findObject(By.text("English"));
+            enterSpa = mDevice.findObject(By.text("Spanish"));
+            ok = mDevice.findObject(By.res("android:id/button1"));
+            enterEng.setText(engWord[i]);
+            enterSpa.setText(spaWord[i]);
+            ok.click();
+        }
+
         Thread.sleep(500);
 
+        //Check the table rows in the scroll view
+        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
+        List<UiObject2> tableRows = scroll.getChildren();
+
+        String[] wordpair = {"one, uno", "two, dos", "three, tres", "four, cuatro"};
+        for(int i = 0;i<4;i++) {
+            tableRows.get(i).findObject(By.text(wordpair[i]));
+        }
+
+        //clear again and check
+        clear = mDevice.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsClear")));
+        //clear word bank
+        clear.click();
+        Thread.sleep(1000);
+        assertEquals(0,scroll.getChildCount());
 
 
         // go back
@@ -84,8 +161,6 @@ public class CustomWordsTest {
         backButton.isEnabled();
         backButton.isClickable();
         backButton.click();
-
-
 
     }
 
