@@ -67,11 +67,15 @@ public class SudokuFunctionality {
         //Updates the text of buttons
         for(int i = 0; i < Sudoku.getGridSize(); i++) {
             for (int j = 0; j < Sudoku.getGridSize(); j++) {
-                if (Sudoku.getElement(i,j).isClickable()) {
+                if (Sudoku.getElement(i,j).isClickable() && !Sudoku.getElement(i,j).getLocked()) {
                     Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(Sudoku.getTranslationDirection()));
-                    Sudoku.getElement(i,j).setTextColor(Color.rgb(0,0,0));
-                    Sudoku.getElement(i,j).setClickable(false);
                 }
+                else if(Sudoku.getElement(i,j).getLocked())
+                {
+                    Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(!Sudoku.getTranslationDirection()));
+                }
+                Sudoku.getElement(i,j).setTextColor(Color.rgb(0,0,0));
+                Sudoku.getElement(i,j).setClickable(false);
             }
         }
     }
