@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -16,7 +17,6 @@ public class GameSetting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setting);
-
 
         // difficulty level
         setupDifficulty();
@@ -29,6 +29,99 @@ public class GameSetting extends AppCompatActivity {
         // Set up buttons: back, confirm, word bank
         setupLaunchButton();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("Resumed");
+
+        if(DataModel.getCheckedCategory() == 5)
+        {
+            System.out.println("fasfasfasfa");
+            EnableToggles();
+        }
+    }
+
+    public void EnableToggles()
+    {
+        ToggleButton nineXNine = findViewById(R.id.tgBtn9);
+        ToggleButton fourXFour = findViewById(R.id.tgBtn4);
+        ToggleButton twelveXTwelve = findViewById(R.id.tgBtn12);
+        ToggleButton sixXSix = findViewById(R.id.tgBtn6);
+
+        //If custom word bank is selected
+        if(DataModel.getCheckedCategory() == 5)
+        {
+            System.out.println(DataModel.getCustomWordsLength() + "sdadsadasda");
+            if(DataModel.getCustomWordsLength() <= 3)
+            {
+                fourXFour.setChecked(false);
+                nineXNine.setChecked(false);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+                fourXFour.setEnabled(false);
+                nineXNine.setEnabled(false);
+                sixXSix.setEnabled(false);
+                twelveXTwelve.setEnabled(false);
+                findViewById(R.id.btnConfirm).setClickable(false);
+            }
+            else if (DataModel.getCustomWordsLength() <= 4) {
+                fourXFour.setChecked(true);
+                nineXNine.setChecked(false);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+
+                fourXFour.setEnabled(true);
+                nineXNine.setEnabled(false);
+                sixXSix.setEnabled(false);
+                twelveXTwelve.setEnabled(false);
+                Sudoku.setGRID_SIZE(4);
+            } else if (DataModel.getCustomWordsLength() <= 6) {
+                fourXFour.setChecked(false);
+                sixXSix.setChecked(true);
+                nineXNine.setChecked(false);
+                twelveXTwelve.setChecked(false);
+
+                fourXFour.setEnabled(true);
+                nineXNine.setEnabled(false);
+                sixXSix.setEnabled(true);
+                twelveXTwelve.setEnabled(false);
+                Sudoku.setGRID_SIZE(6);
+            } else if (DataModel.getCustomWordsLength() <= 9) {
+                fourXFour.setChecked(false);
+                nineXNine.setChecked(true);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+
+                fourXFour.setEnabled(true);
+                nineXNine.setEnabled(true);
+                sixXSix.setEnabled(true);
+                twelveXTwelve.setEnabled(false);
+                Sudoku.setGRID_SIZE(9);
+            } else if (DataModel.getCustomWordsLength() <= 12) {
+                fourXFour.setChecked(false);
+                nineXNine.setChecked(true);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+
+                fourXFour.setEnabled(true);
+                nineXNine.setEnabled(true);
+                sixXSix.setEnabled(true);
+                twelveXTwelve.setEnabled(true);
+            } else {
+                fourXFour.setChecked(false);
+                nineXNine.setChecked(true);
+                sixXSix.setChecked(false);
+                twelveXTwelve.setChecked(false);
+
+                fourXFour.setEnabled(true);
+                nineXNine.setEnabled(true);
+                sixXSix.setEnabled(true);
+                twelveXTwelve.setEnabled(true);
+            }
+        }
+    }
+
 
     private void setupLanguageMode() {
         ToggleButton btnEngToSpan = findViewById(R.id.tgBtnEngToSpan);
@@ -60,10 +153,9 @@ public class GameSetting extends AppCompatActivity {
 
         SwitchCompat switchAudioMode = findViewById(R.id.switchAudio);
         switchAudioMode.setChecked(false);
-        Sudoku.setAudioMode(false);
         switchAudioMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
-            Sudoku.setAudioMode(!Sudoku.getAudioMode());
+            DataModel.setAudioMode(true);
         });
 
     }

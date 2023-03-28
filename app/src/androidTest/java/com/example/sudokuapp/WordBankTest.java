@@ -8,15 +8,17 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 
+import java.io.IOException;
+
 
 public class WordBankTest {
 
     @Test
-    public void generateWordBank() {
+    public void generateWordBank() throws IOException {
         WordBank bank = new WordBank();
         Context context = InstrumentationRegistry.getInstrumentation().getContext();
-        
-        WordBank.setValue(0);
+
+        DataModel.setCategoryIndex(0);
         bank.generateWordBank(9,0,context);
 
 
@@ -34,16 +36,16 @@ public class WordBankTest {
 
         assertArrayEquals(eng, bank.getEnglish());
         assertArrayEquals(span, bank.getSpanish());
-        assertEquals(WordBank.getValue(), 9);
+        assertEquals(DataModel.getCategoryIndex(), 9);
     }
     @Test
     public void setValue() {
-        WordBank.setValue(4);
-        assertEquals(WordBank.getValue(), 4);
+        DataModel.setCategoryIndex(4);
+        assertEquals(DataModel.getCategoryIndex(), 4);
     }
     @Test
     public void getValue() {
-        WordBank.setValue(10);
-        assertEquals(WordBank.getValue(), 10);
+        DataModel.setCategoryIndex(10);
+        assertEquals(DataModel.getCategoryIndex(), 10);
     }
 }

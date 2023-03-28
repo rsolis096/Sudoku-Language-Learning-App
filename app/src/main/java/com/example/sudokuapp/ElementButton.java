@@ -84,11 +84,12 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         //this.setClickable(!locked);
         isLocked = locked;
 
+        //Sets the text of the element button depending on if its audio mode, a given, or an empty cell
         if(mValue == 0)
         {
             this.setText(" ");
         }
-        else if(!Sudoku.getAudioMode())
+        else if(!DataModel.getAudioMode())
         {
             //translationDirection = true -> english to spanish
             if(Sudoku.getTranslationDirection())
