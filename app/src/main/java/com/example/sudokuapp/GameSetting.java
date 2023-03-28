@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class GameSetting extends AppCompatActivity {
+    private boolean togglesDisabled;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +36,21 @@ public class GameSetting extends AppCompatActivity {
         super.onResume();
         System.out.println("Resumed");
 
+        //Disable toggle buttons when there arent enough custom words to accomdate a board size
         if(DataModel.getCheckedCategory() == 5)
         {
-            System.out.println("fasfasfasfa");
+            togglesDisabled = true;
+            DisableToggles();
+        }
+        //Enable when switch to another grid or when you have enough words
+        else if (togglesDisabled)
+        {
+            togglesDisabled = false;
             EnableToggles();
         }
     }
 
-    public void EnableToggles()
+    public void DisableToggles()
     {
         ToggleButton nineXNine = findViewById(R.id.tgBtn9);
         ToggleButton fourXFour = findViewById(R.id.tgBtn4);
@@ -122,6 +130,25 @@ public class GameSetting extends AppCompatActivity {
         }
     }
 
+    public void EnableToggles()
+    {
+        ToggleButton nineXNine = findViewById(R.id.tgBtn9);
+        ToggleButton fourXFour = findViewById(R.id.tgBtn4);
+        ToggleButton twelveXTwelve = findViewById(R.id.tgBtn12);
+        ToggleButton sixXSix = findViewById(R.id.tgBtn6);
+
+        fourXFour.setChecked(false);
+        sixXSix.setChecked(false);
+        nineXNine.setChecked(true);
+        twelveXTwelve.setChecked(false);
+
+        fourXFour.setEnabled(true);
+        nineXNine.setEnabled(true);
+        sixXSix.setEnabled(true);
+        twelveXTwelve.setEnabled(true);
+        findViewById(R.id.btnConfirm).setClickable(true);
+    }
+
 
     private void setupLanguageMode() {
         ToggleButton btnEngToSpan = findViewById(R.id.tgBtnEngToSpan);
@@ -139,7 +166,6 @@ public class GameSetting extends AppCompatActivity {
             btnEngToSpan.setChecked(false);
             btnSpanToEng.setChecked(true);
         });
-
     }
 
     //set up for the input mode switch
