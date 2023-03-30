@@ -2,6 +2,7 @@ package com.example.sudokuapp;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 
 // Utility class to provide general Functionality for Sudoku Board
@@ -34,6 +35,49 @@ public class SudokuFunctionality {
         }
         return false;
     }
+
+    static public void colorBoxAndColumns(int row, int col, boolean selected)
+    {
+        //Check rows and cols
+
+        //Check box
+        int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
+        int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
+
+        if(selected)
+        {
+            for (int i = 0; i < Sudoku.getGridSize(); i++) {
+                GradientDrawable gd = new GradientDrawable();
+                gd.setColor(Color.rgb(226,235,243)); // set the fill color
+                gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
+                Sudoku.getElement(i, col).setBackground(gd);
+                Sudoku.getElement(row, i).setBackground(gd);
+            }
+            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
+
+                    GradientDrawable gd = new GradientDrawable();
+                    gd.setColor(Color.rgb(226,235,243)); // set the fill color
+                    gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
+                    Sudoku.getElement(i + box_start_row, j + box_start_col).setBackground(gd);
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < Sudoku.getGridSize(); i++) {
+                Sudoku.setCellDesign(Sudoku.getElement(row, i));
+                Sudoku.setCellDesign(Sudoku.getElement(i, col));
+            }
+            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
+                    Sudoku.setCellDesign(Sudoku.getElement(i + box_start_row, j + box_start_col));
+                }
+            }
+
+        }
+
+    }
+
 
     //checks a given element for any conflicts with other cell values
     static public boolean validSpot(ElementButton cell, String givenInput)
