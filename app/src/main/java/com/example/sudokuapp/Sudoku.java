@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Log;
 import android.util.Pair;
@@ -17,13 +18,17 @@ import android.widget.TableRow;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Objects;
 
 
 public class Sudoku extends AppCompatActivity implements Serializable
 {
+    private static final WordBank bank = new WordBank();
     private static int GRID_SIZE;
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
@@ -31,9 +36,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private final Context context;
     private transient final Chronometer mTimer;
     private static int difficulty;
-    public static String[] english;
-    public static String[] spanish;
-    private static int wordBank;
+
     private static boolean manual;
     private static boolean translationDirection = true;
     private static int mRemainingCells;
@@ -42,7 +45,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
     //setters for game settings
     public static void setDifficulty(int d) {difficulty = d;}
-    public static void setWordBank(int index) {wordBank = index;}
     public static void setInputMode(boolean m) {manual = m;}
     public static void setTranslationDirection(boolean t) {translationDirection = t;}
     public static void decreaseRemainingCells() {--mRemainingCells;}
@@ -61,10 +63,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
         boxSize = temp;
     }
     public static void setRemainingCells(int remainingCells) {mRemainingCells = remainingCells;}
-
     public static Pair<Integer, Integer> getBoxSize() {return boxSize;}
     public static ElementButton getElement(int rows, int cols) {return mSudokuBoard[rows][cols];}
-    public static int getWordBank() {return wordBank;}
+    public static WordBank getBank() {return bank;}
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
@@ -94,7 +95,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
         return mTimer;
     }
 
-    Sudoku(Context THIS, Chronometer t){
+    Sudoku(Context THIS, Chronometer t) throws IOException {
+
         //Default GRID_SIZE
         setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
@@ -105,43 +107,15 @@ public class Sudoku extends AppCompatActivity implements Serializable
         userInputButtons = new LinkedList<>();
         context = THIS;
         mTimer = t;
-        //Temporarily hardcoded, another solution should best be found
-        int[] categoryArrays = {
-                        R.array.numbers,//0
-                        R.array.greetings_easy,//1
-                        R.array.greetings_medium,//2
-                        R.array.greetings_hard,//3
-                        R.array.directions_easy,//4
-                        R.array.directions_medium,//5
-                        R.array.directions_hard,//6
-                        R.array.family_easy,//7
-                        R.array.family_medium,//7
-                        R.array.family_hard,//8
-                        R.array.food_drinks_easy,//10
-                        R.array.food_drinks_medium,//9
-                        R.array.food_drinks_hard//10
-                };
 
-
-        //Given a category from categoryArrays, generate a puzzle using that category.
-        int selectedArrayId = categoryArrays[getWordBank() + getDifficulty()];
-        if(getWordBank() == 0)
-            selectedArrayId = categoryArrays[0];
-        String[] inputString = context.getResources().getStringArray(selectedArrayId);
-
-        //There is a one to one correspondence between english and spanish. the string at index 0 in spanish is the translation to the string at index 0 in english
-        english = new String[GRID_SIZE];
-        spanish = new String[GRID_SIZE];
-        //From word pair, words are split by commas. Separate and place in corresponding array. Eg. inputString[0] = "english,spanish"
-        for(int i = 0; i < GRID_SIZE; i++)
-        {
-            String [] wordPair = inputString[i].split(",");
-            english[i] = wordPair[0];
-            spanish[i] = wordPair[1];
-        }
-
-        //english  = new String[] {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty", "Twenty-one", "Twenty-two", "Twenty-three", "Twenty-four", "Twenty-five"};
-        //spanish = new String[]{"Uno", "Dos", "Tres", "Cuatro", "Cinco", "Seis", "Siete", "Ocho", "Nueve", "Diez", "Once", "Doce", "Trece", "Catorce", "Quince", "Dieciséis", "Diecisiete", "Dieciocho", "Diecinueve", "Veinte", "Veintiuno", "Veintidós", "Veintitrés", "Veinticuatro", "Veinticinco"};
+        mTimer.start();
+        mTimer.setOnChronometerTickListener(chronometer -> {
+            //convert base time to readable minutes and seconds
+            minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
+            seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
+        });
+        //creates a word bank object that contains english and spanish arrays of the word bank
+        bank.generateWordBank(GRID_SIZE, difficulty, context);
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -169,13 +143,16 @@ public class Sudoku extends AppCompatActivity implements Serializable
                     mSudokuBoard[rows][cols] =
                             new ElementButton(
                                 GenerateBoard.mGeneratedBoard[rows][cols],
-                                english[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
-                                spanish[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
+                                bank.getEnglish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
+                                bank.getSpanish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
                                 cols
                             );
+                    //OnClickListener only made for given cells if in audio mode
+                    if(DataModel.getAudioMode())
+                        mSudokuBoard[rows][cols].setOnClickListener(new AudioElementButtonListener());
                 }
                 //This initializes ElementButtons that correspond to empty Cells
                 else
@@ -188,8 +165,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 mSudokuAnswerBoard[rows][cols] =
                         new ElementButton(
                                 GenerateBoard.mAnswerBoard[rows][cols],
-                                english[GenerateBoard.mAnswerBoard[rows][cols] - 1],
-                                spanish[GenerateBoard.mAnswerBoard[rows][cols] - 1],
+                                bank.getEnglish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
+                                bank.getSpanish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
                                 context,
                                 true,
                                 rows,
@@ -199,15 +176,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
             }
         }
-    }
-
-    public void startTimer(Chronometer t) {
-        t.start();
-        t.setOnChronometerTickListener(chronometer -> {
-            //convert base time to readable minutes and seconds
-            minutes = ((SystemClock.elapsedRealtime() - t.getBase())/1000) / 60;
-            seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
-        });
     }
     public void checkIfCompleted(View view) {
 
@@ -227,7 +195,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-    //looks complicated, just pairs each cell to a proper border drawable to make the board look like sudoku
+    //pairs each cell to a proper border drawable to make the board look like sudoku
     public void setCellDesign(ElementButton cell) {
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
@@ -267,8 +235,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-
-
     private class ElementButtonListener implements View.OnClickListener {
 
         @Override
@@ -276,8 +242,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
             Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
             //Save the calling object as to a variable for easier to understand use.
             ElementButton buttonPressed = (ElementButton) view;
+
             //Only allow unlocked cells to be changed (givens cannot be changed)
-            if (buttonPressed.isClickable()) {
+            if (!buttonPressed.isLocked) {
 
                 //**************************************//
                 //          MANUAL INPUT                //
@@ -311,7 +278,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 //User input in Spanish
                                 if (translationDirection) {
                                     //Check to see if the userInput is a valid word in play
-                                    if (Objects.equals(spanish[i].toLowerCase(), userInput.toLowerCase())) {
+                                    if (Objects.equals(bank.getSpanish()[i].toLowerCase(), userInput.toLowerCase())) {
                                         index = i;
                                         validUserInput = true;
                                         break;
@@ -319,7 +286,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 }
                                 //User input in English
                                 else {
-                                    if (Objects.equals(english[i].toLowerCase(), userInput.toLowerCase())) {
+                                    if (Objects.equals(bank.getEnglish()[i].toLowerCase(), userInput.toLowerCase())) {
                                         index = i;
                                         validUserInput = true;
                                         break;
@@ -430,9 +397,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
                             //If true, the user should be given the choice of words in spanish
                             if(translationDirection)
-                                wordButton.setText(spanish[(rows* boxSize.first) + cols]);
+                                wordButton.setText(bank.getSpanish()[(rows* boxSize.first) + cols]);
                             else
-                                wordButton.setText(english[(rows* boxSize.first) + cols]);
+                                wordButton.setText(bank.getEnglish()[(rows* boxSize.first) + cols]);
 
                             //Button holds its index of where it is in subgrid
                             wordButton.setIndex(rows*boxSize.first + cols);
@@ -450,6 +417,137 @@ public class Sudoku extends AppCompatActivity implements Serializable
                     alert.setView(input);
                     alert.show();
                 }
+            }
+        }
+    }
+
+    private class AudioElementButtonListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
+            //Save the calling object as to a variable for easier to understand use.
+            ElementButton buttonPressed = (ElementButton) view;
+
+            Sound.playSound(buttonPressed.getContext(), buttonPressed.getTranslation(translationDirection));
+
+            //**************************************//
+            //          MANUAL INPUT                //
+            //**************************************//
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            if (manual) {
+                builder.setTitle("Enter Word:");
+                //Set up the input type (manual text input)
+                EditText input = new EditText(view.getContext());
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                //Display popup
+                builder.setView(input);
+                //When the user hits ok
+                builder.setPositiveButton("OK", (dialog, which) ->
+                {
+                    //This index tracks the position userInput is in the english or spanish array
+                    //Get the string currently in the EditText object
+                    String userInput = input.getText().toString();
+
+                    //If nothing is entered, close and do nothing
+                    if(userInput.length() != 0)
+                    {
+                        //Boolean to store whether or not the userInput string is part of the words in play
+                        boolean validUserInput = false;
+
+                        //Check if userInput string is part of the words in play
+                        for (int i = 0; i < GRID_SIZE; i++)
+                        {
+                            //User input in Spanish
+                            if (!translationDirection) {
+                                //Check to see if the userInput is a valid word in play
+                                if (Objects.equals(bank.getSpanish()[i].toLowerCase(), userInput.toLowerCase())) {
+                                    validUserInput = true;
+                                    break;
+                                }
+                            }
+                            //User input in English
+                            else {
+                                if (Objects.equals(bank.getEnglish()[i].toLowerCase(), userInput.toLowerCase())) {
+                                    validUserInput = true;
+                                    break;
+                                }
+                            }
+                        }
+                        // If userInput string is a valid word in play, and is placed in a valid position by sudoku rules
+                        if (Objects.equals(buttonPressed.getTranslation(!Sudoku.getTranslationDirection()), userInput) &&  validUserInput) {
+                            buttonPressed.setText(buttonPressed.getTranslation(!Sudoku.getTranslationDirection()));
+                        }
+                        // If userInput string is not a valid word in play
+                        else {
+                            Toast t = Toast.makeText(context, "You cant place that there!", Toast.LENGTH_LONG);
+                            t.show();
+                        }
+                    }
+                });
+
+                //Set up popup cancel button
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                //Display the popup
+                builder.show();
+            }
+            //Below uses buttons to assist user with word input
+            else
+            {
+                //**************************************//
+                //          ASSISTED INPUT              //
+                //**************************************//
+
+                // Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
+                AlertDialog alert = builder.create();
+                alert.setTitle("Enter Word:");
+                Context dialogContext = builder.getContext();
+
+                // Exit the popup with no changes made
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+                // Builds the pre defined inputs the user may choose from
+                TableLayout input = new TableLayout(dialogContext);
+                input.setContentDescription("assistDialogLayout");
+
+                //Set tag counter for assistButtons
+                int assistButtonTagCounter = 0;
+                for (int rows = 0; rows < boxSize.second; rows++)
+                {
+                    TableRow tableRow = new TableRow(dialogContext);
+                    //Set tag for each table row to be used in testing
+                    tableRow.setTag("assistTableRowTag" + (rows));
+
+                    for (int cols = 0; cols < boxSize.first; cols++)
+                    {
+                        //These buttons represents the 1 of 9 buttons user can choose words from
+                        AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
+                        //Set tag each AssistedInputButton for testing
+                        wordButton.setTag("assistButtonTag" + (assistButtonTagCounter));
+                        assistButtonTagCounter++;
+
+                        //If true, the user should be given the choice of words in spanish
+                        if(!translationDirection)
+                            wordButton.setText(bank.getSpanish()[(rows* boxSize.first) + cols]);
+                        else
+                            wordButton.setText(bank.getEnglish()[(rows* boxSize.first) + cols]);
+
+                        //Button holds its index of where it is in subgrid
+                        wordButton.setIndex(rows*boxSize.first + cols);
+                        //Button stores a reference to the AlertDialog so it can close it in onclicklistener
+                        wordButton.setAssociatedAlertDialog(alert);
+                        //Stores a reference to the ElementButton that called it when it was pressed
+                        wordButton.setCallingButton(buttonPressed);
+                        //Button Functionality
+                        wordButton.setOnClickListener(new AudioAssistedInputButtonListener());
+                        tableRow.setId(View.generateViewId());
+                        tableRow.addView(wordButton);
+                    }
+                    input.addView(tableRow);
+                }
+                alert.setView(input);
+                alert.show();
             }
         }
     }
@@ -494,9 +592,28 @@ public class Sudoku extends AppCompatActivity implements Serializable
             //closes dialog box after a button is pressed
             wordButtonPressed.AssociatedAlertDialog.cancel();
         }
-
     }
 
+    private class AudioAssistedInputButtonListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View view)
+        {
+            AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
+            Log.i("Word Pressed:", wordButtonPressed.getText().toString());
+            Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
+
+            if(Objects.equals(wordButtonPressed.callingButton.getTranslation(!Sudoku.getTranslationDirection()), wordButtonPressed.getText().toString()))
+            {
+                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
+                wordButtonPressed.callingButton.setClickable(false);
+            }
+
+            //closes dialog box after a button is pressed
+            wordButtonPressed.AssociatedAlertDialog.cancel();
+        }
+
+    }
 }
 
 

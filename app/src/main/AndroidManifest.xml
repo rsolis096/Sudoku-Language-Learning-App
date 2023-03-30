@@ -16,7 +16,7 @@
             android:name=".Tutorialpage1"
             android:exported="false" />
         <activity
-            android:name=".WordBank"
+            android:name=".WordBankPage"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity

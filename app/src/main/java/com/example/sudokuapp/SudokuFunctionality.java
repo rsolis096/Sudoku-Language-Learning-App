@@ -42,13 +42,13 @@ public class SudokuFunctionality {
         if(cell.isClickable()) {
             if (!Sudoku.getTranslationDirection()) {
                 for (int i = 0; i < Sudoku.getGridSize(); i++) {
-                    if (Sudoku.english[i].equalsIgnoreCase(givenInput)) {
+                    if (Sudoku.getBank().getEnglish()[i].equalsIgnoreCase(givenInput)) {
                         checkNum = i + 1;
                     }
                 }
             } else {
                 for (int i = 0; i < Sudoku.getGridSize(); i++) {
-                    if (Sudoku.spanish[i].equalsIgnoreCase(givenInput)) {
+                    if (Sudoku.getBank().getSpanish()[i].equalsIgnoreCase(givenInput)) {
                         checkNum = i + 1;
                     }
                 }
@@ -67,11 +67,15 @@ public class SudokuFunctionality {
         //Updates the text of buttons
         for(int i = 0; i < Sudoku.getGridSize(); i++) {
             for (int j = 0; j < Sudoku.getGridSize(); j++) {
-                if (Sudoku.getElement(i,j).isClickable()) {
+                if (Sudoku.getElement(i,j).isClickable() && !Sudoku.getElement(i,j).getLocked()) {
                     Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(Sudoku.getTranslationDirection()));
-                    Sudoku.getElement(i,j).setTextColor(Color.rgb(0,0,0));
-                    Sudoku.getElement(i,j).setClickable(false);
                 }
+                else if(Sudoku.getElement(i,j).getLocked())
+                {
+                    Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(!Sudoku.getTranslationDirection()));
+                }
+                Sudoku.getElement(i,j).setTextColor(Color.rgb(0,0,0));
+                Sudoku.getElement(i,j).setClickable(false);
             }
         }
     }
@@ -88,14 +92,14 @@ public class SudokuFunctionality {
                 //If true, english is board language, spanish is the language the user should input
                 if(Sudoku.getTranslationDirection())
                 {
-                    Sudoku.getElement(i,j).setEnglish(Sudoku.english[GenerateBoard.mAnswerBoard[i][j]-1]);
-                    Sudoku.getElement(i,j).setTranslation(Sudoku.spanish[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    Sudoku.getElement(i,j).setEnglish(Sudoku.getBank().getEnglish()[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    Sudoku.getElement(i,j).setTranslation(Sudoku.getBank().getSpanish()[GenerateBoard.mAnswerBoard[i][j]-1]);
                     System.out.println("English to spanish");
                 }
                 else
                 {
-                    Sudoku.getElement(i,j).setEnglish(Sudoku.spanish[GenerateBoard.mAnswerBoard[i][j]-1]);
-                    Sudoku.getElement(i,j).setTranslation(Sudoku.english[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    Sudoku.getElement(i,j).setEnglish(Sudoku.getBank().getSpanish()[GenerateBoard.mAnswerBoard[i][j]-1]);
+                    Sudoku.getElement(i,j).setTranslation(Sudoku.getBank().getEnglish()[GenerateBoard.mAnswerBoard[i][j]-1]);
                     System.out.println("Spanish to english");
                     System.out.println(Sudoku.getElement(i,j).getEnglish() +", "+Sudoku.getElement(i,j).getTranslation(Sudoku.getTranslationDirection()));
                 }

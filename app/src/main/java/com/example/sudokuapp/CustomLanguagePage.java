@@ -17,21 +17,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 
+
 public class CustomLanguagePage extends AppCompatActivity {
-
-    public static int rowCounter;
-
-    public CustomLanguagePage() {
-        rowCounter = 0;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +31,7 @@ public class CustomLanguagePage extends AppCompatActivity {
 
         //Fill page with file contents
         try {
-            //Read the file and update the table layout
-            readFile();
+            populateTableLayout();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -67,11 +57,10 @@ public class CustomLanguagePage extends AppCompatActivity {
         btn.setOnClickListener(view -> finish());
     }
 
+    //Creates the pop up that the user interacts with to add words
     private void setupAddRow(){
         Button btnCustom = findViewById(R.id.btnCustomWordsAdd);
         btnCustom.setOnClickListener(view -> {
-            //Increase row amount
-            rowCounter++;
             //Get reference to Table Layout
             TableLayout tableLayout = findViewById(R.id.customWordsTable);
 
@@ -79,18 +68,17 @@ public class CustomLanguagePage extends AppCompatActivity {
             TableRow tableRow = new TableRow(this);
             tableRow.setPadding(10,10,10,10);
 
-            //Sets its Content Description for testing
-            tableRow.setContentDescription("customWordsTableRow" + rowCounter);
+            //Sets its Content Description for testing (needs more thought)
+            //tableRow.setContentDescription("customWordsTableRow" + rowCounter);
 
             //Create the content to be placed in the row
-            // Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
+            //Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter Word Pair:");
 
-            //Set Up Rows to place User input EditTexts
+            //Set Up rows in TableLayout pop up to place User input from EditTexts
             TableLayout userInputLayout = new TableLayout(view.getContext());
             builder.setView(userInputLayout);
-
             TableRow userInputRowOne = new TableRow(view.getContext());
             TableRow userInputRowTwo = new TableRow(view.getContext());
             userInputLayout.addView(userInputRowOne);
@@ -111,13 +99,14 @@ public class CustomLanguagePage extends AppCompatActivity {
             userInputRowOne.addView(englishInput);
             userInputRowTwo.addView(spanishInput);
 
-            //When the user hits ok
+            //When the user hits ok, update the screen, append to the file
             builder.setPositiveButton("OK", (dialog, which) ->
             {
                 //Get the string currently in the EditText object
                 String userEnglishInput = englishInput.getText().toString();
                 String userSpanishInput = spanishInput.getText().toString();
 
+                //Do not add empty lines
                 if(englishInput.length() == 0 || spanishInput.length() == 0)
                 {
                     //Confirmation message
@@ -128,13 +117,12 @@ public class CustomLanguagePage extends AppCompatActivity {
                 {
                     //Create the content to be placed in the row
                     TextView tableRowText = new TextView(this);
-                    String displayString = userEnglishInput +", " + userSpanishInput + "\n";
+                    String displayString = userEnglishInput +", " + userSpanishInput;
 
                     //Create the delete button to delete the current row
                     Button deleteRowButton = new Button(this);
                     deleteRowButton.setText("X");
                     deleteRowButton.setOnClickListener(new deleteRowButtonListener());
-
 
                     // Create a new GradientDrawable with the desired border color and width
                     GradientDrawable border = new GradientDrawable();
@@ -147,13 +135,14 @@ public class CustomLanguagePage extends AppCompatActivity {
                     tableRowText.setBackground(border);
                     tableRowText.setPadding(10,10,10,10);
 
-
+                    //Place the new views on screen
                     tableRow.addView(tableRowText);
                     tableRow.addView(deleteRowButton);
                     tableLayout.addView(tableRow);
 
+                    //Append the file with the updated line
                     try {
-                        writeToFile(displayString);
+                        FileIO.writeToFile(this,displayString);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -170,63 +159,25 @@ public class CustomLanguagePage extends AppCompatActivity {
         });
     }
 
-    public void clearFile()
-    {
-        //Remove all TableRows from TableLayout
-        TableLayout tableLayout = findViewById(R.id.customWordsTable);
-        tableLayout.removeAllViews();
+    //Places the user input words onto the TableLayout
+    private void populateTableLayout() throws IOException {
 
-        //Open file
-        FileOutputStream myFileOut = null;
-        try {
-            myFileOut = openFileOutput("myOtherText.txt", MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        //Read the contents of the text file and write them to a string
+        String fileContents = FileIO.readFile(this);
+        System.out.println("ACTUAL STRING " + fileContents);
 
-        //Write fileContents to the opened file
-        try {
-            myFileOut.write("".getBytes());
-            myFileOut.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void readFile() throws IOException {
-
-        String fileName = "myOtherText.txt";
-        File file = new File(getFilesDir(), fileName);
-
-        //create the file if it doesn't exist
-        if(!file.exists()) {
-            FileOutputStream outputStream = openFileOutput(fileName, MODE_PRIVATE);
-        }
-
-        FileInputStream inputStream = openFileInput(fileName);
-        //Initialize a byte array
-        byte[] buffer = new byte[inputStream.available()];
-
-        //Fill byte array with contents of file (file contents are in byte form)
-        inputStream.read(buffer);
-
-        //Use built in String constructor to convert byte array into string
-        String fileContents = new String(buffer);
-        //Write the string to TableLayout to individual rows
-        String[] fileContentsLines = fileContents.split("\\n");
-
-        //Close file
-        inputStream.close();
-
-        //Get a reference to the Table Layout
-        TableLayout tableLayout = findViewById(R.id.customWordsTable);
-
-
-        //fileContentsLines appears to have one element even if fileContents is of length zero. Only update table layout if
-        //fileContents is greater than zero
-        if(fileContents.length() > 0)
+        //Only proceed if the string fileContents has contents
+        if(fileContents.length() != 0)
         {
-            for (String fileContentsLine : fileContentsLines) {
+            //Place the contents of the string fileContents into an array of string lines
+            String [] fileContentsLines = fileContents.split("\\n");
+
+            //Get a reference to the Table Layout
+            TableLayout tableLayout = findViewById(R.id.customWordsTable);
+
+            //Populate the table layout with rows and the lines of strings in fileContentsLines
+            for (String str : fileContentsLines) {
+
                 //Create a row to add to the table layout
                 TableRow tableRow = new TableRow(this);
                 tableRow.setPadding(10, 10, 10, 10);
@@ -235,18 +186,17 @@ public class CustomLanguagePage extends AppCompatActivity {
                 //Create a text view to add to the row
                 TextView fileLine = new TextView(this);
 
-                //Create the delete button to delete the current row
+                //Create the delete button to delete add to the row
                 Button deleteRowButton = new Button(this);
                 deleteRowButton.setText("X");
                 //Button Functionality
                 deleteRowButton.setOnClickListener(new deleteRowButtonListener());
 
                 //Create new GradientDrawable for the textview styling
+                //Some styling for the text view
                 GradientDrawable border = new GradientDrawable();
                 border.setStroke(2, Color.BLACK);
-
-                //Some styling for the text view
-                fileLine.setText(fileContentsLine);
+                fileLine.setText(str);
                 fileLine.setTextSize(20);
                 fileLine.setTypeface(null, Typeface.BOLD);
                 fileLine.setBackground(border);
@@ -256,39 +206,28 @@ public class CustomLanguagePage extends AppCompatActivity {
                 tableRow.addView(fileLine);
                 tableRow.addView(deleteRowButton);
             }
-
+            //Confirmation message
+            Toast toast = Toast.makeText(this, "CONTENTS WRITTEN ON SCREEN", Toast.LENGTH_SHORT);
+            toast.show();
         }
-        //Confirmation message
-        Toast toast = Toast.makeText(this, "CONTENTS WRITTEN ON SCREEN",Toast.LENGTH_SHORT);
-        toast.show();
     }
 
-    private void writeToFile(String fileContents) throws IOException {
-        //Open file
-        FileOutputStream myFileOut = openFileOutput("myOtherText.txt", MODE_PRIVATE | MODE_APPEND);
-
-        //Write fileContents to the opened file
-        myFileOut.write(fileContents.getBytes());
-
-        //Close file
-        myFileOut.close();
-
-        //Confirmation toast
-        Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
+    //Clears the TableLayout of all its contents and empties the text file
     private void setupClear() throws FileNotFoundException
     {
         Button btn = findViewById(R.id.btnCustomWordsClear);
         btn.setOnClickListener(view -> {
 
-            clearFile();
-            rowCounter = 0;
+            //Clear table rows
+            TableLayout tableLayout = findViewById(R.id.customWordsTable);
+            tableLayout.removeAllViews();
+
+            //Clear the file
+            FileIO.clearFile(this);
+
             //Confirmation toast
             Toast toast = Toast.makeText(this, "FILE CONTENTS UPDATED",Toast.LENGTH_SHORT);
             toast.show();
-
         });
     }
 
@@ -296,37 +235,16 @@ public class CustomLanguagePage extends AppCompatActivity {
         return new Intent(context, CustomLanguagePage.class);
     }
 
-    //This writes the file contents to console for viewing purposes
-    //Not intended to be part of working code, call to display text file contents
-    public void displayFileContents() throws IOException {
-        String fileName = "myOtherText.txt";
-        File file = new File(getFilesDir(), fileName);
-
-        //create the file if it doesn't exist
-        if(!file.exists()) {
-
-            FileOutputStream outputStream = openFileOutput(fileName, Context.MODE_PRIVATE);
-        }
-
-        FileInputStream inputStream = openFileInput(fileName);
-        //Initialize a byte array
-        byte[] buffer = new byte[inputStream.available()];
-
-        //Fill byte array with contents of file (file contents are in byte form)
-        inputStream.read(buffer);
-
-        //Use built in String constructor to convert byte array into string
-        String fileContents = new String(buffer);
-
-        //Close file
-        inputStream.close();
-
-        //Write the string to TextView
-        System.out.println("File Contents" +fileContents);
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        TableLayout tableLayout = findViewById(R.id.customWordsTable);
+        DataModel.setCustomWordsLength(tableLayout.getChildCount());
+        System.out.println(DataModel.getCustomWordsLength());
     }
 
-    public static class deleteRowButtonListener extends AppCompatActivity implements View.OnClickListener {
+    //Deletes a row from the TableLayout. Re-Writes the entire text file
+    public static class deleteRowButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
 
@@ -341,8 +259,9 @@ public class CustomLanguagePage extends AppCompatActivity {
             //Delete tableRow from tableLayout
             tableLayout.removeView(tableRow);
 
-            //Re-Write the file
-            clearFile(v.getContext());
+            //Clear the file so it can be re written
+            FileIO.clearFile(v.getContext());
+
             int numberOfRows = tableLayout.getChildCount();
             for(int i =0; i < numberOfRows; i++)
             {
@@ -350,43 +269,13 @@ public class CustomLanguagePage extends AppCompatActivity {
                 TableRow row = (TableRow) tableLayout.getChildAt(i);
                 TextView rowText = (TextView) row.getChildAt(0);
                 try {
-                    writeToFile(v.getContext(), rowText.getText().toString());
+                    FileIO.writeToFile(v.getContext(), rowText.getText().toString());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
 
-        public static void clearFile(Context context)
-        {
-            //Open file
-            FileOutputStream myFileOut = null;
-            try {
-                myFileOut = context.openFileOutput("myOtherText.txt", MODE_PRIVATE);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
 
-            //Write fileContents to the opened file
-            try {
-                myFileOut.write("".getBytes());
-                myFileOut.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private static void writeToFile(Context context, String fileContents) throws IOException {
-
-            //Open file
-            fileContents += "\n";
-            FileOutputStream myFileOut = context.openFileOutput("myOtherText.txt", MODE_PRIVATE | MODE_APPEND);
-
-            //Write fileContents to the opened file
-            myFileOut.write(fileContents.getBytes());
-
-            //Close file
-            myFileOut.close();
-        }
     }
 }

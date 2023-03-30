@@ -16,6 +16,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1826955210">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Pixel_3_API_31" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1647706418">
           <value>
             <AndroidTestResultsTableState>
@@ -95,6 +108,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="Google&#10; Pixel 6" value="120" />
                   <entry key="Pixel_3_API_30" value="120" />
+                  <entry key="Pixel_3_API_31" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -265,7 +279,9 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="1B181FDF6001TN" value="120" />
                   <entry key="Duration" value="90" />
+                  <entry key="Google&#10; Pixel 6" value="120" />
                   <entry key="Pixel_3_API_31" value="120" />
                   <entry key="Tests" value="360" />
                 </map>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -13,6 +14,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
 import java.io.Serializable;
 
 public class SudokuPage extends AppCompatActivity implements Serializable {
@@ -46,8 +49,11 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             //Creates a timer on the game page
             Chronometer cmTimer = findViewById(R.id.gameTimerText);
             //changed the sudoku constructor to pass the timer so it could be assigned as a member variable, not sure if there's a cleaner way to implement this
-            myGame = new Sudoku(this, cmTimer);
-            myGame.startTimer(cmTimer);
+            try {
+                myGame = new Sudoku(this, cmTimer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         int elementButtonCounterForTag = 0;
@@ -119,11 +125,12 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         builder.setPositiveButton("Yes", (dialog, which) -> {
             //reset all options
             Sudoku.setDifficulty(0);
-            Sudoku.setWordBank(0);
+            DataModel.setCategoryIndex(0);
+            DataModel.setAudioMode(false);
             Sudoku.setInputMode(false);
             Sudoku.setTranslationDirection(true);
             Sudoku.setGRID_SIZE(9);
-            WordBank.resetWordBank();
+            WordBankPage.resetWordBank();
             Intent intent = new Intent(context, MainMenu.class);
             context.startActivity(intent);
         });
