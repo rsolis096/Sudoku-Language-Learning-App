@@ -1,9 +1,13 @@
 package com.example.sudokuapp;
 
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.view.View;
 
 // Utility class to provide general Functionality for Sudoku Board
 public class SudokuFunctionality {
@@ -24,7 +28,7 @@ public class SudokuFunctionality {
             //Check box
             int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
             int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
-            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
+            for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
                 for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
                     if (Sudoku.getElement(i + box_start_row, j + box_start_col).getValue() == num) {
                         return false;
@@ -36,7 +40,25 @@ public class SudokuFunctionality {
         return false;
     }
 
-    static public void colorBoxAndColumns(int row, int col, boolean selected)
+    public static void checkIfCompleted(View view) {
+
+        if(Sudoku.getRemainingCells() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("Game Finished!");
+            builder.setPositiveButton("Continue", (dialog, which) -> {
+                Intent intent = new Intent(view.getContext(), ResultsScreen.class);
+                view.getContext().startActivity(intent);
+            });
+            builder.setOnDismissListener(dialogInterface -> {
+                Intent intent = new Intent(view.getContext(), ResultsScreen.class);
+                view.getContext().startActivity(intent);
+            });
+            builder.show();
+        }
+    }
+
+    //Sets colors of relevant row column and box when an free cell is selected
+    static public void colorBoxColumnRow(int row, int col, boolean selected)
     {
         //Check rows and cols
 
@@ -47,19 +69,19 @@ public class SudokuFunctionality {
         if(selected)
         {
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
-                GradientDrawable gd = new GradientDrawable();
-                gd.setColor(Color.rgb(226,235,243)); // set the fill color
-                gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
-                Sudoku.getElement(i, col).setBackground(gd);
-                Sudoku.getElement(row, i).setBackground(gd);
+                GradientDrawable drawable = new GradientDrawable();
+                drawable.setColor(Color.rgb(226,235,243)); // set the fill color
+                drawable.setStroke(1, Color.rgb(0,0,0)); // set the border color and width
+                Sudoku.getElement(i, col).setBackground(drawable);
+                Sudoku.getElement(row, i).setBackground(drawable);
             }
-            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
-                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
+            for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
 
-                    GradientDrawable gd = new GradientDrawable();
-                    gd.setColor(Color.rgb(226,235,243)); // set the fill color
-                    gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
-                    Sudoku.getElement(i + box_start_row, j + box_start_col).setBackground(gd);
+                    GradientDrawable drawable = new GradientDrawable();
+                    drawable.setColor(Color.rgb(226,235,243)); // set the fill color
+                    drawable.setStroke(1, Color.rgb(0,0,0)); // set the border color and width
+                    Sudoku.getElement(i + box_start_row, j + box_start_col).setBackground(drawable);
                 }
             }
         }
@@ -106,9 +128,10 @@ public class SudokuFunctionality {
         return false;
     }
 
+    //Updates the text of buttons
     static public void updateGame()
     {
-        //Updates the text of buttons
+
         for(int i = 0; i < Sudoku.getGridSize(); i++) {
             for (int j = 0; j < Sudoku.getGridSize(); j++) {
                 if (Sudoku.getElement(i,j).isClickable() && !Sudoku.getElement(i,j).getLocked()) {
@@ -124,6 +147,7 @@ public class SudokuFunctionality {
         }
     }
 
+    //Solves the grid
     static public void solveGrid()
     {
         Sudoku.setRemainingCells(0);

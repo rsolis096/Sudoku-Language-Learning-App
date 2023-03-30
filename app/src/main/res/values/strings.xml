@@ -36,4 +36,5 @@
     <string name ="_0_00">0:00</string>
     <string name="here_is_your_time" />
     <string name="custom_words">Custom Words</string>
+    <string name="enter_your_answer">\"Enter your answer: \"</string>
 </resources>

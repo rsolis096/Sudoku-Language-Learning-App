@@ -1,12 +1,14 @@
 package com.example.sudokuapp;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.util.Log;
@@ -34,10 +36,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
     private final ElementButton[][] mSudokuAnswerBoard;
-    private static  Context context = null;
-    private static transient Chronometer mTimer = null;
+    private final Chronometer mTimer;
     private static int difficulty;
-
     public static boolean manual;
     private static boolean translationDirection = true;
     private static int mRemainingCells;
@@ -106,7 +106,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
             setGRID_SIZE(9);
         }
         userInputButtons = new LinkedList<>();
-        context = THIS;
         mTimer = t;
 
         mTimer.start();
@@ -116,7 +115,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
             seconds = ((SystemClock.elapsedRealtime() - t.getBase())/1000) % 60;
         });
         //creates a word bank object that contains english and spanish arrays of the word bank
-        bank.generateWordBank(GRID_SIZE, difficulty, context);
+        bank.generateWordBank(GRID_SIZE, difficulty, THIS);
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
@@ -146,7 +145,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 GenerateBoard.mGeneratedBoard[rows][cols],
                                 bank.getEnglish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
                                 bank.getSpanish()[GenerateBoard.mGeneratedBoard[rows][cols] - 1],
-                                context,
+                                THIS,
                                 true,
                                 rows,
                                 cols
@@ -158,7 +157,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                 //This initializes ElementButtons that correspond to empty Cells
                 else
                 {
-                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", context, false, rows, cols);
+                    mSudokuBoard[rows][cols] = new ElementButton(0, "", "", THIS, false, rows, cols);
                     //Set listener only for buttons that can change
                     mSudokuBoard[rows][cols].setOnClickListener(new ElementButtonListener());
                 }
@@ -168,7 +167,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 GenerateBoard.mAnswerBoard[rows][cols],
                                 bank.getEnglish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
                                 bank.getSpanish()[GenerateBoard.mAnswerBoard[rows][cols] - 1],
-                                context,
+                                THIS,
                                 true,
                                 rows,
                                 cols
@@ -178,66 +177,51 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
         }
     }
-    public static void checkIfCompleted(View view) {
 
-        if(getRemainingCells() == 0) {
-            Sudoku.mTimer.stop();
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("Game Finished!");
-            builder.setPositiveButton("Continue", (dialog, which) -> {
-                Intent intent = new Intent(context, ResultsScreen.class);
-                context.startActivity(intent);
-            });
-            builder.setOnDismissListener(dialogInterface -> {
-                Intent intent = new Intent(context, ResultsScreen.class);
-                context.startActivity(intent);
-            });
-            builder.show();
-        }
-    }
 
     //pairs each cell to a proper border drawable to make the board look like sudoku
     public static void setCellDesign(ElementButton cell) {
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
+        Context tempContext = cell.getContext();
 
         if((colCoordinate + 1) % boxSize.first == 0) {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_right));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom_right));
             }
             else if((rowCoordinate) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_right));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top_right));
             }
             else {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_right));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_right));
             }
         }
         else if((colCoordinate) % boxSize.first == 0) {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom_left));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom_left));
             }
             else if((rowCoordinate) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top_left));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top_left));
             }
             else {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_left));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_left));
             }
         }
         else {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_bottom));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom));
             }
             else if((rowCoordinate) % boxSize.second == 0) {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border_thick_top));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top));
             }
             else {
-                cell.setBackground(AppCompatResources.getDrawable(context, R.drawable.border));
+                cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border));
             }
         }
     }
 
     //Sets the ElementButton as the selected button for user input
-    private class ElementButtonListener implements View.OnClickListener {
+    private static class ElementButtonListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -248,23 +232,22 @@ public class Sudoku extends AppCompatActivity implements Serializable
             {
                 //If another button is selected, return the previous button to original state
                 //setCellDesign(SudokuPage.selectedButton);
-                SudokuFunctionality.colorBoxAndColumns(SudokuPage.selectedButton.getIndex1(), SudokuPage.selectedButton.getIndex2(), false);
+                SudokuFunctionality.colorBoxColumnRow(SudokuPage.selectedButton.getIndex1(), SudokuPage.selectedButton.getIndex2(), false);
             }
 
             SudokuPage.selectedButton = buttonPressed;
 
             //Update the new currently selected button
-            SudokuFunctionality.colorBoxAndColumns(buttonPressed.getIndex1(), buttonPressed.getIndex2(), true);
+            SudokuFunctionality.colorBoxColumnRow(buttonPressed.getIndex1(), buttonPressed.getIndex2(), true);
             GradientDrawable gd = new GradientDrawable();
             gd.setColor(Color.rgb(187,222,251)); // set the fill color
             gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
             buttonPressed.setBackground(gd);
-
-
         }
     }
 
-    private class AudioElementButtonListener implements View.OnClickListener {
+    //Unique functionality for clicking a given cell in audio mode
+    private static class AudioElementButtonListener implements View.OnClickListener {
 
         @Override
         public void onClick(View view) {
@@ -278,9 +261,9 @@ public class Sudoku extends AppCompatActivity implements Serializable
             //          MANUAL INPUT                //
             //**************************************//
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             if (manual) {
-                builder.setTitle("Enter Word:");
+                builder.setTitle("What did you hear?");
                 //Set up the input type (manual text input)
                 EditText input = new EditText(view.getContext());
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -324,12 +307,11 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         }
                         // If userInput string is not a valid word in play
                         else {
-                            Toast t = Toast.makeText(context, "You cant place that there!", Toast.LENGTH_LONG);
+                            Toast t = Toast.makeText(view.getContext(), "You cant place that there!", Toast.LENGTH_LONG);
                             t.show();
                         }
                     }
                 });
-
                 //Set up popup cancel button
                 builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
                 //Display the popup
@@ -388,6 +370,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
                         tableRow.addView(wordButton);
                     }
                     input.addView(tableRow);
+                    input.setStretchAllColumns(true);
+                    input.setShrinkAllColumns(true);
                 }
                 alert.setView(input);
                 alert.show();
@@ -395,56 +379,15 @@ public class Sudoku extends AppCompatActivity implements Serializable
         }
     }
 
-    //Class used for OnClickListener for userInput buttons when manual input is turned off
-    private class AssistedInputButtonListener implements View.OnClickListener
+    //This deals with the check after selecting an answer that had popped up after a given cell is pressed in audio mode
+    private static class AudioAssistedInputButtonListener implements View.OnClickListener
     {
         @Override
         public void onClick(View view)
         {
             AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
-            Log.i("Word Pressed:", wordButtonPressed.getText().toString());
-            Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
-
-            if(SudokuFunctionality.validSpot(wordButtonPressed.callingButton, wordButtonPressed.getText().toString()))
-            {
-                wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
-                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
-                wordButtonPressed.callingButton.setTextColor(Color.rgb(	0,138,216));
-                userInputButtons.add(wordButtonPressed.callingButton);
-                if(wordButtonPressed.callingButton.isWrong)
-                {
-                    decreaseRemainingCells();
-                }
-                wordButtonPressed.callingButton.isWrong = false;
-            }
-            else
-            {
-                wordButtonPressed.callingButton.setValue(wordButtonPressed.index + 1);
-                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
-                wordButtonPressed.callingButton.setTextColor(Color.rgb(255,114,118));
-                if(!wordButtonPressed.callingButton.isWrong)
-                {
-                    increaseRemainingCells();
-                }
-                wordButtonPressed.callingButton.isWrong = true;
-
-                userInputButtons.add(wordButtonPressed.callingButton);
-            }
-            //update cells and check completion
-            checkIfCompleted(view);
-            //closes dialog box after a button is pressed
-            wordButtonPressed.AssociatedAlertDialog.cancel();
-        }
-    }
-
-    private class AudioAssistedInputButtonListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View view)
-        {
-            AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
-            Log.i("Word Pressed:", wordButtonPressed.getText().toString());
-            Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
+            //Log.i("Word Pressed:", wordButtonPressed.getText().toString());
+            //Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
 
             if(Objects.equals(wordButtonPressed.callingButton.getTranslation(!Sudoku.getTranslationDirection()), wordButtonPressed.getText().toString()))
             {
