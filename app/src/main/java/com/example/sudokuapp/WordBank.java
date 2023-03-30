@@ -63,6 +63,8 @@ public class WordBank {
         for(int i = 0; i < size; i++)
         {
             String [] wordPair = inputString[i].split(",");
+            //english[i] = wordPair[0].replace(" ","\n");
+            //spanish[i]  = wordPair[1].replace(" ","\n");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
         }

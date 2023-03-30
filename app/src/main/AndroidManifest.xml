@@ -33,7 +33,8 @@
             android:exported="false" />
         <activity
             android:name=".SudokuPage"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".CustomLanguagePage"
             android:exported="false" />
