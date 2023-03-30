@@ -2,6 +2,7 @@ package com.example.sudokuapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.widget.Toast;
 
 public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButton {
     public int index;
@@ -30,6 +31,5 @@ public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButt
         AssociatedAlertDialog = null;
         callingButton = null;
     }
-
 
 }

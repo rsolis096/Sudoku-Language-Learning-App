@@ -33,8 +33,6 @@ public class ResultsScreen extends AppCompatActivity implements Serializable {
     }
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
-        //Toast.makeText(ResultsScreen.this,"You can't return to a completed game, press Home to return to home screen!",Toast.LENGTH_LONG).show();
         Intent intent = new Intent(ResultsScreen.this, GameSetting.class);
         startActivity(intent);
     }
