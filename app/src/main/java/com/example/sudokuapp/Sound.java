@@ -1,6 +1,7 @@
 package com.example.sudokuapp;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
@@ -11,7 +12,10 @@ public class Sound {
     {
         System.out.println("SOUND SHOULD PLAY");
         tts = new TextToSpeech(context, status -> {
-            tts.setLanguage(new Locale("es", "ES"));
+            if(Sudoku.getTranslationDirection())
+                tts.setLanguage(new Locale("es", "ES"));
+            else
+                tts.setLanguage(new Locale("en", "US"));
             tts.speak(wordToSpeak, TextToSpeech.QUEUE_FLUSH, null, "");
         });
         tts.shutdown();
