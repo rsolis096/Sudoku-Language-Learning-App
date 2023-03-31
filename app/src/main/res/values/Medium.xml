@@ -5,13 +5,13 @@
         <item>Godmother,Madrina</item>
         <item>Godfather,Padrino</item>
         <item>Stepdaughter,Hijastra</item>
-        <item>Stepson,Hijastra</item>
+        <item>Stepson,Hijastro</item>
         <item>Grandmother,Abuela</item>
         <item>Grandfather,Abuelo</item>
         <item>Cousin,Primo</item>
         <item>Family,Familia</item>
         <item>Friend,Amigo</item>
-        <item>Sibling,Hermano</item>
+        <item>Sibling,Hermanos</item>
         <item>Twins,Gemelos</item>
         <item>Niece,Sobrina</item>
         <item>Nephew,Sobrino</item>
@@ -29,13 +29,13 @@
         <item>Take care,Cuidate</item>
         <item>Sorry,Perdón</item>
         <item>Maam,Señora</item>
-        <item>Sir,Senor</item>
-        <item>Excuse Me,Disculpa</item>
+        <item>Sir,Señor</item>
+        <item>Excuse Me,Disculpame</item>
         <item>You are welcome,De nada</item>
         <item>All the best,Todo lo mejor</item>
         <item>Good luck,Buena suerte</item>
         <item>Bon appetit,Buen provecho</item>
-        <item>Congratulations,Felicidades</item>
+        <item>Congratulations,Felicitaciones</item>
         <item>Merry Christmas,Feliz Navidad</item>
     </string-array>
 
@@ -68,7 +68,7 @@
         <item>Walk,Caminar</item>
         <item>Up,Arriba</item>
         <item>Down,Abajo</item>
-        <item>Pedestrian,Peaton</item>
+        <item>Pedestrian,Peatón</item>
         <item>Street,Calle</item>
         <item>Avenue,Avenida</item>
         <item>North,Norte</item>

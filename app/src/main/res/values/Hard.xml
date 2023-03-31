@@ -14,7 +14,7 @@
         <item>Great-grandfather,Bisabuelo</item>
         <item>Stepfather,Padrastro</item>
         <item>Stepmother,Madrastra</item>
-        <item>Sibling,Hermano</item>
+        <item>Sibling,Hermanos</item>
         <item>Half-brother,Hermanastro</item>
         <item>Twins,Gemelos</item>
         <item>Godson,Ahijado</item>
@@ -34,9 +34,9 @@
         <item>Good luck,Buena suerte</item>
         <item>Bon appetit,Buen provecho</item>
         <item>You look great,Te ves genial</item>
-        <item>Happy Birthday,Feliz cumpleanos</item>
+        <item>Happy Birthday,Feliz cumpleaños</item>
         <item>Been a while,Pasado un tiempo</item>
-        <item>Congratulations,Felicidades</item>
+        <item>Congratulations,Felicitaciones</item>
     </string-array>
 
     <string-array name="food_drinks_hard">
