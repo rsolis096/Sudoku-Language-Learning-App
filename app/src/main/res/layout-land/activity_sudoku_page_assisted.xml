@@ -14,10 +14,10 @@
         android:scaleY="1.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.811"
+        app:layout_constraintHorizontal_bias="0.054"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.928" />
+        app:layout_constraintVertical_bias="0.957" />
 
     <Button
         android:id="@+id/solveButton"
@@ -26,10 +26,10 @@
         android:text="@string/solve"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintHorizontal_bias="0.977"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
+        app:layout_constraintVertical_bias="0.988" />
 
     <LinearLayout
         android:id="@+id/SudokuPageLinearLayout"
@@ -73,8 +73,19 @@
             android:id="@+id/lowerHalfTableLayout"
             android:layout_width="242dp"
             android:layout_height="335dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
+
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="4dp"
+        android:text="@string/help"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/solveButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

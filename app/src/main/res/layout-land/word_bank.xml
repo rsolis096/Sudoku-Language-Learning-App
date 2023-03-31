@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="72dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="48dp"
             android:text="@string/custom_words"
             android:textOff="@string/custom_words"
             android:textOn="@string/custom_words"
