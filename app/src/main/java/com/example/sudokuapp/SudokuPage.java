@@ -53,6 +53,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         }
 
 
+        setuptutButton();
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
         if (savedInstanceState != null) {
@@ -283,6 +284,14 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
                 t.show();
             }
 
+        });
+    }
+
+    private void setuptutButton() {
+        Button btnTut = findViewById(R.id.button);
+        btnTut.setOnClickListener(view -> {
+            Intent intent = Tutorialpage1.makeIntent(SudokuPage.this);
+            startActivity(intent);
         });
     }
 
