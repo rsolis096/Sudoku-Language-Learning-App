@@ -36,7 +36,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
     private final ElementButton[][] mSudokuAnswerBoard;
-    private final Chronometer mTimer;
+    private final transient Chronometer mTimer;
     private static int difficulty;
     public static boolean manual;
     private static boolean translationDirection = true;
