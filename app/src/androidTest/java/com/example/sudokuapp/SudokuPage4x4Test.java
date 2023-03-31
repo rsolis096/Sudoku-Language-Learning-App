@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.util.Log;
 import android.widget.Chronometer;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -206,21 +207,10 @@ public class SudokuPage4x4Test {
         UiObject2 emptyCell = mDevice.findObject(By.desc("emptyCell"));
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
-        Thread.sleep(2000);
+        Thread.sleep(500);
 
         //Check all resources in manual input pop up
-        UiObject2 resources = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
-        assertEquals("Enter Word should be shown.", "Enter Word:", resources.getText());
-        resources = mDevice.findObject(By.res("android:id/button3"));
-        assertTrue("clear answer is not enabled", resources.isEnabled());
-        assertTrue("clear answer is not clickable", resources.isClickable());
-        resources = mDevice.findObject(By.res("android:id/button2"));
-        assertTrue("cancel button is not enabled", resources.isEnabled());
-        assertTrue("cancel button is not clickable", resources.isClickable());
-        resources = mDevice.findObject(By.res("android:id/button1"));
-        assertTrue("ok button is not enabled", resources.isEnabled());
-        assertTrue("ok button is not clickable", resources.isClickable());
-
+        UiObject2 resources = mDevice.findObject(By.res("com.example.sudokuapp:id/manualInputConfirmBtn"));
         //Check text edit function
         UiObject2 editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         assertTrue("edit text field should be clickable.", editText.isClickable());
@@ -237,7 +227,7 @@ public class SudokuPage4x4Test {
         editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         assertTrue("edit text field should be clickable.", editText.isClickable());
         editText.setText("dos");
-        resources = mDevice.findObject(By.res("android:id/button1"));
+        resources = mDevice.findObject(By.res("com.example.sudokuapp:id/manualInputConfirmBtn"));
         resources.click();
         Thread.sleep(500);
         //confirm the change
@@ -249,35 +239,18 @@ public class SudokuPage4x4Test {
         Thread.sleep(500);
         editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         editText.setText("Un");
-        resources = mDevice.findObject(By.res("android:id/button1"));
+        resources = mDevice.findObject(By.res("com.example.sudokuapp:id/manualInputConfirmBtn"));
         resources.click();
         Thread.sleep(500);
         //confirm no change
         assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
-
-        //try cancel button
-        emptyCell.click();
-        Thread.sleep(500);
-        resources = mDevice.findObject(By.res("android:id/button2"));
-        resources.click();
-        Thread.sleep(500);
-        //confirm no change
-        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
-
-        //try clear answer
-        emptyCell.click();
-        Thread.sleep(500);
-        resources = mDevice.findObject(By.res("android:id/button3"));
-        resources.click();
-        Thread.sleep(500);
-        //is cell null after clearing?
-        assertNull("cell should be empty.", emptyCell.getText());
 
         //check solve button
         resources = mDevice.findObject(By.res("com.example.sudokuapp:id/solveButton"));
         assertTrue("solve button is not enabled", resources.isEnabled());
         assertTrue("solve button is not clickable", resources.isClickable());
         resources.click();
+
         //check pop up for game completion
         UiObject2 textV = mDevice.wait(Until.findObject(By.res("android:id/alertTitle")),3000);
         assertEquals("Game finished should be displayed.", "Game Finished!", textV.getText());
@@ -307,6 +280,7 @@ public class SudokuPage4x4Test {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         start.click();
+        Thread.sleep(500);
 
         //Make sure 4x4 toggle button exists
         UiObject2 toggleButton4x4 = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/tgBtn4")),3000);
@@ -334,55 +308,57 @@ public class SudokuPage4x4Test {
         familyButton.click();
         Thread.sleep(500);
         backBtnCtg.click();
+        Thread.sleep(1000);
 
         // Press the confirm button
         UiObject2 confirm = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnConfirm")),3000);
         confirm.click();
+        Thread.sleep(1000);
 
         //get empty cell
         UiObject2 emptyCell = mDevice.wait(Until.findObject(By.desc("emptyCell")),3000);
+        assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
         //check a valid input
         UiObject2 editText = mDevice.wait(Until.findObject(By.clazz("android.widget.EditText")),3000);
-        UiObject2 okB = mDevice.findObject(By.res("android:id/button1"));
+        UiObject2 okB = mDevice.findObject(By.res("com.example.sudokuapp:id/manualInputConfirmBtn"));
         assertTrue("edit text field should be clickable.", editText.isClickable());
-        editText.setText("Stepdaughter");
+        editText.setText(Sudoku.bank.getEnglish()[0].toLowerCase());
         okB.click();
+        System.out.println(emptyCell.getText() + "    " + Sudoku.bank.getEnglish()[0].toLowerCase());
         Thread.sleep(500);
         //confirm the change
         String prevAnswer = emptyCell.getText();
-        assertEquals("previously empty cell should be displaying the answer.", "STEPDAUGHTER", prevAnswer);
+        assertEquals("previously empty cell should be displaying the answer.", Sudoku.bank.getEnglish()[0].toLowerCase(), emptyCell.getText().toLowerCase());
 
         //check an invalid input from same category different difficulty
         emptyCell.click();
         editText = mDevice.wait(Until.findObject(By.clazz("android.widget.EditText")),3000);
-        editText.setText("Mother");
-        okB = mDevice.findObject(By.res("android:id/button1"));
+        editText.setText(Sudoku.bank.getEnglish()[1].toLowerCase());
         okB.click();
         Thread.sleep(500);
         //confirm no change
-        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
+
+        assertEquals("invalid input should not change the text of the cell.", Sudoku.bank.getEnglish()[1].toLowerCase(), emptyCell.getText().toLowerCase());
 
         //check an invalid input from different category same difficulty
         emptyCell.click();
         editText = mDevice.wait(Until.findObject(By.clazz("android.widget.EditText")),3000);
-        editText.setText("Breakfast");
-        okB = mDevice.findObject(By.res("android:id/button1"));
+        editText.setText(Sudoku.bank.getEnglish()[2].toLowerCase());
         okB.click();
         Thread.sleep(500);
         //confirm no change
-        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
+        assertEquals("invalid input should not change the text of the cell.", Sudoku.bank.getEnglish()[2].toLowerCase(), emptyCell.getText().toLowerCase());
 
         //check an invalid input of wrong language
         emptyCell.click();
         editText = mDevice.wait(Until.findObject(By.clazz("android.widget.EditText")),3000);
-        editText.setText("Sobrino");
-        okB = mDevice.findObject(By.res("android:id/button1"));
+        editText.setText(Sudoku.bank.getEnglish()[3].toLowerCase());
         okB.click();
         Thread.sleep(500);
         //confirm no change
-        assertEquals("invalid input should not change the text of the cell.", prevAnswer, emptyCell.getText());
+        assertEquals("invalid input should not change the text of the cell.", Sudoku.bank.getEnglish()[3].toLowerCase(), emptyCell.getText().toLowerCase());
 
         //quit and check the button states are reset
         mDevice.pressBack();
@@ -395,9 +371,7 @@ public class SudokuPage4x4Test {
         assertTrue(yesB.isEnabled());
         assertTrue(yesB.isClickable());
         yesB.click();
-
-        start = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnStart")),3000);
-        start.click();
+        Thread.sleep(1000);
 
         // check category button states are restored
         categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),3000);

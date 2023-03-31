@@ -99,8 +99,8 @@
                     android:id="@+id/manualInputEditText"
                     android:layout_width="349dp"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:autofillHints=" "/>
+                    android:autofillHints=" "
+                    android:inputType="text" />
 
                 <Button
                     android:id="@+id/manualInputConfirmBtn"

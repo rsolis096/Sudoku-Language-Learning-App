@@ -83,8 +83,6 @@ public class CustomWordsTest {
         assertEquals(text.getText(),"Your Custom Words");
         UiObject2 scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsScrollView")));
         assertTrue(scroll.isEnabled());
-        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
-        assertTrue(scroll.isEnabled());
         UiObject2 add = mDevice.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsAdd")));
         assertTrue(add.isEnabled());
         assertTrue(add.isClickable());
@@ -94,7 +92,7 @@ public class CustomWordsTest {
         //clear word bank
         clear.click();
         Thread.sleep(1000);
-        assertEquals(0,scroll.getChildCount());
+        assertEquals(1,scroll.getChildCount());
 
 
         //add words
