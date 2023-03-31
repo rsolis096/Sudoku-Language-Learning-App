@@ -40,7 +40,7 @@
     <LinearLayout
         android:id="@+id/SudokuPageLinearLayout"
         android:layout_width="416dp"
-        android:layout_height="550dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
@@ -81,44 +81,36 @@
             </ScrollView>
         </HorizontalScrollView>
 
-        <TableLayout
+        <LinearLayout
             android:id="@+id/lowerHalfTableLayout"
             android:layout_width="411dp"
-            android:layout_height="87dp">
+            android:layout_height="141dp"
+            android:orientation="vertical">
 
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="173dp"
+                android:layout_height="30dp"
+                android:text="@string/enter_your_answer"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="173dp"
-                    android:layout_height="30dp"
-                    android:text="@string/enter_your_answer"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </TableRow>
+            <EditText
+                android:id="@+id/manualInputEditText"
+                android:layout_width="349dp"
+                android:layout_height="wrap_content"
+                android:autofillHints=" "
+                android:hint="Your answer"
+                android:inputType="text" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="37dp">
+            <Button
+                android:id="@+id/manualInputConfirmBtn"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:text="@android:string/ok" />
 
-                <EditText
-                    android:id="@+id/manualInputEditText"
-                    android:layout_width="349dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:autofillHints=" "/>
-
-                <Button
-                    android:id="@+id/manualInputConfirmBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="@android:string/ok" />
-            </TableRow>
-
-        </TableLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
