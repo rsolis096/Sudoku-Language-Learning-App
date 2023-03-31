@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
 public class WordBank {
 
     private String[] english, spanish;
@@ -34,7 +35,7 @@ public class WordBank {
 
         //If the user has selected Numbers
         if(DataModel.getCheckedCategory() == 0) {
-            inputString = context.getResources().getStringArray(categoryArrays[0]);
+            inputString = context.getResources().getStringArray(R.array.numbers);
         }
         //If the user selects custom category
         else if(DataModel.getCategoryIndex() == 13)
