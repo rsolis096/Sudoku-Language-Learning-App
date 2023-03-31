@@ -41,19 +41,25 @@ public class Tutorialpage1 extends AppCompatActivity {
     private void onClick(View view) {
         if (page == 0) {
             TextView text = findViewById(R.id.textView5);
+            TextView pageNum = findViewById(R.id.page);
             text.setText(R.string.tutorial_2);
+            pageNum.setText("2 / 3");
             ImageView image = findViewById(R.id.imageView);
             image.setImageResource(R.drawable.example1);
             page = 1;
         } else if (page == 1) {
             TextView text = findViewById(R.id.textView5);
+            TextView pageNum = findViewById(R.id.page);
             text.setText(R.string.tutorial_3);
+            pageNum.setText("3 / 3");
             ImageView image = findViewById(R.id.imageView);
             image.setImageResource(R.drawable.example3);
             page = 2;
         } else if (page == 2) {
             TextView text = findViewById(R.id.textView5);
+            TextView pageNum = findViewById(R.id.page);
             text.setText(R.string.tutorial_text);
+            pageNum.setText("1 / 3");
             ImageView image = findViewById(R.id.imageView);
             image.setImageResource(R.drawable.example2);
             page = 0;
