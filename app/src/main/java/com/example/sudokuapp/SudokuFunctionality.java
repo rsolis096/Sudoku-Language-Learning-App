@@ -29,7 +29,7 @@ public class SudokuFunctionality {
             int box_start_col = ((int) (col / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
             int box_start_row = ((int) (row / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
             for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
-                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
                     if (Sudoku.getElement(j + box_start_row, i + box_start_col).getValue() == num) {
                         return false;
                     }
@@ -97,8 +97,8 @@ public class SudokuFunctionality {
                 Sudoku.setCellDesign(Sudoku.getElement(i, col));
             }
             //set box that cell is contained in to default design
-            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
-                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
+            for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
                     Sudoku.setCellDesign(Sudoku.getElement(j + box_start_row, i + box_start_col));
                 }
             }
