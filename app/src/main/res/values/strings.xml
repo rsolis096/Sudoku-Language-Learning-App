@@ -41,4 +41,6 @@
     <string name="enter_your_answer">\"Enter your answer: \"</string>
     <string name="help">Help</string>
     <string name="your_answer_here">Your answer here</string>
+    <string name="clear_cell">Clear Cell</string>
+    <string name="your_answer">Your answer</string>
 </resources>
