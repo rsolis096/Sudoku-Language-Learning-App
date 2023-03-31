@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.util.Objects;
 
 
 public class CustomLanguagePage extends AppCompatActivity {
@@ -27,6 +27,7 @@ public class CustomLanguagePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_custom_language);
 
         //Fill page with file contents

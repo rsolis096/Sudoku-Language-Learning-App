@@ -43,4 +43,11 @@
     <string name="your_answer_here">Your answer here</string>
     <string name="clear_cell">Clear Cell</string>
     <string name="your_answer">Your answer</string>
+    <string name="choose_category">Choose Category</string>
+    <string name="clear_word_bank">Clear Word Bank</string>
+    <string name="add_word_pair">Add Word Pair</string>
+    <string name="your_custom_words">Your Custom Words</string>
+    <string name="customwordsscrollview">customWordsScrollView</string>
+    <string name="audio_mode">Audio mode</string>
+    <string name="arrow"><![CDATA[>]]></string>
 </resources>
