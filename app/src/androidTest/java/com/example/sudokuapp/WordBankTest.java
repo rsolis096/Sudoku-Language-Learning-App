@@ -10,13 +10,13 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-
 public class WordBankTest {
 
     @Test
     public void generateWordBank() throws IOException {
         WordBank bank = new WordBank();
-        Context context = InstrumentationRegistry.getInstrumentation().getContext();
+        //use this context if resources are needed for your tests
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
         DataModel.setCategoryIndex(0);
         bank.generateWordBank(9,0,context);
@@ -36,7 +36,7 @@ public class WordBankTest {
 
         assertArrayEquals(eng, bank.getEnglish());
         assertArrayEquals(span, bank.getSpanish());
-        assertEquals(DataModel.getCategoryIndex(), 9);
+        assertEquals(0, DataModel.getCategoryIndex());
     }
     @Test
     public void setValue() {
