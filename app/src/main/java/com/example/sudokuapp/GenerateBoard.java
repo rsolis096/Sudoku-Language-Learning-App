@@ -88,11 +88,11 @@ public class GenerateBoard implements Serializable  {
             }
 
             //Check box
-            int box_start_row = ((int) (row / rows) * rows);
-            int box_start_col = ((int) (col / cols) * cols);
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    if (board[i + box_start_row][j + box_start_col] == num) {
+            int box_start_col = ((int) (col / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
+            int box_start_row = ((int) (row / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
+            for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
+                    if (board[j + box_start_row][i + box_start_col] == num) {
                         return false;
                     }
                 }
