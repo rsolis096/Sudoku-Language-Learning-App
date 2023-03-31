@@ -90,7 +90,7 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="173dp"
+                android:layout_width="209dp"
                 android:layout_height="30dp"
                 android:text="@string/enter_your_answer"
                 android:textSize="20sp"
