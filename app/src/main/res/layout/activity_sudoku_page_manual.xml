@@ -19,6 +19,19 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        android:id="@+id/clearSelectedCell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_cell"
+        android:translationX="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.626"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
         android:id="@+id/solveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,25 +45,29 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
         android:text="@string/help"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/solveButton" />
+        app:layout_constraintEnd_toEndOf="@+id/solveButton"
+        app:layout_constraintHorizontal_bias="0.28"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/SudokuPageLinearLayout"
+        app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
         android:id="@+id/SudokuPageLinearLayout"
-        android:layout_width="416dp"
-        android:layout_height="match_parent"
+        android:layout_width="418dp"
+        android:layout_height="728dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-3dp">
 
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
             android:layout_width="match_parent"
-            android:layout_height="460dp"
+            android:layout_height="479dp"
             android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,8 +100,8 @@
 
         <LinearLayout
             android:id="@+id/lowerHalfTableLayout"
-            android:layout_width="411dp"
-            android:layout_height="141dp"
+            android:layout_width="402dp"
+            android:layout_height="247dp"
             android:orientation="vertical">
 
 
@@ -101,7 +118,7 @@
                 android:layout_width="349dp"
                 android:layout_height="wrap_content"
                 android:autofillHints=" "
-                android:hint="Your answer"
+                android:hint="@string/your_answer"
                 android:inputType="text" />
 
             <Button

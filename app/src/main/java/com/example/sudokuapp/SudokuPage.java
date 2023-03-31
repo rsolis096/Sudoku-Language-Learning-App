@@ -54,6 +54,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
 
 
         setuptutButton();
+        setupClearButton();
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
         if (savedInstanceState != null) {
@@ -294,6 +295,19 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             startActivity(intent);
         });
     }
+
+    private void setupClearButton()
+    {
+        Button clrBtn = findViewById(R.id.clearSelectedCell);
+        clrBtn.setOnClickListener(view -> {
+            if(selectedButton!=null)
+            {
+                selectedButton.setValue(0);
+                selectedButton.setText(" ");
+            }
+        });
+    }
+
 
     //When an pre given selection is pressed in assist mode
     private static class ChosenAssistInputButtonListener implements View.OnClickListener {
