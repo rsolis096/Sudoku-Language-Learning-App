@@ -42,7 +42,7 @@ public class WordBank {
         {
             String textFileContents = FileIO.readFile(context);
             inputString = textFileContents.split("\\n");
-            for(var str : inputString)
+            for(String str : inputString)
             {
                 //Remove lingering new line characters
                 str = str.replace("\\n", "");
