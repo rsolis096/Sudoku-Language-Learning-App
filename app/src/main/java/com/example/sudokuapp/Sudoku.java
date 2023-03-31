@@ -36,7 +36,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private static ElementButton[][] mSudokuBoard;
     private static Pair<Integer, Integer> boxSize;
     private final ElementButton[][] mSudokuAnswerBoard;
-    private final Chronometer mTimer;
+    private final transient Chronometer mTimer;
     private static int difficulty;
     public static boolean manual;
     private static boolean translationDirection = true;
@@ -102,7 +102,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
         setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
         {
-            GRID_SIZE = 9;
             setGRID_SIZE(9);
         }
         userInputButtons = new LinkedList<>();
@@ -236,7 +235,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
 
             SudokuPage.selectedButton = buttonPressed;
-
             //Update the new currently selected button
             SudokuFunctionality.colorBoxColumnRow(buttonPressed.getIndex1(), buttonPressed.getIndex2(), true);
             GradientDrawable gd = new GradientDrawable();

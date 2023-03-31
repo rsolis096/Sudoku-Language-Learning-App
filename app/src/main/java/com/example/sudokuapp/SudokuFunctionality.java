@@ -26,11 +26,11 @@ public class SudokuFunctionality {
                 }
             }
             //Check box
-            int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
-            int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
+            int box_start_col = ((int) (col / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
+            int box_start_row = ((int) (row / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
             for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
-                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
-                    if (Sudoku.getElement(i + box_start_row, j + box_start_col).getValue() == num) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
+                    if (Sudoku.getElement(j + box_start_row, i + box_start_col).getValue() == num) {
                         return false;
                     }
                 }
@@ -63,36 +63,43 @@ public class SudokuFunctionality {
         //Check rows and cols
 
         //Check box
-        int box_start_row = ((int) (row / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
-        int box_start_col = ((int) (col / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
-
+        int box_start_col = ((int) (col / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
+        int box_start_row = ((int) (row / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
+        Log.i("box top left x", Integer.toString(box_start_col));
+        Log.i("box top left y", Integer.toString(box_start_row));
         if(selected)
         {
+            //fill in entire corresponding line and column that cell is contained in
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
                 GradientDrawable drawable = new GradientDrawable();
                 drawable.setColor(Color.rgb(226,235,243)); // set the fill color
                 drawable.setStroke(1, Color.rgb(0,0,0)); // set the border color and width
+
                 Sudoku.getElement(i, col).setBackground(drawable);
                 Sudoku.getElement(row, i).setBackground(drawable);
             }
+            //fill in box that cell is contained in
             for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
                 for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
 
                     GradientDrawable drawable = new GradientDrawable();
                     drawable.setColor(Color.rgb(226,235,243)); // set the fill color
                     drawable.setStroke(1, Color.rgb(0,0,0)); // set the border color and width
-                    Sudoku.getElement(i + box_start_row, j + box_start_col).setBackground(drawable);
+
+                    Sudoku.getElement(j + box_start_row, i + box_start_col).setBackground(drawable);
                 }
             }
         }
         else {
+            //set corresponding line and column that cell is contained in to default design
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
                 Sudoku.setCellDesign(Sudoku.getElement(row, i));
                 Sudoku.setCellDesign(Sudoku.getElement(i, col));
             }
-            for (int i = 0; i < (int) Sudoku.getBoxSize().first; i++) {
-                for (int j = 0; j < (int) Sudoku.getBoxSize().second; j++) {
-                    Sudoku.setCellDesign(Sudoku.getElement(i + box_start_row, j + box_start_col));
+            //set box that cell is contained in to default design
+            for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
+                for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
+                    Sudoku.setCellDesign(Sudoku.getElement(j + box_start_row, i + box_start_col));
                 }
             }
 

@@ -14,10 +14,10 @@
         android:scaleY="1.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.811"
+        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.928" />
+        app:layout_constraintVertical_bias="0.959" />
 
     <Button
         android:id="@+id/solveButton"
@@ -26,7 +26,32 @@
         android:text="@string/solve"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintHorizontal_bias="0.947"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/solveButton"
+        app:layout_constraintHorizontal_bias="0.661"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <Button
+        android:id="@+id/clearSelectedCell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_cell"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.757"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.955" />
@@ -69,43 +94,35 @@
             </ScrollView>
         </HorizontalScrollView>
 
-        <TableLayout
+        <LinearLayout
             android:id="@+id/lowerHalfTableLayout"
-            android:layout_width="411dp"
-            android:layout_height="87dp">
+            android:layout_width="248dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="245dp"
+                android:layout_height="30dp"
+                android:text="@string/enter_your_answer"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <TableRow
+            <EditText
+                android:id="@+id/manualInputEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:autofillHints=" "
+                android:inputType="text"
+                android:hint="@string/your_answer" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="173dp"
-                    android:layout_height="30dp"
-                    android:text="@string/enter_your_answer"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </TableRow>
+            <Button
+                android:id="@+id/manualInputConfirmBtn"
+                android:layout_width="60dp"
+                android:layout_height="48dp"
+                android:text="@android:string/ok" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="37dp">
-
-                <EditText
-                    android:id="@+id/manualInputEditText"
-                    android:layout_width="349dp"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""/>
-
-                <Button
-                    android:id="@+id/manualInputConfirmBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="@android:string/ok" />
-            </TableRow>
-
-        </TableLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

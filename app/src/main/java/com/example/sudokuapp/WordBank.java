@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+
 public class WordBank {
 
     private String[] english, spanish;
@@ -34,14 +35,14 @@ public class WordBank {
 
         //If the user has selected Numbers
         if(DataModel.getCheckedCategory() == 0) {
-            inputString = context.getResources().getStringArray(categoryArrays[0]);
+            inputString = context.getResources().getStringArray(R.array.numbers);
         }
         //If the user selects custom category
         else if(DataModel.getCategoryIndex() == 13)
         {
             String textFileContents = FileIO.readFile(context);
             inputString = textFileContents.split("\\n");
-            for(var str : inputString)
+            for(String str : inputString)
             {
                 //Remove lingering new line characters
                 str = str.replace("\\n", "");
@@ -63,8 +64,6 @@ public class WordBank {
         for(int i = 0; i < size; i++)
         {
             String [] wordPair = inputString[i].split(",");
-            //english[i] = wordPair[0].replace(" ","\n");
-            //spanish[i]  = wordPair[1].replace(" ","\n");
             english[i] = wordPair[0];
             spanish[i] = wordPair[1];
         }
