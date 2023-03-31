@@ -97,7 +97,7 @@
 
                 <EditText
                     android:id="@+id/manualInputEditText"
-                    android:layout_width="349dp"
+                    android:layout_width="331dp"
                     android:layout_height="wrap_content"
                     android:autofillHints=" "
                     android:inputType="text" />

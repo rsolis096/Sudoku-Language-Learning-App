@@ -192,6 +192,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             for (int cols = 0; cols < Sudoku.getBoxSize().first; cols++) {
                 //These buttons represents the 1 of 9 buttons user can choose words from
                 AssistedInputButton chosenAssistInputButton = new AssistedInputButton(this);
+                chosenAssistInputButton.setIndex(assistButtonTagCounter);
                 //Set tag each AssistedInputButton for testing
                 chosenAssistInputButton.setTag("assistButtonTag" + (assistButtonTagCounter));
                 assistButtonTagCounter++;
@@ -202,6 +203,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
                 else
                     chosenAssistInputButton.setText(Sudoku.bank.getEnglish()[(rows * Sudoku.getBoxSize().first) + cols]);
 
+                //Set assist button functionality
                 chosenAssistInputButton.setOnClickListener(new ChosenAssistInputButtonListener());
 
                 tableRow.setId(View.generateViewId());
@@ -288,24 +290,24 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
     private static class ChosenAssistInputButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
+            AssistedInputButton assistButtonPressed = (AssistedInputButton) view;
             if(selectedButton != null) {
-                wordButtonPressed.callingButton = selectedButton;
-                selectedButton.setText(wordButtonPressed.getText());
+                assistButtonPressed.callingButton = selectedButton;
+                selectedButton.setText(assistButtonPressed.getText());
 
                 //Verifies correct input
-                if (SudokuFunctionality.validSpot(selectedButton, wordButtonPressed.getText().toString())) {
-                    selectedButton.setValue(wordButtonPressed.index + 1);
-                    selectedButton.setText(wordButtonPressed.getText().toString());
+                if (SudokuFunctionality.validSpot(selectedButton, assistButtonPressed.getText().toString())) {
+                    selectedButton.setValue(assistButtonPressed.index + 1);
+                    selectedButton.setText(assistButtonPressed.getText().toString());
                     selectedButton.setTextColor(Color.rgb(0, 138, 216));
-                    Sudoku.userInputButtons.add(wordButtonPressed.callingButton);
+                    Sudoku.userInputButtons.add(assistButtonPressed.callingButton);
                     if (selectedButton.isWrong) {
                         Sudoku.decreaseRemainingCells();
                     }
                     selectedButton.isWrong = false;
                 } else {
-                    selectedButton.setValue(wordButtonPressed.index + 1);
-                    selectedButton.setText(wordButtonPressed.getText().toString());
+                    selectedButton.setValue(assistButtonPressed.index + 1);
+                    selectedButton.setText(assistButtonPressed.getText().toString());
                     selectedButton.setTextColor(Color.rgb(255, 114, 118));
                     if (!selectedButton.isWrong) {
                         Sudoku.increaseRemainingCells();

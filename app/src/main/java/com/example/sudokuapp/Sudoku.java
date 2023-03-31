@@ -102,7 +102,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
         setGRID_SIZE(getGridSize());
         if(getGridSize() == 0)
         {
-            GRID_SIZE = 9;
             setGRID_SIZE(9);
         }
         userInputButtons = new LinkedList<>();
@@ -236,7 +235,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
             }
 
             SudokuPage.selectedButton = buttonPressed;
-
             //Update the new currently selected button
             SudokuFunctionality.colorBoxColumnRow(buttonPressed.getIndex1(), buttonPressed.getIndex2(), true);
             GradientDrawable gd = new GradientDrawable();
