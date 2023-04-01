@@ -65,16 +65,16 @@
 
     <ScrollView
         android:id="@+id/customWordsScrollView"
-        android:layout_width="380dp"
-        android:layout_height="476dp"
+        android:layout_width="379dp"
+        android:layout_height="336dp"
         android:contentDescription="@string/customwordsscrollview"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.406"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.375">
+        app:layout_constraintVertical_bias="0.217">
 
         <TableLayout
             android:id="@+id/customWordsTable"
