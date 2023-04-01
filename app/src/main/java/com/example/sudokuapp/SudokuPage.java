@@ -1,10 +1,13 @@
 package com.example.sudokuapp;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
@@ -177,6 +180,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
     }
 
     //Sets up the assisted input functionality
+    @SuppressLint("ResourceType")
     public void setupAssistedInput() {
 
         TableLayout lowerHalfTableLayout = findViewById(R.id.lowerHalfTableLayout);

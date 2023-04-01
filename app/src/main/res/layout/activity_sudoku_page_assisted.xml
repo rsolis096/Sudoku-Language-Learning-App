@@ -10,27 +10,29 @@
         android:id="@+id/gameTimerText"
         android:layout_width="86dp"
         android:layout_height="39dp"
+        android:gravity="center"
         android:scaleX="1.3"
         android:scaleY="1.3"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SudokuPageLinearLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.479" />
 
     <Button
         android:id="@+id/solveButton"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/solve"
+        app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.987"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SudokuPageLinearLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <LinearLayout
         android:id="@+id/SudokuPageLinearLayout"
@@ -80,27 +82,31 @@
 
     <Button
         android:id="@+id/button"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="48dp"
         android:text="@string/help"
+        app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/solveButton"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/clearSelectedCell"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/clear_cell"
+        app:cornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.646"
+        app:layout_constraintHorizontal_bias="0.606"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.976" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
