@@ -42,6 +42,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
     private static boolean translationDirection = true;
     private static int mRemainingCells;
     private static long minutes, seconds;
+    //This keeps track of the cells filled by the user. Used to retain game board fater screen rotation
     public static LinkedList<ElementButton> userInputButtons;
 
     //setters for game settings
@@ -52,7 +53,6 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static void increaseRemainingCells() {++mRemainingCells;}
     public static void setGRID_SIZE(int size) {
         GRID_SIZE = size;
-
         Pair<Integer, Integer> temp = new Pair<>(9, 9);
         if (Math.sqrt(size) % 1 == 0) {
             temp = new Pair<>((int) Math.sqrt(size), (int) Math.sqrt(size));
@@ -70,8 +70,8 @@ public class Sudoku extends AppCompatActivity implements Serializable
     public static int getDifficulty() {return difficulty;}
     public static boolean getInputMode() {return manual;}
     public static boolean getTranslationDirection() {return translationDirection;}
-    //returns time in H:MM:SS or MM:SS format
     public static String getElapsedTime() {
+        //returns time in H:MM:SS or MM:SS format
         String sec;
         int hours = 0;
         if(minutes >= 60) {
@@ -118,22 +118,21 @@ public class Sudoku extends AppCompatActivity implements Serializable
 
         //Builds a valid integer board
         //GenerateBoard class has member 2d arrays:
-        //int[][] mGeneratedBoard; This board is the partially filled array of integers
-        //int[][] mAnswerBoard;    This board is the completed board used to reference for answer checking
         GenerateBoard generatedBoard = new GenerateBoard(getBoxSize().first, getBoxSize().second, getDifficulty());
         generatedBoard.createBoard();
+
         //Initialize number of unfilled cells
-        mRemainingCells = generatedBoard.getEmptyCells();
-        Log.i("Status:","Board Generated");
+        setRemainingCells(generatedBoard.getEmptyCells());
+
         //mSudokuBoard is the play board of ElementButtons (what the player interacts with)
-        mSudokuBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
+        mSudokuBoard = new ElementButton[getGridSize()][getGridSize()];
         //mSudokuAnswerBoard is a complete board of ElementButtons used to reference for input checking
-        mSudokuAnswerBoard = new ElementButton[GRID_SIZE][GRID_SIZE];
+        mSudokuAnswerBoard = new ElementButton[getGridSize()][getGridSize()];
 
         //Copy mGeneratedBoard into mSudokuBoard, skip empty cells which == 0
-        for(int rows = 0; rows < GRID_SIZE; rows++)
+        for(int rows = 0; rows < getGridSize(); rows++)
         {
-            for(int cols = 0; cols < GRID_SIZE; cols++)
+            for(int cols = 0; cols < getGridSize(); cols++)
             {
                 //This initializes ElementButtons that correspond to given cells
                 if(GenerateBoard.mGeneratedBoard[rows][cols] != 0)
@@ -169,234 +168,41 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 THIS,
                                 true,
                                 rows,
-                                cols
-                        );
-
-
+                                cols);
             }
         }
     }
-
-
     //pairs each cell to a proper border drawable to make the board look like sudoku
     public static void setCellDesign(ElementButton cell) {
         int rowCoordinate = cell.getIndex1();
         int colCoordinate = cell.getIndex2();
         Context tempContext = cell.getContext();
 
-        if((colCoordinate + 1) % boxSize.first == 0) {
+        if ((colCoordinate + 1) % boxSize.first == 0) {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom_right));
-            }
-            else if((rowCoordinate) % boxSize.second == 0) {
+            } else if ((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top_right));
-            }
-            else {
+            } else {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_right));
             }
-        }
-        else if((colCoordinate) % boxSize.first == 0) {
+        } else if ((colCoordinate) % boxSize.first == 0) {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom_left));
-            }
-            else if((rowCoordinate) % boxSize.second == 0) {
+            } else if ((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top_left));
-            }
-            else {
+            } else {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_left));
             }
-        }
-        else {
+        } else {
             if ((rowCoordinate + 1) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_bottom));
-            }
-            else if((rowCoordinate) % boxSize.second == 0) {
+            } else if ((rowCoordinate) % boxSize.second == 0) {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border_thick_top));
-            }
-            else {
+            } else {
                 cell.setBackground(AppCompatResources.getDrawable(tempContext, R.drawable.border));
             }
         }
-    }
-
-    //Sets the ElementButton as the selected button for user input
-    private static class ElementButtonListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
-            //Save the calling object as to a variable for easier to understand use.
-            ElementButton buttonPressed = (ElementButton) view;
-            if(SudokuPage.selectedButton != buttonPressed && SudokuPage.selectedButton!= null)
-            {
-                //If another button is selected, return the previous button to original state
-                //setCellDesign(SudokuPage.selectedButton);
-                SudokuFunctionality.colorBoxColumnRow(SudokuPage.selectedButton.getIndex1(), SudokuPage.selectedButton.getIndex2(), false);
-            }
-
-            SudokuPage.selectedButton = buttonPressed;
-            //Update the new currently selected button
-            SudokuFunctionality.colorBoxColumnRow(buttonPressed.getIndex1(), buttonPressed.getIndex2(), true);
-            GradientDrawable gd = new GradientDrawable();
-            gd.setColor(Color.rgb(187,222,251)); // set the fill color
-            gd.setStroke(2, Color.rgb(0,0,0)); // set the border color and width
-            buttonPressed.setBackground(gd);
-        }
-    }
-
-    //Unique functionality for clicking a given cell in audio mode
-    private static class AudioElementButtonListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View view) {
-            Log.i("Remaining Cells", String.valueOf(getRemainingCells()));
-            //Save the calling object as to a variable for easier to understand use.
-            ElementButton buttonPressed = (ElementButton) view;
-
-            Sound.playSound(buttonPressed.getContext(), buttonPressed.getTranslation(translationDirection));
-
-            //**************************************//
-            //          MANUAL INPUT                //
-            //**************************************//
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            if (manual) {
-                builder.setTitle("What did you hear?");
-                //Set up the input type (manual text input)
-                EditText input = new EditText(view.getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                //Display popup
-                builder.setView(input);
-                //When the user hits ok
-                builder.setPositiveButton("OK", (dialog, which) ->
-                {
-                    //This index tracks the position userInput is in the english or spanish array
-                    //Get the string currently in the EditText object
-                    String userInput = input.getText().toString();
-
-                    //If nothing is entered, close and do nothing
-                    if(userInput.length() != 0)
-                    {
-                        //Boolean to store whether or not the userInput string is part of the words in play
-                        boolean validUserInput = false;
-
-                        //Check if userInput string is part of the words in play
-                        for (int i = 0; i < GRID_SIZE; i++)
-                        {
-                            //User input in Spanish
-                            if (!translationDirection) {
-                                //Check to see if the userInput is a valid word in play
-                                if (Objects.equals(bank.getSpanish()[i].toLowerCase(), userInput.toLowerCase())) {
-                                    validUserInput = true;
-                                    break;
-                                }
-                            }
-                            //User input in English
-                            else {
-                                if (Objects.equals(bank.getEnglish()[i].toLowerCase(), userInput.toLowerCase())) {
-                                    validUserInput = true;
-                                    break;
-                                }
-                            }
-                        }
-                        // If userInput string is a valid word in play, and is placed in a valid position by sudoku rules
-                        if (Objects.equals(buttonPressed.getTranslation(!Sudoku.getTranslationDirection()), userInput) &&  validUserInput) {
-                            buttonPressed.setText(buttonPressed.getTranslation(!Sudoku.getTranslationDirection()));
-                        }
-                        // If userInput string is not a valid word in play
-                        else {
-                            Toast t = Toast.makeText(view.getContext(), "You cant place that there!", Toast.LENGTH_LONG);
-                            t.show();
-                        }
-                    }
-                });
-                //Set up popup cancel button
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-                //Display the popup
-                builder.show();
-            }
-            //Below uses buttons to assist user with word input
-            else
-            {
-                //**************************************//
-                //          ASSISTED INPUT              //
-                //**************************************//
-
-                // Create the dialog box this way allows alert.cancel() to be called, otherwise user needs to manually close the dialog every time
-                AlertDialog alert = builder.create();
-                alert.setTitle("Enter Word:");
-                Context dialogContext = builder.getContext();
-
-                // Exit the popup with no changes made
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
-                // Builds the pre defined inputs the user may choose from
-                TableLayout input = new TableLayout(dialogContext);
-                input.setContentDescription("assistDialogLayout");
-
-                //Set tag counter for assistButtons
-                int assistButtonTagCounter = 0;
-                for (int rows = 0; rows < boxSize.second; rows++)
-                {
-                    TableRow tableRow = new TableRow(dialogContext);
-                    //Set tag for each table row to be used in testing
-                    tableRow.setTag("assistTableRowTag" + (rows));
-
-                    for (int cols = 0; cols < boxSize.first; cols++)
-                    {
-                        //These buttons represents the 1 of 9 buttons user can choose words from
-                        AssistedInputButton wordButton = new AssistedInputButton(dialogContext);
-                        //Set tag each AssistedInputButton for testing
-                        wordButton.setTag("assistButtonTag" + (assistButtonTagCounter));
-                        assistButtonTagCounter++;
-
-                        //If true, the user should be given the choice of words in spanish
-                        if(!translationDirection)
-                            wordButton.setText(bank.getSpanish()[(rows* boxSize.first) + cols]);
-                        else
-                            wordButton.setText(bank.getEnglish()[(rows* boxSize.first) + cols]);
-
-                        //Button holds its index of where it is in subgrid
-                        wordButton.setIndex(rows*boxSize.first + cols);
-                        //Button stores a reference to the AlertDialog so it can close it in onclicklistener
-                        wordButton.setAssociatedAlertDialog(alert);
-                        //Stores a reference to the ElementButton that called it when it was pressed
-                        wordButton.setCallingButton(buttonPressed);
-                        //Button Functionality
-                        wordButton.setOnClickListener(new AudioAssistedInputButtonListener());
-                        tableRow.setId(View.generateViewId());
-                        tableRow.addView(wordButton);
-                    }
-                    input.addView(tableRow);
-                    input.setStretchAllColumns(true);
-                    input.setShrinkAllColumns(true);
-                }
-                alert.setView(input);
-                alert.show();
-            }
-        }
-    }
-
-    //This deals with the check after selecting an answer that had popped up after a given cell is pressed in audio mode
-    private static class AudioAssistedInputButtonListener implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View view)
-        {
-            AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
-            //Log.i("Word Pressed:", wordButtonPressed.getText().toString());
-            //Log.i("Correct Word:", mSudokuAnswerBoard[wordButtonPressed.callingButton.getIndex1()][wordButtonPressed.callingButton.getIndex2()].getTranslation(translationDirection));
-
-            if(Objects.equals(wordButtonPressed.callingButton.getTranslation(!Sudoku.getTranslationDirection()), wordButtonPressed.getText().toString()))
-            {
-                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
-                wordButtonPressed.callingButton.setClickable(false);
-            }
-
-            //closes dialog box after a button is pressed
-            wordButtonPressed.AssociatedAlertDialog.cancel();
-        }
-
     }
 }
 

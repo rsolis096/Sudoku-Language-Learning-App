@@ -16,7 +16,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     private int  index1;
     private int index2;
     boolean isWrong;
-    boolean isLocked;
+    boolean locked;
 
     //Getter methods
     public int getValue() {
@@ -42,8 +42,8 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         return index2;
     }
 
-    public boolean getLocked() {
-        return isLocked;
+    public boolean isLocked() {
+        return locked;
     }
 
     //Setter methods
@@ -54,6 +54,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = english;
     }
     public void setTranslation(String translation) {
+
         if(Sudoku.getTranslationDirection())
         {
             mTranslation = translation;
@@ -62,16 +63,15 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
             mEnglish = translation;
         }
     }
-    public void setIndex(int i, int j)
-    {
+    public void setIndex(int i, int j) {
         index1 = i;
         index2 = j;
     }
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public void setLocked(boolean l) {
+        locked = l;
     }
 
-    public ElementButton(int v, String e, String t, @NonNull Context context, boolean locked, int i1, int i2) {
+    public ElementButton(int v, String e, String t, @NonNull Context context, boolean l, int i1, int i2) {
 
         super(context);
 
@@ -81,8 +81,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = v;
         mEnglish = e;
         mTranslation = t;
-        //this.setClickable(!locked);
-        isLocked = locked;
+        locked = l;
 
         //Sets the text of the element button depending on if its audio mode, a given, or an empty cell
         if(mValue == 0)
@@ -110,7 +109,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mValue = 0;
         mEnglish = "";
         mTranslation ="";
-        isLocked = true;
+        locked = true;
         //this.setClickable(false);
     }
 }
