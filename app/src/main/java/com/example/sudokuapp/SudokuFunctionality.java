@@ -17,7 +17,7 @@ public class SudokuFunctionality {
     static public boolean validSpotHelper(int row, int col, int num) {
 
         //Cannot place value where a given is
-        if(Sudoku.getElement(row,col).isClickable())
+        if(!Sudoku.getElement(row,col).isLocked())
         {
             //Check rows and cols
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
@@ -40,8 +40,10 @@ public class SudokuFunctionality {
         return false;
     }
 
+    //Checks the game board for completion
     public static void checkIfCompleted(View view) {
 
+        //If remaining cells are 0, show end game pop up, otherwise do nothing
         if(Sudoku.getRemainingCells() == 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
             builder.setTitle("Game Finished!");
@@ -57,7 +59,7 @@ public class SudokuFunctionality {
         }
     }
 
-    //Sets colors of relevant row column and box when an free cell is selected
+    //Sets blue highlight color of relevant row, column, and box when an free cell is selected
     static public void colorBoxColumnRow(int row, int col, boolean selected)
     {
         //Check rows and cols
@@ -65,11 +67,9 @@ public class SudokuFunctionality {
         //Check box
         int box_start_col = ((int) (col / Sudoku.getBoxSize().first) * Sudoku.getBoxSize().first);
         int box_start_row = ((int) (row / Sudoku.getBoxSize().second) * Sudoku.getBoxSize().second);
-        Log.i("box top left x", Integer.toString(box_start_col));
-        Log.i("box top left y", Integer.toString(box_start_row));
         if(selected)
         {
-            //fill in entire corresponding line and column that cell is contained in
+            //fill in entire  row and column that cell is contained in
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
                 GradientDrawable drawable = new GradientDrawable();
                 drawable.setColor(Color.rgb(226,235,243)); // set the fill color
@@ -91,12 +91,12 @@ public class SudokuFunctionality {
             }
         }
         else {
-            //set corresponding line and column that cell is contained in to default design
+            //set row and column that cell is contained in back to default design
             for (int i = 0; i < Sudoku.getGridSize(); i++) {
                 Sudoku.setCellDesign(Sudoku.getElement(row, i));
                 Sudoku.setCellDesign(Sudoku.getElement(i, col));
             }
-            //set box that cell is contained in to default design
+            //set box that cell is contained in back to default design
             for (int i = 0; i < Sudoku.getBoxSize().first; i++) {
                 for (int j = 0; j < Sudoku.getBoxSize().second; j++) {
                     Sudoku.setCellDesign(Sudoku.getElement(j + box_start_row, i + box_start_col));
@@ -107,12 +107,12 @@ public class SudokuFunctionality {
 
     }
 
-
-    //checks a given element for any conflicts with other cell values
+    //checks a given element for any conflicts with other cells by sudoku rules
     static public boolean validSpot(ElementButton cell, String givenInput)
     {
         int checkNum = 0;
-        if(cell.isClickable()) {
+        if(!cell.isLocked()) {
+            System.out.println("Sfkjabsfkjsabf");
             if (!Sudoku.getTranslationDirection()) {
                 for (int i = 0; i < Sudoku.getGridSize(); i++) {
                     if (Sudoku.getBank().getEnglish()[i].equalsIgnoreCase(givenInput)) {
@@ -131,7 +131,7 @@ public class SudokuFunctionality {
                 return true;
             }
         }
-        Log.i("Status", "Not a valid spot, does not follow game rules.");
+        System.out.println("Not a valid spot, does not follow game rules.");
         return false;
     }
 
@@ -141,10 +141,10 @@ public class SudokuFunctionality {
 
         for(int i = 0; i < Sudoku.getGridSize(); i++) {
             for (int j = 0; j < Sudoku.getGridSize(); j++) {
-                if (Sudoku.getElement(i,j).isClickable() && !Sudoku.getElement(i,j).getLocked()) {
+                if (!Sudoku.getElement(i,j).isLocked()) {
                     Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(Sudoku.getTranslationDirection()));
                 }
-                else if(Sudoku.getElement(i,j).getLocked())
+                else
                 {
                     Sudoku.getElement(i,j).setText(Sudoku.getElement(i,j).getTranslation(!Sudoku.getTranslationDirection()));
                 }

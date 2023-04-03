@@ -2,10 +2,12 @@ package com.example.sudokuapp;
 
 public class DataModel
 {
+    //These are used to pass data between multiple activities.
     private static boolean audioMode = false;
     private static int categoryIndex = 0;
     private static int checkedCategory = 0;
     private static int customWordsLength = 0;
+
 
     //Getters
     public static boolean getAudioMode() {

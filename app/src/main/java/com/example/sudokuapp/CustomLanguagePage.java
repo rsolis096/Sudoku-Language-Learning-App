@@ -1,7 +1,6 @@
 package com.example.sudokuapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,26 +29,19 @@ public class CustomLanguagePage extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_custom_language);
 
-        //Fill page with file contents
         try {
+            //Fill page with file contents
             populateTableLayout();
+            //Setup Clear Button
+            setupClear();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         //Setup back button
         setupBackToMain();
-
         //Setup Add Row Button
         setupAddRow();
-
-        //Setup Clear Button
-        try {
-            setupClear();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     // close this activity
@@ -165,7 +157,7 @@ public class CustomLanguagePage extends AppCompatActivity {
 
         //Read the contents of the text file and write them to a string
         String fileContents = FileIO.readFile(this);
-        System.out.println("ACTUAL STRING " + fileContents);
+        //System.out.println("ACTUAL STRING " + fileContents);
 
         //Only proceed if the string fileContents has contents
         if(fileContents.length() != 0)
@@ -187,7 +179,7 @@ public class CustomLanguagePage extends AppCompatActivity {
                 //Create a text view to add to the row
                 TextView fileLine = new TextView(this);
 
-                //Create the delete button to delete add to the row
+                //Create the row delete button
                 Button deleteRowButton = new Button(this);
                 deleteRowButton.setText("X");
                 //Button Functionality
@@ -214,11 +206,9 @@ public class CustomLanguagePage extends AppCompatActivity {
     }
 
     //Clears the TableLayout of all its contents and empties the text file
-    private void setupClear() throws FileNotFoundException
-    {
+    private void setupClear() throws FileNotFoundException {
         Button btn = findViewById(R.id.btnCustomWordsClear);
         btn.setOnClickListener(view -> {
-
             //Clear table rows
             TableLayout tableLayout = findViewById(R.id.customWordsTable);
             tableLayout.removeAllViews();
@@ -239,17 +229,17 @@ public class CustomLanguagePage extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        //Update the number of custom words to the data model
         TableLayout tableLayout = findViewById(R.id.customWordsTable);
         DataModel.setCustomWordsLength(tableLayout.getChildCount());
-        System.out.println(DataModel.getCustomWordsLength());
     }
 
-    //Deletes a row from the TableLayout. Re-Writes the entire text file
+    //Deletes a row from the custom words TableLayout. Re-Writes the entire text file
     public static class deleteRowButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
 
-            //Get Reference to TableRow which is the parent of button and textview
+            //Get Reference to TableRow which is the parent of x button and textview
             TableRow tableRow = (TableRow) v.getParent();
 
             //Get Reference to TableLayout which is the parent of tableRow
@@ -257,16 +247,16 @@ public class CustomLanguagePage extends AppCompatActivity {
 
             //Delete the textview and button from tableRow
             tableRow.removeAllViews();
+
             //Delete tableRow from tableLayout
             tableLayout.removeView(tableRow);
 
             //Clear the file so it can be re written
             FileIO.clearFile(v.getContext());
 
-            int numberOfRows = tableLayout.getChildCount();
-            for(int i =0; i < numberOfRows; i++)
+            for(int i =0; i < tableLayout.getChildCount(); i++)
             {
-                //Get access to the children of tableLayout
+                //Get access to the children of tableLayout (current visible board on screen)
                 TableRow row = (TableRow) tableLayout.getChildAt(i);
                 TextView rowText = (TextView) row.getChildAt(0);
                 try {
@@ -276,7 +266,6 @@ public class CustomLanguagePage extends AppCompatActivity {
                 }
             }
         }
-
 
     }
 }
