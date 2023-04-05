@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SudokuApp"
         tools:targetApi="31">
         <activity
+            android:name=".GameOptions"
+            android:exported="false" />
+        <activity
             android:name=".Tutorialpage1"
             android:exported="false" />
         <activity
@@ -28,7 +31,7 @@
         <activity
             android:name=".SudokuPage"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".CustomLanguagePage"
             android:exported="false" />

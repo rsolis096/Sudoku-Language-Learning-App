@@ -32,7 +32,7 @@ public class MainMenu extends AppCompatActivity {
     private void setupOptionsButton() {
         Button btnOptions = findViewById(R.id.btnOptions);
         btnOptions.setOnClickListener(view -> {
-            Intent intent = CustomLanguagePage.makeIntent(MainMenu.this);
+            Intent intent = GameOptions.makeIntent(MainMenu.this);
             startActivity(intent);
         });
     }

@@ -50,4 +50,8 @@
     <string name="customwordsscrollview">customWordsScrollView</string>
     <string name="audio_mode">Audio mode</string>
     <string name="arrow"><![CDATA[>]]></string>
+    <string name="display_theme">Choose your Display Theme</string>
+    <string name="theme_mode">Dark Mode</string>
+    <string name="custom">Customize Word Bank</string>
+
 </resources>
