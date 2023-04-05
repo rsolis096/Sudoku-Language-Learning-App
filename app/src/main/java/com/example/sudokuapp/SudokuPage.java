@@ -1,10 +1,13 @@
 package com.example.sudokuapp;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
@@ -29,6 +32,10 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class SudokuPage extends AppCompatActivity implements Serializable {
@@ -52,8 +59,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
             setContentView(R.layout.activity_sudoku_page_manual);
         }
 
-
-        setuptutButton();
+        setupTutorialButton();
         setupClearButton();
         //If savedInstanceState == null, this is the first time launching the game
         //If savedInstanceState != null, the screen has been rotated during gameplay
@@ -80,7 +86,6 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         int elementButtonCounterForTag = 0;
         boolean foundEmptyCell = false;
         TableLayout tableLayout = findViewById(R.id.sudoku_table);
-        ScrollView sView = (ScrollView) tableLayout.getParent();
 
         for (int rows = 0; rows < Sudoku.getGridSize(); rows++) {
             TableRow tableRow = new TableRow(this);
@@ -177,7 +182,19 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
     }
 
     //Sets up the assisted input functionality
+    @SuppressLint("ResourceType")
     public void setupAssistedInput() {
+
+        String[] selectionArray;
+        //If true, the user should be given the choice of words in spanish
+        if (Sudoku.getTranslationDirection())
+            selectionArray = Arrays.copyOf(Sudoku.bank.getSpanish(), Sudoku.getGridSize());
+        else
+            selectionArray = Arrays.copyOf(Sudoku.bank.getEnglish(), Sudoku.getGridSize());
+
+        List<String> temp = Arrays.asList(selectionArray);
+        Collections.shuffle(temp);
+        temp.toArray(selectionArray);
 
         TableLayout lowerHalfTableLayout = findViewById(R.id.lowerHalfTableLayout);
         lowerHalfTableLayout.setContentDescription("assistDialogLayout");
@@ -199,14 +216,18 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
                 chosenAssistInputButton.setTag("assistButtonTag" + (assistButtonTagCounter));
                 assistButtonTagCounter++;
 
-                //If true, the user should be given the choice of words in spanish
+                //Set text values of assist buttons
+                chosenAssistInputButton.setText(selectionArray[(rows * Sudoku.getBoxSize().first) + cols]);
+
+                /*
                 if (Sudoku.getTranslationDirection())
                     chosenAssistInputButton.setText(Sudoku.bank.getSpanish()[(rows * Sudoku.getBoxSize().first) + cols]);
                 else
                     chosenAssistInputButton.setText(Sudoku.bank.getEnglish()[(rows * Sudoku.getBoxSize().first) + cols]);
+                */
 
                 //Set assist button functionality
-                chosenAssistInputButton.setOnClickListener(new ChosenAssistInputButtonListener());
+                chosenAssistInputButton.setOnClickListener(new AssistedInputButtonListener());
 
                 tableRow.setId(View.generateViewId());
                 tableRow.addView(chosenAssistInputButton);
@@ -288,7 +309,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         });
     }
 
-    private void setuptutButton() {
+    private void setupTutorialButton() {
         Button btnTut = findViewById(R.id.button);
         btnTut.setOnClickListener(view -> {
             Intent intent = Tutorialpage1.makeIntent(SudokuPage.this);
@@ -310,13 +331,14 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
 
 
     //When an pre given selection is pressed in assist mode
-    private static class ChosenAssistInputButtonListener implements View.OnClickListener {
+    private static class AssistedInputButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             AssistedInputButton assistButtonPressed = (AssistedInputButton) view;
             if(selectedButton != null) {
                 assistButtonPressed.callingButton = selectedButton;
                 selectedButton.setText(assistButtonPressed.getText());
+                selectedButton.setValue(0);
 
                 //Verifies correct input
                 if (SudokuFunctionality.validSpot(selectedButton, assistButtonPressed.getText().toString())) {

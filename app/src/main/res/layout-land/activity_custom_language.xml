@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:translationX="2dp">
@@ -10,30 +9,34 @@
         android:id="@+id/btnCustomWordsClear"
         android:layout_width="258dp"
         android:layout_height="51dp"
-        android:text="Clear Word Bank"
+        android:text="@string/clear_word_bank"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.788"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:cornerRadius="25dp"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"/>
 
     <Button
         android:id="@+id/btnCustomWordsAdd"
         android:layout_width="258dp"
         android:layout_height="51dp"
-        android:text="Add Word Pair"
+        android:text="@string/add_word_pair"
         android:textSize="20sp"
         android:translationX="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.087"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:cornerRadius="25dp"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"/>
 
     <TextView
         android:id="@+id/customWordsHeader"
         android:layout_width="243dp"
         android:layout_height="45dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Your Custom Words"
+        android:text="@string/your_custom_words"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,24 +55,25 @@
         app:layout_constraintHorizontal_bias="0.947"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintVertical_bias="0.021"
+        app:cornerRadius="25dp"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"/>
 
     <ScrollView
         android:id="@+id/customWordsScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="customWordsScrollView"
-        android:orientation="vertical"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="60dp"
+        android:layout_width="607dp"
+        android:layout_height="229dp"
         android:layout_marginStart="60dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="60dp"
+        android:layout_marginBottom="60dp"
+        android:contentDescription="@string/customwordsscrollview"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/customWordsHeader"
-        app:layout_constraintVertical_bias="0.375">
+        app:layout_constraintVertical_bias="0.0">
 
         <TableLayout
             android:id="@+id/customWordsTable"

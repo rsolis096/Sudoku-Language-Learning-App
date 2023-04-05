@@ -11,11 +11,14 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.Objects;
+
 public class GameSetting extends AppCompatActivity {
     private boolean togglesDisabled;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_game_setting);
 
         // difficulty level

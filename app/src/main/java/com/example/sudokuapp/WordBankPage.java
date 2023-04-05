@@ -9,6 +9,7 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class WordBankPage extends AppCompatActivity {
 
@@ -21,6 +22,7 @@ public class WordBankPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.word_bank);
 
         //Get number of words in file
