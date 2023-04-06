@@ -33,12 +33,7 @@ public class WordBank {
         int selectedArrayId;
         String[] inputString;
 
-        //If the user has selected Numbers
-        if(DataModel.getCheckedCategory() == 0) {
-            inputString = context.getResources().getStringArray(R.array.numbers);
-        }
-        //If the user selects custom category
-        else if(DataModel.getCategoryIndex() == 13)
+       if(DataModel.getCategoryIndex() == 13)
         {
             String textFileContents = FileIO.readFile(context);
             inputString = textFileContents.split("\\n");

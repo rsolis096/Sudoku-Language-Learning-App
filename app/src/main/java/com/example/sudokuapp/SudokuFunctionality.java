@@ -117,12 +117,14 @@ public class SudokuFunctionality {
                 for (int i = 0; i < Sudoku.getGridSize(); i++) {
                     if (Sudoku.getBank().getEnglish()[i].equalsIgnoreCase(givenInput)) {
                         checkNum = i + 1;
+                        break;
                     }
                 }
             } else {
                 for (int i = 0; i < Sudoku.getGridSize(); i++) {
                     if (Sudoku.getBank().getSpanish()[i].equalsIgnoreCase(givenInput)) {
                         checkNum = i + 1;
+                        break;
                     }
                 }
             }
