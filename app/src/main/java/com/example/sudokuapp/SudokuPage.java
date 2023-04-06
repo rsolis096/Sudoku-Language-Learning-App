@@ -192,10 +192,6 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         else
             selectionArray = Arrays.copyOf(Sudoku.bank.getEnglish(), Sudoku.getGridSize());
 
-        List<String> temp = Arrays.asList(selectionArray);
-        Collections.shuffle(temp);
-        temp.toArray(selectionArray);
-
         TableLayout lowerHalfTableLayout = findViewById(R.id.lowerHalfTableLayout);
         lowerHalfTableLayout.setContentDescription("assistDialogLayout");
 
