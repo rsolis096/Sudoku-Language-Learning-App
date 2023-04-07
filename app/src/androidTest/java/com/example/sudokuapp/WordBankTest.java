@@ -34,8 +34,9 @@ public class WordBankTest {
             span[i] = wordPair[1];
         }
 
-        assertArrayEquals(eng, bank.getEnglish());
-        assertArrayEquals(span, bank.getSpanish());
+        //Due to randomness of word selection, we may only test size of array
+        assertEquals(eng.length, bank.getEnglish().length);
+        assertEquals(span.length, bank.getSpanish().length);
         assertEquals(0, DataModel.getCategoryIndex());
     }
     @Test

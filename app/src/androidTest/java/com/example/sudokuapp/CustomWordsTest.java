@@ -78,6 +78,13 @@ public class CustomWordsTest {
         //open options page
         optionsButton.click();
 
+        //Test open custom word bank activity button
+        UiObject2 buttonCustomBankButton = mDevice.findObject(By.res("com.example.sudokuapp:id/buttonCustomBank"));
+        assertTrue("buttonCustomBank is not enabled", buttonCustomBankButton.isEnabled());
+        assertTrue("buttonCustomBank is not clickable", buttonCustomBankButton.isClickable());
+        buttonCustomBankButton.click();
+        Thread.sleep(500);
+
         //check views and buttons
         UiObject2 text = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/customWordsHeader")),3000);
         assertEquals(text.getText(),"Your Custom Words");
