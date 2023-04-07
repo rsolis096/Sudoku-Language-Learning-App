@@ -77,6 +77,7 @@ public class CustomWordsTest {
 
         //open options page
         optionsButton.click();
+        Thread.sleep(500);
 
         //Test open custom word bank activity button
         UiObject2 buttonCustomBankButton = mDevice.findObject(By.res("com.example.sudokuapp:id/buttonCustomBank"));

@@ -215,9 +215,9 @@ public class SudokuPage4x4Test {
         //Reference to ok button for manual input
         UiObject2 manualInputConfirmBtn= mDevice.findObject(By.res("com.example.sudokuapp:id/manualInputConfirmBtn"));
         //Check text edit function
-
         UiObject2 editText = mDevice.findObject(By.clazz("android.widget.EditText"));
         assertTrue("edit text field should be clickable.", editText.isClickable());
+
         editText.setText(validWords[0]);
         manualInputConfirmBtn.click();
         //confirm the change
@@ -260,11 +260,6 @@ public class SudokuPage4x4Test {
         assertTrue("home button is not enabled", btnEndGameReturn.isEnabled());
         assertTrue("home button is not clickable", btnEndGameReturn.isClickable());
         btnEndGameReturn.click();
-
-
-
-        // Hold to ensure app is where its expected to be
-        Thread.sleep(1000);
     }
 
     @Test

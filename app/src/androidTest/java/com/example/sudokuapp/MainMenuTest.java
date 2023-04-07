@@ -94,14 +94,28 @@ public class MainMenuTest {
 
         //Check options page
         optionsButton.click();
+
+        Thread.sleep(500);
+
+        //Check Dark Mode Button
+        UiObject2 switchTheme = mDevice.findObject(By.res("com.example.sudokuapp:id/switchTheme"));
+        assertTrue(switchTheme.isCheckable());
+        assertTrue(switchTheme.isClickable());
+        assertTrue(switchTheme.isEnabled());
+
+        //Test open custom word bank activity button
+        UiObject2 buttonCustomBankButton = mDevice.findObject(By.res("com.example.sudokuapp:id/buttonCustomBank"));
+        assertTrue("buttonCustomBank is not enabled", buttonCustomBankButton.isEnabled());
+        assertTrue("buttonCustomBank is not clickable", buttonCustomBankButton.isClickable());
+        buttonCustomBankButton.click();
+        Thread.sleep(500);
+
         //Give App time to catchup
         Thread.sleep(500);
         backButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnCustomWordsBack"));
         backButton.isEnabled();
         backButton.isClickable();
         backButton.click();
-
-
 
     }
 
