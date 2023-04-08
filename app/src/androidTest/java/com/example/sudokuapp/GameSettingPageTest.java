@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
-public class WordBankAndSettingTest {
+public class GameSettingPageTest {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.example.sudokuapp";
@@ -58,8 +58,9 @@ public class WordBankAndSettingTest {
         assertNotNull(mDevice);
     }
 
+    //Because WordBankPage is a sub activity of GameSettings, we test both here
     @Test
-    public void wordBankAndSettingTest() throws InterruptedException {
+    public void wordBankPageAndGameSettingPageTest() throws InterruptedException {
         // Press the start button
         UiObject2 start = mDevice.findObject(By.res("com.example.sudokuapp:id/btnStart"));
         assertTrue(start.isEnabled());

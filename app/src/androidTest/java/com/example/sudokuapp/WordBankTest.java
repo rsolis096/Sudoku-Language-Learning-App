@@ -18,7 +18,7 @@ public class WordBankTest {
         //use this context if resources are needed for your tests
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        DataModel.setCategoryIndex(0);
+        WordBank.setCategoryIndex(0);
         bank.generateWordBank(9,0,context);
 
 
@@ -37,16 +37,16 @@ public class WordBankTest {
         //Due to randomness of word selection, we may only test size of array
         assertEquals(eng.length, bank.getEnglish().length);
         assertEquals(span.length, bank.getSpanish().length);
-        assertEquals(0, DataModel.getCategoryIndex());
+        assertEquals(0, WordBank.getCategoryIndex());
     }
     @Test
     public void setValue() {
-        DataModel.setCategoryIndex(4);
-        assertEquals(DataModel.getCategoryIndex(), 4);
+        WordBank.setCategoryIndex(4);
+        assertEquals(WordBank.getCategoryIndex(), 4);
     }
     @Test
     public void getValue() {
-        DataModel.setCategoryIndex(10);
-        assertEquals(DataModel.getCategoryIndex(), 10);
+        WordBank.setCategoryIndex(10);
+        assertEquals(WordBank.getCategoryIndex(), 10);
     }
 }

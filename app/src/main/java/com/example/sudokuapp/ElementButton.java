@@ -88,7 +88,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         {
             this.setText(" ");
         }
-        else if(!DataModel.getAudioMode())
+        else if(!Sound.getAudioMode())
         {
             //translationDirection = true -> english to spanish
             if(Sudoku.getTranslationDirection())
@@ -110,6 +110,5 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
         mEnglish = "";
         mTranslation ="";
         locked = true;
-        //this.setClickable(false);
     }
 }

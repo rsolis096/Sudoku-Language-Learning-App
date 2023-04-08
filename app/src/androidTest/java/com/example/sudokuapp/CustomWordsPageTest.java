@@ -26,7 +26,7 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
-public class CustomWordsTest {
+public class CustomWordsPageTest {
 
     private static final String BASIC_SAMPLE_PACKAGE
             = "com.example.sudokuapp";
@@ -169,6 +169,7 @@ public class CustomWordsTest {
         backButton.click();
 
     }
+
 
 
     /*

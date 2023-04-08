@@ -39,7 +39,7 @@ public class GameSetting extends AppCompatActivity {
         System.out.println("Resumed");
 
         //Disable toggle buttons when there arent enough custom words to accomdate a board size
-        if(DataModel.getCheckedCategory() == 5)
+        if(WordBank.getCheckedCategory() == 5)
         {
             togglesDisabled = true;
             DisableToggles();
@@ -60,10 +60,10 @@ public class GameSetting extends AppCompatActivity {
         ToggleButton sixXSix = findViewById(R.id.tgBtn6);
 
         //If custom word bank is selected
-        if(DataModel.getCheckedCategory() == 5)
+        if(WordBank.getCheckedCategory() == 5)
         {
-            System.out.println(DataModel.getCustomWordsLength() + "sdadsadasda");
-            if(DataModel.getCustomWordsLength() <= 3)
+            System.out.println(WordBank.getCustomWordsLength() + "sdadsadasda");
+            if(WordBank.getCustomWordsLength() <= 3)
             {
                 fourXFour.setChecked(false);
                 nineXNine.setChecked(false);
@@ -75,7 +75,7 @@ public class GameSetting extends AppCompatActivity {
                 twelveXTwelve.setEnabled(false);
                 findViewById(R.id.btnConfirm).setClickable(false);
             }
-            else if (DataModel.getCustomWordsLength() <= 4) {
+            else if (WordBank.getCustomWordsLength() <= 4) {
                 fourXFour.setChecked(true);
                 nineXNine.setChecked(false);
                 sixXSix.setChecked(false);
@@ -86,7 +86,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(false);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(4);
-            } else if (DataModel.getCustomWordsLength() <= 6) {
+            } else if (WordBank.getCustomWordsLength() <= 6) {
                 fourXFour.setChecked(false);
                 sixXSix.setChecked(true);
                 nineXNine.setChecked(false);
@@ -97,7 +97,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(true);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(6);
-            } else if (DataModel.getCustomWordsLength() <= 9) {
+            } else if (WordBank.getCustomWordsLength() <= 9) {
                 fourXFour.setChecked(false);
                 nineXNine.setChecked(true);
                 sixXSix.setChecked(false);
@@ -108,7 +108,7 @@ public class GameSetting extends AppCompatActivity {
                 sixXSix.setEnabled(true);
                 twelveXTwelve.setEnabled(false);
                 Sudoku.setGRID_SIZE(9);
-            } else if (DataModel.getCustomWordsLength() <= 12) {
+            } else if (WordBank.getCustomWordsLength() <= 12) {
                 fourXFour.setChecked(false);
                 nineXNine.setChecked(true);
                 sixXSix.setChecked(false);
@@ -183,7 +183,7 @@ public class GameSetting extends AppCompatActivity {
         switchAudioMode.setChecked(false);
         switchAudioMode.setOnClickListener(view -> {
             //flips the mode when the switch is triggered based on current state
-            DataModel.setAudioMode(true);
+            Sound.setAudioMode(true);
         });
 
     }

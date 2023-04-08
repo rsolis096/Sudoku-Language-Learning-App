@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-public class CustomLanguagePage extends AppCompatActivity {
+public class CustomWordsPage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +223,7 @@ public class CustomLanguagePage extends AppCompatActivity {
     }
 
     public static Intent makeIntent(Context context) {
-        return new Intent(context, CustomLanguagePage.class);
+        return new Intent(context, CustomWordsPage.class);
     }
 
     @Override
@@ -231,7 +231,7 @@ public class CustomLanguagePage extends AppCompatActivity {
         super.onStop();
         //Update the number of custom words to the data model
         TableLayout tableLayout = findViewById(R.id.customWordsTable);
-        DataModel.setCustomWordsLength(tableLayout.getChildCount());
+        WordBank.setCustomWordsLength(tableLayout.getChildCount());
     }
 
     //Deletes a row from the custom words TableLayout. Re-Writes the entire text file

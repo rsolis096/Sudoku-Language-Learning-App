@@ -33,7 +33,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".CustomLanguagePage"
+            android:name=".CustomWordsPage"
             android:exported="false" />
         <activity
             android:name=".MainMenu"

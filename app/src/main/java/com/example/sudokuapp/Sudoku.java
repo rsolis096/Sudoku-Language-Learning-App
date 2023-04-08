@@ -149,7 +149,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
                                 cols
                             );
                     //OnClickListener only made for given cells if in audio mode
-                    if(DataModel.getAudioMode())
+                    if(Sound.getAudioMode())
                         mSudokuBoard[rows][cols].setOnClickListener(new AudioElementButtonListener());
                 }
                 //This initializes ElementButtons that correspond to empty Cells

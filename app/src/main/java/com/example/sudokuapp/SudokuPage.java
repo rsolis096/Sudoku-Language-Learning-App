@@ -154,8 +154,8 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         builder.setPositiveButton("Yes", (dialog, which) -> {
             //reset all options
             Sudoku.setDifficulty(0);
-            DataModel.setCategoryIndex(0);
-            DataModel.setAudioMode(false);
+            WordBank.setCategoryIndex(0);
+            Sound.setAudioMode(false);
             Sudoku.setInputMode(false);
             Sudoku.setTranslationDirection(true);
             Sudoku.setGRID_SIZE(9);
@@ -332,7 +332,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
         public void onClick(View view) {
             AssistedInputButton assistButtonPressed = (AssistedInputButton) view;
             if(selectedButton != null) {
-                assistButtonPressed.callingButton = selectedButton;
+                assistButtonPressed.setCallingButton(selectedButton);
                 selectedButton.setText(assistButtonPressed.getText());
                 selectedButton.setValue(0);
 
@@ -341,7 +341,7 @@ public class SudokuPage extends AppCompatActivity implements Serializable {
                     selectedButton.setValue(assistButtonPressed.index + 1);
                     selectedButton.setText(assistButtonPressed.getText().toString());
                     selectedButton.setTextColor(Color.rgb(0, 138, 216));
-                    Sudoku.userInputButtons.add(assistButtonPressed.callingButton);
+                    Sudoku.userInputButtons.add(assistButtonPressed.getCallingButton());
                     if (selectedButton.isWrong) {
                         Sudoku.decreaseRemainingCells();
                     }
