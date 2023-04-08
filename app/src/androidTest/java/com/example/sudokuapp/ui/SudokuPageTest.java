@@ -346,7 +346,7 @@ public class SudokuPageTest {
         confirm.click();
 
         //Check Timer (wait for it to appear on screen, going to fast will cause fail)
-        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),500);
+        UiObject2 cTimer = mDevice.wait(Until.findObject(By.clazz(Chronometer.class)),2000);
         assertTrue("Timer is not enabled", cTimer.isEnabled());
         //Get text to compare for later to make sure it is counting up
         String timerText = cTimer.getText();
@@ -394,7 +394,7 @@ public class SudokuPageTest {
         emptyCell.click();
 
         //Check all the table rows that pop up in assist mode
-        tableLayout = mDevice.wait(Until.findObject(By.desc("assistDialogLayout")),5000);
+        tableLayout = mDevice.wait(Until.findObject(By.desc("assistDialogLayout")),9000);
         UiObject2 assistButtonToSelect = null;
         for(UiObject2 individualButton : tableLayout.getChildren())
         {

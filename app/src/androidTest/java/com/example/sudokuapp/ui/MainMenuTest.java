@@ -95,10 +95,8 @@ public class MainMenuTest {
         //Check options page
         optionsButton.click();
 
-        Thread.sleep(500);
-
         //Check Dark Mode Button
-        UiObject2 switchTheme = mDevice.findObject(By.res("com.example.sudokuapp:id/switchTheme"));
+        UiObject2 switchTheme = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/switchTheme")),5000);
         assertTrue(switchTheme.isCheckable());
         assertTrue(switchTheme.isClickable());
         assertTrue(switchTheme.isEnabled());

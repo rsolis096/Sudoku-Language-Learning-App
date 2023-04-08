@@ -68,14 +68,14 @@ public class GameSettingPageTest {
         start.click();
 
         // Press the word bank/category Button
-        UiObject2 categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),3000);
+        UiObject2 categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),8000);
         assertTrue(categoryButton.isEnabled());
         assertTrue(categoryButton.isClickable());
         assertEquals(categoryButton.getText().toLowerCase(), "categories");
         categoryButton.click();
 
         //Check back button
-        UiObject2 backBtnCtg = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnback")),3000);
+        UiObject2 backBtnCtg = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnback")),8000);
         assertTrue(backBtnCtg.isEnabled());
         assertTrue(backBtnCtg.isClickable());
         assertEquals(backBtnCtg.getText().toLowerCase(), "back");
