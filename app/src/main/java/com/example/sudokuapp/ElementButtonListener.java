@@ -6,6 +6,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
 
+import com.example.sudokuapp.view.SudokuPage;
+
 //Sets the ElementButton as the selected button for user input
 public class ElementButtonListener implements View.OnClickListener {
     @Override

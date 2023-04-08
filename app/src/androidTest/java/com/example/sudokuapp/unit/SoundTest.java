@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.unit;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -7,6 +7,8 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import com.example.sudokuapp.Sound;
 
 
 public class SoundTest {

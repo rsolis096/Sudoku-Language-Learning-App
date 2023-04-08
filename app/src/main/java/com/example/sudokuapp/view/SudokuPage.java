@@ -1,41 +1,35 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.view;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
-import android.sax.Element;
-import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import com.example.sudokuapp.AssistedInputButton;
+import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.R;
+import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.SudokuFunctionality;
+import com.example.sudokuapp.WordBank;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 public class SudokuPage extends AppCompatActivity implements Serializable {

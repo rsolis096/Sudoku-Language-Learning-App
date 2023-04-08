@@ -1,9 +1,13 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.unit;
 
 import static org.junit.Assert.*;
 import android.widget.Chronometer;
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.SudokuFunctionality;
 
 import org.junit.Test;
 import org.junit.Before;

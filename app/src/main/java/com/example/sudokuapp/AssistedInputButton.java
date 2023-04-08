@@ -32,7 +32,7 @@ public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButt
 
     public int getIndex(){return index;}
 
-    AssistedInputButton(Context context)
+    public AssistedInputButton(Context context)
     {
         super(context);
         index = 0;

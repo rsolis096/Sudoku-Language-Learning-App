@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -10,6 +10,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.example.sudokuapp.R;
+import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.WordBank;
 
 import java.util.Objects;
 

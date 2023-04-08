@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.ui;
 
 import androidx.test.filters.SdkSuppress;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;

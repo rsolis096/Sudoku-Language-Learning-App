@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.sudokuapp.R;
+import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.WordBank;
 
 import java.io.Serializable;
 

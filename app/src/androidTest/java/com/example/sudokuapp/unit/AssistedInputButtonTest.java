@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.unit;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,9 @@ import android.content.Context;
 import android.os.Looper;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.example.sudokuapp.AssistedInputButton;
+import com.example.sudokuapp.ElementButton;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

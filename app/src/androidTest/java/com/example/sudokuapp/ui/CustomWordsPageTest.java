@@ -1,9 +1,10 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.ui;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
@@ -80,7 +81,7 @@ public class CustomWordsPageTest {
         Thread.sleep(500);
 
         //Test open custom word bank activity button
-        UiObject2 buttonCustomBankButton = mDevice.findObject(By.res("com.example.sudokuapp:id/buttonCustomBank"));
+        UiObject2 buttonCustomBankButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/buttonCustomBank")),8000);
         assertTrue("buttonCustomBank is not enabled", buttonCustomBankButton.isEnabled());
         assertTrue("buttonCustomBank is not clickable", buttonCustomBankButton.isClickable());
         buttonCustomBankButton.click();
@@ -126,10 +127,10 @@ public class CustomWordsPageTest {
         enterEng.setText("one");
         enterSpa.setText("uno");
         cancel.click();
+        Thread.sleep(500);
 
-        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
-        List<UiObject2> tableRows = scroll.getChildren();
-        assertTrue(tableRows.isEmpty());
+        scroll = mDevice.wait(Until.findObject((By.res("com.example.sudokuapp:id/customWordsTable"))),3000);
+        assertNull(scroll);
 
         //words to be put in
         String[] engWord = {"one", "two","three","four"};
@@ -152,7 +153,7 @@ public class CustomWordsPageTest {
 
         //Check the table rows in the scroll view
         scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
-        tableRows = scroll.getChildren();
+        List<UiObject2> tableRows = scroll.getChildren();
 
         String[] wordpair = {"one, uno", "two, dos", "three, tres", "four, cuatro"};
         for(int i = 0;i<4;i++) {
@@ -186,9 +187,8 @@ public class CustomWordsPageTest {
         Thread.sleep(500);
 
         //Check the table rows in the scroll view
-        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
-        tableRows = scroll.getChildren();
-        assertTrue(tableRows.isEmpty());
+        scroll = mDevice.wait(Until.findObject((By.res("com.example.sudokuapp:id/customWordsTable"))),3000);
+        assertNull(scroll);
 
 
         // go back

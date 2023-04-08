@@ -4,10 +4,11 @@ package com.example.sudokuapp;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
+
+import com.example.sudokuapp.view.ResultsScreen;
 
 // Utility class to provide general Functionality for Sudoku Board
 public class SudokuFunctionality {

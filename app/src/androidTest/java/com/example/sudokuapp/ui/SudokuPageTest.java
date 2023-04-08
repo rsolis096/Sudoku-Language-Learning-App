@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.ui;
 
 import androidx.test.filters.SdkSuppress;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -21,6 +21,9 @@ import androidx.test.uiautomator.UiScrollable;
 import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 import static org.junit.Assert.*;
+
+import com.example.sudokuapp.Sudoku;
+
 import java.util.Objects;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
@@ -322,10 +325,8 @@ public class SudokuPageTest {
         assertNotNull("Start button is null in test " + testSize, start);
         start.click();
 
-        Thread.sleep(2000);
-
         //Make sure 12x12 toggle button exists
-        UiObject2 toggleButton= mDevice.findObject(By.res("com.example.sudokuapp:id/tgBtn"+testSize));
+        UiObject2 toggleButton= mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/tgBtn"+testSize)),8000);
         assertTrue("Toggle button is not enabled", toggleButton.isEnabled());
         assertTrue("Toggle button is not checkable", toggleButton.isCheckable());
         toggleButton.click();
@@ -394,10 +395,8 @@ public class SudokuPageTest {
         assertTrue("Empty Cell is not clickable", emptyCell.isClickable());
         emptyCell.click();
 
-        Thread.sleep(2000);
-
         //Check all the table rows that pop up in assist mode
-        tableLayout = mDevice.findObject(By.desc("assistDialogLayout"));
+        tableLayout = mDevice.wait(Until.findObject(By.desc("assistDialogLayout")),5000);
         UiObject2 assistButtonToSelect = null;
         for(UiObject2 individualButton : tableLayout.getChildren())
         {

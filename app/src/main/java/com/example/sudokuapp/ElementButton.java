@@ -15,7 +15,7 @@ public class ElementButton extends androidx.appcompat.widget.AppCompatButton imp
     private String mEnglish;
     private int  index1;
     private int index2;
-    boolean isWrong;
+    public boolean isWrong;
     boolean locked;
 
     //Getter methods

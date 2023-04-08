@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.unit;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,8 @@ import android.content.Context;
 
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.example.sudokuapp.FileIO;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +21,7 @@ public class FileIOTest {
 
     @Before
     public void setupTest() {
-        context = InstrumentationRegistry.getInstrumentation().getTargetContext();;
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
     @Test

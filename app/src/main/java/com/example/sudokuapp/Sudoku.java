@@ -96,7 +96,7 @@ public class Sudoku extends AppCompatActivity implements Serializable
         return mTimer;
     }
 
-    Sudoku(Context THIS, Chronometer t) throws IOException {
+    public Sudoku(Context THIS, Chronometer t) throws IOException {
 
         //Default GRID_SIZE
         setGRID_SIZE(getGridSize());

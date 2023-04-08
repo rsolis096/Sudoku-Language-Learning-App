@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
@@ -16,6 +16,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.sudokuapp.FileIO;
+import com.example.sudokuapp.R;
+import com.example.sudokuapp.WordBank;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
@@ -96,11 +101,11 @@ public class CustomWordsPage extends AppCompatActivity {
             builder.setPositiveButton("OK", (dialog, which) ->
             {
                 //Get the string currently in the EditText object
-                String userEnglishInput = englishInput.getText().toString();
-                String userSpanishInput = spanishInput.getText().toString();
+                String userEnglishInput = englishInput.getText().toString().trim();
+                String userSpanishInput = spanishInput.getText().toString().trim();
 
                 //Do not add empty lines
-                if(englishInput.length() == 0 || spanishInput.length() == 0)
+                if(userEnglishInput.isBlank() || userSpanishInput.isBlank())
                 {
                     //Confirmation message
                     Toast toast = Toast.makeText(this, "INVALID INPUT",Toast.LENGTH_SHORT);
