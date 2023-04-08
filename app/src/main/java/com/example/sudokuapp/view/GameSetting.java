@@ -12,7 +12,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.model.Sound;
 import com.example.sudokuapp.model.Sudoku;
 import com.example.sudokuapp.model.WordBank;
 

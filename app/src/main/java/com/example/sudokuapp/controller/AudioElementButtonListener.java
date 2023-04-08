@@ -11,9 +11,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-import com.example.sudokuapp.AssistedInputButton;
-import com.example.sudokuapp.ElementButton;
-import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.model.AssistedInputButton;
+import com.example.sudokuapp.model.ElementButton;
+import com.example.sudokuapp.model.Sound;
 import com.example.sudokuapp.model.Sudoku;
 
 import java.util.Objects;

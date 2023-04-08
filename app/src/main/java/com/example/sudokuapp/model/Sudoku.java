@@ -10,10 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.sudokuapp.controller.AudioElementButtonListener;
-import com.example.sudokuapp.ElementButton;
 import com.example.sudokuapp.controller.ElementButtonListener;
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.Sound;
 
 import java.io.IOException;
 import java.io.Serializable;

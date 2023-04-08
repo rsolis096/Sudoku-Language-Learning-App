@@ -8,8 +8,8 @@ import android.os.Looper;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.sudokuapp.AssistedInputButton;
-import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.model.AssistedInputButton;
+import com.example.sudokuapp.model.ElementButton;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

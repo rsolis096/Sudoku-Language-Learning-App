@@ -57,17 +57,24 @@ public class SudokuPageTest {
     }
 
     @Test
-    public void testDriver() throws InterruptedException, UiObjectNotFoundException {
+    public void assistModeTest() throws InterruptedException, UiObjectNotFoundException {
+        //Tests only assist mode
         assistModeCheck(4);
         assistModeCheck(6);
         assistModeCheck(9);
         assistModeCheck(12);
-
+    }
+    @Test
+    public void manualModeTest() throws InterruptedException, UiObjectNotFoundException {
+        //Tests only manual mode
         manualModeCheck(4);
         manualModeCheck(6);
         manualModeCheck(9);
         manualModeCheck(12);
-
+    }
+    @Test
+    public void combinationModeTest() throws InterruptedException, UiObjectNotFoundException {
+        //Tests a mix of manual and assist mode
         combinationCheck(4);
         combinationCheck(6);
         combinationCheck(9);
@@ -106,6 +113,8 @@ public class SudokuPageTest {
         // Press the confirm button
         UiObject2 confirm = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnConfirm")),3000);
         confirm.click();
+
+        Thread.sleep(500);
 
         //get empty cell
         UiObject2 emptyCell = mDevice.wait(Until.findObject(By.desc("emptyCell")),3000);

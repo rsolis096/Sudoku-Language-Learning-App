@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sudokuapp.FileIO;
+import com.example.sudokuapp.model.FileIO;
 import com.example.sudokuapp.R;
 import com.example.sudokuapp.model.WordBank;
 

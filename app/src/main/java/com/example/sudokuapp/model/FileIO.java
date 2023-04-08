@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 import static android.content.Context.MODE_PRIVATE;
 

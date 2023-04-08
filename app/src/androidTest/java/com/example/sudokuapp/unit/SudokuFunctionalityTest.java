@@ -5,9 +5,9 @@ import android.widget.Chronometer;
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.model.ElementButton;
 import com.example.sudokuapp.model.Sudoku;
-import com.example.sudokuapp.SudokuFunctionality;
+import com.example.sudokuapp.model.SudokuFunctionality;
 
 import org.junit.Test;
 import org.junit.Before;

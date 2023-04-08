@@ -7,7 +7,7 @@ import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.sudokuapp.FileIO;
+import com.example.sudokuapp.model.FileIO;
 
 import org.junit.Before;
 import org.junit.Test;

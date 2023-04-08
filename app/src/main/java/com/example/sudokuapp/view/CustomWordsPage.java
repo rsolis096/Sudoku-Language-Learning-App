@@ -17,7 +17,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.sudokuapp.FileIO;
+import com.example.sudokuapp.model.FileIO;
 import com.example.sudokuapp.R;
 import com.example.sudokuapp.model.WordBank;
 

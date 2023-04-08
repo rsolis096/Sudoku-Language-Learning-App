@@ -1,11 +1,9 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 import android.content.Context;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
-
-import com.example.sudokuapp.model.Sudoku;
 
 import java.io.Serializable;
 

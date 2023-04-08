@@ -8,7 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.model.Sound;
 
 
 public class SoundTest {

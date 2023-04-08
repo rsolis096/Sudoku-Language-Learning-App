@@ -1,7 +1,9 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 import android.app.AlertDialog;
 import android.content.Context;
+
+import com.example.sudokuapp.model.ElementButton;
 
 public class AssistedInputButton extends androidx.appcompat.widget.AppCompatButton {
     public int index;

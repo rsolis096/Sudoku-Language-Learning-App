@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 
 import android.app.AlertDialog;
@@ -8,8 +8,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
 
-import com.example.sudokuapp.model.GenerateBoard;
-import com.example.sudokuapp.model.Sudoku;
 import com.example.sudokuapp.view.ResultsScreen;
 
 // Utility class to provide general Functionality for Sudoku Board

@@ -7,7 +7,7 @@ import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.model.ElementButton;
 
 import org.junit.Test;
 

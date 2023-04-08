@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
