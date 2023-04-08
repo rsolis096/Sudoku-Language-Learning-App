@@ -19,7 +19,7 @@ public class GameOptions extends AppCompatActivity {
 
     Switch switcher;
     boolean nightMode;
-    SharedPreferences sharedPreferences;
+
     SharedPreferences.Editor editor;
 
     @Override
@@ -36,8 +36,8 @@ public class GameOptions extends AppCompatActivity {
 private void changeTheme(){
         switcher = findViewById(R.id.switchTheme);
         //used to save mode in case game is exited and revisited
-        sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
-        nightMode = sharedPreferences.getBoolean("night", false); //light mode selection by default
+        MainMenu.sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        nightMode = MainMenu.sharedPreferences.getBoolean("night", false); //light mode selection by default
 
         if(nightMode){
             switcher.setChecked(true);
@@ -48,13 +48,13 @@ private void changeTheme(){
 
             if (nightMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                editor = sharedPreferences.edit();
+                editor = MainMenu.sharedPreferences.edit();
                 editor.putBoolean("night", false);
             }
             else
             {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                editor = sharedPreferences.edit();
+                editor = MainMenu.sharedPreferences.edit();
                 editor.putBoolean("night", true);
             }
             editor.apply();
