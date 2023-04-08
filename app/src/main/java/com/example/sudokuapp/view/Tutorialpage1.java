@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.sudokuapp.R;
 
 import java.util.Objects;
 

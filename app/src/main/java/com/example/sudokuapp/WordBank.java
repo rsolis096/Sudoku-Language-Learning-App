@@ -67,8 +67,8 @@ public class WordBank {
             spanish[i] = wordPair[1];
         }
     }
-    String[] getEnglish() {return english;}
-    String[] getSpanish() {return spanish;}
+    public String[] getEnglish() {return english;}
+    public String[] getSpanish() {return spanish;}
 
     public static int getCategoryIndex() {
         return categoryIndex;
