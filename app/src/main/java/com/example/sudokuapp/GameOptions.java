@@ -44,23 +44,20 @@ private void changeTheme(){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
 
-        switcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        switcher.setOnClickListener(view -> {
 
-                if (nightMode) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("night", false);
-                }
-                else
-                {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("night", true);
-                }
-                editor.apply();
+            if (nightMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("night", false);
             }
+            else
+            {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("night", true);
+            }
+            editor.apply();
         });
 }
 private void setupBackToMain() {
@@ -71,7 +68,7 @@ private void setupBackToMain() {
 private void setupOptionsButton() {
         Button btnCustom_Bank = findViewById(R.id.buttonCustomBank);
         btnCustom_Bank.setOnClickListener(view -> {
-            Intent intent = CustomLanguagePage.makeIntent(GameOptions.this);
+            Intent intent = CustomWordsPage.makeIntent(GameOptions.this);
             startActivity(intent);
         });
 }

@@ -11,6 +11,10 @@ import java.util.List;
 public class WordBank {
 
     private String[] english, spanish;
+
+    private static int categoryIndex = 0;
+    private static int checkedCategory = 0;
+    private static int customWordsLength = 0;
     public void generateWordBank(int size, int dif, Context context) throws IOException {
 
         int[] categoryArrays = {
@@ -33,7 +37,7 @@ public class WordBank {
         int selectedArrayId;
         String[] inputString;
 
-       if(DataModel.getCategoryIndex() == 13)
+       if(WordBank.getCategoryIndex() == 13)
         {
             String textFileContents = FileIO.readFile(context);
             inputString = textFileContents.split("\\n");
@@ -45,7 +49,7 @@ public class WordBank {
         }
         //The user has selected a category other than numbers or custom
         else {
-            selectedArrayId = categoryArrays[DataModel.getCategoryIndex() + dif];
+            selectedArrayId = categoryArrays[WordBank.getCategoryIndex() + dif];
             //shuffles word bank to give random values at random indices (except for number word bank)
             inputString = context.getResources().getStringArray(selectedArrayId);
             List<String> temp = Arrays.asList(inputString);
@@ -65,4 +69,24 @@ public class WordBank {
     }
     String[] getEnglish() {return english;}
     String[] getSpanish() {return spanish;}
+
+    public static int getCategoryIndex() {
+        return categoryIndex;
+    }
+    public static int getCustomWordsLength() {
+        return customWordsLength;
+    }
+    public static int getCheckedCategory() {
+        return checkedCategory;
+    }
+
+    public static void setCategoryIndex(int x) {
+        categoryIndex = x;
+    }
+    public static void setCustomWordsLength(int x) {
+        customWordsLength = x;
+    }
+    public static void setCheckedCategory(int x) {
+        checkedCategory = x;
+    }
 }

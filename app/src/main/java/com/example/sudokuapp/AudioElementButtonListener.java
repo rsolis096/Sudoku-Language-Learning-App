@@ -152,13 +152,13 @@ public class AudioElementButtonListener implements View.OnClickListener {
         public void onClick(View view)
         {
             AssistedInputButton wordButtonPressed = (AssistedInputButton) view;
-            if(Objects.equals(wordButtonPressed.callingButton.getTranslation(!Sudoku.getTranslationDirection()), wordButtonPressed.getText().toString()))
+            if(Objects.equals(wordButtonPressed.getCallingButton().getTranslation(!Sudoku.getTranslationDirection()), wordButtonPressed.getText().toString()))
             {
-                wordButtonPressed.callingButton.setText(wordButtonPressed.getText().toString());
-                wordButtonPressed.callingButton.setClickable(false);
+                wordButtonPressed.getCallingButton().setText(wordButtonPressed.getText().toString());
+                wordButtonPressed.getCallingButton().setClickable(false);
             }
             //closes dialog box after a button is pressed
-            wordButtonPressed.AssociatedAlertDialog.cancel();
+            wordButtonPressed.getAssociatedAlertDialog().cancel();
         }
 
     }

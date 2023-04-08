@@ -26,12 +26,12 @@ public class WordBankPage extends AppCompatActivity {
         setContentView(R.layout.word_bank);
 
         //Get number of words in file
-        if(DataModel.getCustomWordsLength() == 0)
+        if(WordBank.getCustomWordsLength() == 0)
         {
             try {
                 String fileContents = FileIO.readFile(this);
                 String [] fileContentsLines = fileContents.split("\\n");
-                DataModel.setCustomWordsLength(fileContentsLines.length);
+                WordBank.setCustomWordsLength(fileContentsLines.length);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -48,7 +48,7 @@ public class WordBankPage extends AppCompatActivity {
     }
 
     public static void resetWordBank() {
-        DataModel.setCheckedCategory(0);
+        WordBank.setCheckedCategory(0);
     }
 
     private void setupWordBank() {
@@ -61,45 +61,45 @@ public class WordBankPage extends AppCompatActivity {
         toggleButtons[4] = findViewById(R.id.btnDirection);
         toggleButtons[5] = findViewById(R.id.btnCustomWordBank);
 
-        toggleButtons[DataModel.getCheckedCategory()].setChecked(true);
+        toggleButtons[WordBank.getCheckedCategory()].setChecked(true);
 
         toggleButtons[0].setOnClickListener(view-> {
-            DataModel.setCategoryIndex(0);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(0);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[0].setChecked(true);
-            DataModel.setCheckedCategory(0);
+            WordBank.setCheckedCategory(0);
 
         });
         toggleButtons[1].setOnClickListener(view -> {
-            DataModel.setCategoryIndex(7);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(7);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[1].setChecked(true);
-            DataModel.setCheckedCategory(1);
+            WordBank.setCheckedCategory(1);
         });
         toggleButtons[2].setOnClickListener(view -> {
-            DataModel.setCategoryIndex(1);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(1);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[2].setChecked(true);
-            DataModel.setCheckedCategory(2);
+            WordBank.setCheckedCategory(2);
         });
         toggleButtons[3].setOnClickListener(view -> {
-            DataModel.setCategoryIndex(10);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(10);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[3].setChecked(true);
-            DataModel.setCheckedCategory(3);
+            WordBank.setCheckedCategory(3);
 
         });
         toggleButtons[4].setOnClickListener(view -> {
-            DataModel.setCategoryIndex(4);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(4);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[4].setChecked(true);
-            DataModel.setCheckedCategory(4);
+            WordBank.setCheckedCategory(4);
         });
         toggleButtons[5].setOnClickListener(view -> {
-            DataModel.setCategoryIndex(13);
-            toggleButtons[DataModel.getCheckedCategory()].setChecked(false);
+            WordBank.setCategoryIndex(13);
+            toggleButtons[WordBank.getCheckedCategory()].setChecked(false);
             toggleButtons[5].setChecked(true);
-            DataModel.setCheckedCategory(5);
+            WordBank.setCheckedCategory(5);
         });
     }
 }
