@@ -1,4 +1,4 @@
-﻿
+
 **ITERATION 4 - SUDOKU App for Language Learning** 
 
 **Submitted By:** 
@@ -59,11 +59,11 @@ Clicking the cross icon next to the word pairs will delete the word pair from th
 
 **Tdd:** In the options menu of the game, there will be an option for the user to select the game appearance for opting manual dark mode for the app appearance, after selecting the choice the game will be displayed in the corresponding colorful layout selected by the user. By default, there will be the light mode enabled for ease of playing and no distractions.  
 
-![](/Iteration%204/Iteration%204%20Images/9.png) ![](/Iteration%204/Iteration%204%20Images/10.png) ![](/Iteration%204/Iteration%204%20Images/11.png) 
+![](/Iteration%204/Iteration%204%20Images/9.png) ![](/Iteration%204/Iteration%204%20Images/10.png) ![](/Iteration%204/Iteration%204%20Images/12.png) 
 
 Moreover, the grid UI was improved upon highlighting all cells affected by the cell the user is attempting to fill in the Sudoku puzzle. This feature will help users eliminate any conflicts between cell entries to effectively achieve the correct Sudoku puzzle result (Remember, adhering to Sudoku logic a word can only appear once in a row, a column, as well as a box within the grid.)
 
-![](/Iteration%204/Iteration%204%20Images/12.png) 
+![](/Iteration%204/Iteration%204%20Images/11.png) 
 
 **IMPLEMENTATION #4**
 
