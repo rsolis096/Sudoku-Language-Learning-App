@@ -153,7 +153,7 @@ public class CustomLanguagePage extends AppCompatActivity {
     }
 
     //Places the user input words onto the TableLayout
-    private void populateTableLayout() throws IOException {
+    public void populateTableLayout() throws IOException {
 
         //Read the contents of the text file and write them to a string
         String fileContents = FileIO.readFile(this);

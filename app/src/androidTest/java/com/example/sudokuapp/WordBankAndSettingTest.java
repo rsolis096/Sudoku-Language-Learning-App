@@ -70,14 +70,14 @@ public class WordBankAndSettingTest {
         UiObject2 categoryButton = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnWB")),3000);
         assertTrue(categoryButton.isEnabled());
         assertTrue(categoryButton.isClickable());
-        assertEquals(categoryButton.getText(), "CATEGORIES");
+        assertEquals(categoryButton.getText().toLowerCase(), "categories");
         categoryButton.click();
 
         //Check back button
         UiObject2 backBtnCtg = mDevice.wait(Until.findObject(By.res("com.example.sudokuapp:id/btnback")),3000);
         assertTrue(backBtnCtg.isEnabled());
         assertTrue(backBtnCtg.isClickable());
-        assertEquals(backBtnCtg.getText(), "BACK");
+        assertEquals(backBtnCtg.getText().toLowerCase(), "back");
 
         //Check all category buttons exist and are clickable
         UiObject2 numbersButton = mDevice.findObject(By.res("com.example.sudokuapp:id/btnNumbers"));

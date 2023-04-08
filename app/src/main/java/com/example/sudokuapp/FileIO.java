@@ -46,15 +46,14 @@ public class FileIO {
 
     //Returns a string the contains the contents of the text file
     public static String readFile(Context context) throws IOException {
-        String fileName = "myOtherText.txt";
-        File file = new File(context.getFilesDir(), fileName);
+        File file = new File(context.getFilesDir(), "myOtherText.txt");
 
         //create the file if it doesn't exist
         if(!file.exists()) {
-            FileOutputStream outputStream = context.openFileOutput(fileName, MODE_PRIVATE);
+            FileOutputStream outputStream = context.openFileOutput("myOtherText.txt", MODE_PRIVATE);
         }
 
-        FileInputStream inputStream = context.openFileInput(fileName);
+        FileInputStream inputStream = context.openFileInput("myOtherText.txt");
         //Initialize a byte array
         byte[] buffer = new byte[inputStream.available()];
 
