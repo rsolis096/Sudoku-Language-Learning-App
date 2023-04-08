@@ -122,16 +122,21 @@ public class CustomWordsPageTest {
         assertTrue(ok.isEnabled());
         assertTrue(ok.isClickable());
 
+        //Try cancel button
+        enterEng.setText("one");
+        enterSpa.setText("uno");
+        cancel.click();
+
+        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
+        List<UiObject2> tableRows = scroll.getChildren();
+        assertTrue(tableRows.isEmpty());
+
         //words to be put in
         String[] engWord = {"one", "two","three","four"};
         String[] spaWord = {"uno", "dos","tres","cuatro"};
-        //valid input 1
-        enterEng.setText("one");
-        enterSpa.setText("uno");
-        ok.click();
 
         //valid input 2-4
-        for(int i = 1;i<4;i++){
+        for(int i = 0;i<4;i++){
             add = mDevice.wait(Until.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsAdd"))),3000);
             add.click();
             Thread.sleep(1000);
@@ -147,7 +152,7 @@ public class CustomWordsPageTest {
 
         //Check the table rows in the scroll view
         scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
-        List<UiObject2> tableRows = scroll.getChildren();
+        tableRows = scroll.getChildren();
 
         String[] wordpair = {"one, uno", "two, dos", "three, tres", "four, cuatro"};
         for(int i = 0;i<4;i++) {
@@ -160,6 +165,30 @@ public class CustomWordsPageTest {
         clear.click();
         Thread.sleep(1000);
         assertEquals(0,scroll.getChildCount());
+
+        //Try invalid inputs
+        //words to be put in
+        String[] INengWord = {" ", "two"," "};
+        String[] INspaWord = {"uno", " "," "};
+
+        for(int i = 0;i<2;i++){
+            add = mDevice.wait(Until.findObject((By.res("com.example.sudokuapp:id/btnCustomWordsAdd"))),3000);
+            add.click();
+            Thread.sleep(1000);
+            enterEng = mDevice.findObject(By.text("English"));
+            enterSpa = mDevice.findObject(By.text("Spanish"));
+            ok = mDevice.findObject(By.res("android:id/button1"));
+            enterEng.setText(INengWord[i]);
+            enterSpa.setText(INspaWord[i]);
+            ok.click();
+        }
+
+        Thread.sleep(500);
+
+        //Check the table rows in the scroll view
+        scroll = mDevice.findObject((By.res("com.example.sudokuapp:id/customWordsTable")));
+        tableRows = scroll.getChildren();
+        assertTrue(tableRows.isEmpty());
 
 
         // go back
