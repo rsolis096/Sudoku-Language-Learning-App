@@ -1,32 +1,23 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
-import android.speech.tts.TextToSpeech;
-import android.text.InputType;
-import android.util.Log;
 import android.util.Pair;
-import android.view.View;
 import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+
+import com.example.sudokuapp.controller.AudioElementButtonListener;
+import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.controller.ElementButtonListener;
+import com.example.sudokuapp.R;
+import com.example.sudokuapp.Sound;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Objects;
 
 
 public class Sudoku extends AppCompatActivity implements Serializable

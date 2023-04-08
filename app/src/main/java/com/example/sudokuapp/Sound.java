@@ -3,6 +3,8 @@ package com.example.sudokuapp;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
+import com.example.sudokuapp.model.Sudoku;
+
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 

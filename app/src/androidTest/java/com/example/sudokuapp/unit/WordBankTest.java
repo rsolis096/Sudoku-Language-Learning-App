@@ -7,7 +7,7 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.WordBank;
+import com.example.sudokuapp.model.WordBank;
 
 import org.junit.Test;
 

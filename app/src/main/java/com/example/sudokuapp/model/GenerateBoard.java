@@ -1,5 +1,7 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
+
+import com.example.sudokuapp.model.Sudoku;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -18,7 +20,7 @@ public class GenerateBoard implements Serializable  {
         return remainingCells;
     }
 
-    GenerateBoard(int r, int c, int d) {
+    public GenerateBoard(int r, int c, int d) {
         rows = r;
         cols = c;
         GRID_SIZE = (int) (rows * cols);

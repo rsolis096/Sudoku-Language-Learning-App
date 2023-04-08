@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.controller;
 
 
 import android.graphics.Color;
@@ -6,6 +6,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
 
+import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.SudokuFunctionality;
+import com.example.sudokuapp.model.Sudoku;
 import com.example.sudokuapp.view.SudokuPage;
 
 //Sets the ElementButton as the selected button for user input

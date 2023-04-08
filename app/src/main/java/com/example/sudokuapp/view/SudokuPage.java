@@ -23,9 +23,9 @@ import com.example.sudokuapp.AssistedInputButton;
 import com.example.sudokuapp.ElementButton;
 import com.example.sudokuapp.R;
 import com.example.sudokuapp.Sound;
-import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.model.Sudoku;
 import com.example.sudokuapp.SudokuFunctionality;
-import com.example.sudokuapp.WordBank;
+import com.example.sudokuapp.model.WordBank;
 
 import java.io.IOException;
 import java.io.Serializable;

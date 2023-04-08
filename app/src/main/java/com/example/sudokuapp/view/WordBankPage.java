@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.sudokuapp.FileIO;
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.WordBank;
+import com.example.sudokuapp.model.WordBank;
 
 import java.io.IOException;
 import java.util.Objects;

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.sudokuapp.FileIO;
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.WordBank;
+import com.example.sudokuapp.model.WordBank;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

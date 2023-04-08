@@ -1,6 +1,9 @@
 package com.example.sudokuapp;
 
 import static org.junit.Assert.*;
+
+import com.example.sudokuapp.model.GenerateBoard;
+
 import org.junit.Before;
 import org.junit.Test;
 

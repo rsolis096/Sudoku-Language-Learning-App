@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sudokuapp.R;
-import com.example.sudokuapp.Sudoku;
-import com.example.sudokuapp.WordBank;
+import com.example.sudokuapp.model.Sudoku;
+import com.example.sudokuapp.model.WordBank;
 
 import java.io.Serializable;
 

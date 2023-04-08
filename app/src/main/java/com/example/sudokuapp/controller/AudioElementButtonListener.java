@@ -1,4 +1,4 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.controller;
 
 
 import android.app.AlertDialog;
@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
+
+import com.example.sudokuapp.AssistedInputButton;
+import com.example.sudokuapp.ElementButton;
+import com.example.sudokuapp.Sound;
+import com.example.sudokuapp.model.Sudoku;
 
 import java.util.Objects;
 

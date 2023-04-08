@@ -1,6 +1,9 @@
-package com.example.sudokuapp;
+package com.example.sudokuapp.model;
 
 import android.content.Context;
+
+import com.example.sudokuapp.FileIO;
+import com.example.sudokuapp.R;
 
 import java.io.IOException;
 import java.util.Arrays;

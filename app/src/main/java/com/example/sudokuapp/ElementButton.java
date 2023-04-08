@@ -5,6 +5,8 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
+import com.example.sudokuapp.model.Sudoku;
+
 import java.io.Serializable;
 
 //This class inherits button to add some useful attributes.

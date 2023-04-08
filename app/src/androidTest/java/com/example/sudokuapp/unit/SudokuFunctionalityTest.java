@@ -6,7 +6,7 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.sudokuapp.ElementButton;
-import com.example.sudokuapp.Sudoku;
+import com.example.sudokuapp.model.Sudoku;
 import com.example.sudokuapp.SudokuFunctionality;
 
 import org.junit.Test;

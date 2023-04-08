@@ -5,7 +5,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import android.content.Context;
@@ -22,9 +22,7 @@ import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 import static org.junit.Assert.*;
 
-import com.example.sudokuapp.Sudoku;
-
-import java.util.Objects;
+import com.example.sudokuapp.model.Sudoku;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 @SdkSuppress(minSdkVersion = 18)
