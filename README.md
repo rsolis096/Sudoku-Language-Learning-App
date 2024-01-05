@@ -1,3 +1,3 @@
-CMPT276-1231-D2-tango - Sudoku App
+Sudoku Language Learning Android Application.
 
-This is a Sudoku app intended for Language Learning.
+This application was the result of a group project for CMPT 276.
